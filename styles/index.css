@@ -1,3 +1,13 @@
+/***************************** BACKGROUND *****************************/
+html, body {
+    margin: 0;
+    font-family: Georgia, serif, Arial, sans-serif;
+    background: linear-gradient(180deg, #fbe9f1 0%, #f1d1b1 20%, #e6e2db 60%, #eeebe6 100%);
+    color: #15025c;
+    overflow-x: hidden;
+    position: relative;
+}
+
 /***************************** INDEX CONTENT *****************************/
 .hero {
     min-height: 100vh;

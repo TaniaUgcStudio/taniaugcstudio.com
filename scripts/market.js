@@ -98,8 +98,8 @@ function initMapbox() {
         container: 'map',
         style: 'mapbox://styles/sadeqal/cl04dpzyq000v15o3nlcnpn9d',
         center: [-3.7038, 40.4168],
-        zoom: 13,
-        pitch: 60,
+        zoom: 12,
+        pitch: 80,
         bearing: 0
     });
     

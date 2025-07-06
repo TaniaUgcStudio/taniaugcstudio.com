@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UGC Video Showcase</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .category {
+            margin-bottom: 40px;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .video-frame {
+            display: inline-block;
+            width: 200px;
+            height: 350px;
+            background-size: cover;
+            background-position: center;
+            border: 5px solid #3a2f1f;
+            border-radius: 10px;
+            margin: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            vertical-align: top;
+        }
+        .video-frame:hover {
+            transform: scale(1.05);
+        }
+        .popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+        .popup iframe {
+            width: 100%;
+            height: 100%;
+    max-width: 90vw;
+    max-height: 90vh;
+    border: 5px solid #fff;
+    border-radius: 10px;
+    display: block;
+}
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #fff;
+            font-size: 30px;
+            cursor: pointer;
+        }
+        h2 {
+            color: #fff;
+            text-shadow: 2px 2px 4px #000;
+        }
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .video-frame {
+                width: 150px;
+                height: 250px;
+                margin: 5px;
+            }
+            .popup iframe {
+                width: 90%;
+            }
+            .category {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+        /* Animation for horizontal scrolling */
+        .category {
+            animation: scroll 20s linear infinite;
+        }
+        .category:hover {
+            animation-play-state: paused;
+        }
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+        /* Clone the first item to create seamless loop */
+        .category::after {
+            content: "";
+            display: inline-block;
+            width: 200px;
+            height: 350px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Belleza</h2>
+        <div class="category">
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/de22cd3e-7711-4d9f-96f0-da827adf268b')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/de22cd3e-7711-4d9f-96f0-da827adf268b')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/aa4b7211-fb2a-4bcf-afd3-90a0e73fa76c')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/aa4b7211-fb2a-4bcf-afd3-90a0e73fa76c')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/9d57c988-e63a-4446-9fb8-b5d39bcdc99c')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/9d57c988-e63a-4446-9fb8-b5d39bcdc99c')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/c0fba4e9-277e-445b-9628-cb690de1ef40')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/c0fba4e9-277e-445b-9628-cb690de1ef40')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/d8a672d5-2b32-4efa-b545-abcb90e1dbb8')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/d8a672d5-2b32-4efa-b545-abcb90e1dbb8')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/90d11a3e-2ce6-40e1-ac12-e9b04f904bd9')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/90d11a3e-2ce6-40e1-ac12-e9b04f904bd9')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/f6a41e57-71f0-4851-a3a5-e06de1202cb3')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/f6a41e57-71f0-4851-a3a5-e06de1202cb3')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/15b440ab-9e3d-47ca-8bb2-ab794ce3134e')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/15b440ab-9e3d-47ca-8bb2-ab794ce3134e')"></div>
+        </div>
+        <h2>Estilo de Vida</h2>
+        <div class="category">
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/e4b2cca6-a862-4250-b65b-3819c5bcaa8a')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/e4b2cca6-a862-4250-b65b-3819c5bcaa8a')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/45b111ed-ab06-41c8-8da0-3d13cd442433')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/45b111ed-ab06-41c8-8da0-3d13cd442433')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/9b3309dc-c63e-44cb-8b1d-5d4cee28dae3')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/9b3309dc-c63e-44cb-8b1d-5d4cee28dae3')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/ebdc2210-7c66-4ddd-8a36-41768cd48a6c')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/ebdc2210-7c66-4ddd-8a36-41768cd48a6c')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/468bb66e-9000-4beb-b412-8fec76f8312c')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/468bb66e-9000-4beb-b412-8fec76f8312c')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/74aedb03-b41a-4812-bb23-6b5defaf078e')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/74aedb03-b41a-4812-bb23-6b5defaf078e')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/f57765fb-df60-4463-9599-058062ce4a80')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/f57765fb-df60-4463-9599-058062ce4a80')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/2f5ef236-840a-4c25-ad94-9a17037a11ab')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/2f5ef236-840a-4c25-ad94-9a17037a11ab')"></div>
+        </div>
+        <h2>Hogar</h2>
+        <div class="category">
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/2cd798f5-9211-4b8a-9cbe-974e32902036')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/2cd798f5-9211-4b8a-9cbe-974e32902036')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/eafb0f78-92c8-40e1-9a97-3061bda8c35a')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/eafb0f78-92c8-40e1-9a97-3061bda8c35a')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/6d5e6bc8-ecf4-43da-8617-b101f4fdd97e')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/6d5e6bc8-ecf4-43da-8617-b101f4fdd97e')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/e4ecffbb-65cf-47cc-b537-fa32507cdd1a')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/e4ecffbb-65cf-47cc-b537-fa32507cdd1a')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/ea514a8c-feda-45ac-8be7-dd92372e81de')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/ea514a8c-feda-45ac-8be7-dd92372e81de')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/e86a4e72-0c05-4f2c-b0c5-eabadd4e3573')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/e86a4e72-0c05-4f2c-b0c5-eabadd4e3573')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/f36b7868-3f97-456a-bcea-54859548dd8a')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/f36b7868-3f97-456a-bcea-54859548dd8a')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/ed724665-c86a-4967-83d1-c162dd2a4529')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/ed724665-c86a-4967-83d1-c162dd2a4529')"></div>
+        </div>
+        <h2>Tecnologia y Apps</h2>
+        <div class="category">
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/1b22e547-df35-482f-ab20-11652453561f')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/1b22e547-df35-482f-ab20-11652453561f')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/6a142e8f-38fc-41d0-87fb-af736fffe31a')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/6a142e8f-38fc-41d0-87fb-af736fffe31a')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/5fd01fe7-3337-48bf-a081-c9b375a22148')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/5fd01fe7-3337-48bf-a081-c9b375a22148')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/afa94b69-9f26-4809-ba4e-e608f1b66140')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/afa94b69-9f26-4809-ba4e-e608f1b66140')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/f9a4fcbe-ff84-4535-8cc9-e1ffb33334da')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/f9a4fcbe-ff84-4535-8cc9-e1ffb33334da')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/5206c5c9-5ee6-46da-bacc-ea30605d6f3b')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/5206c5c9-5ee6-46da-bacc-ea30605d6f3b')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/a079badd-1c5d-4258-b05b-b2dbe6a430c0')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/a079badd-1c5d-4258-b05b-b2dbe6a430c0')"></div>
+        </div>
+        <h2>Moda</h2>
+        <div class="category">
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/df8057c2-50d5-41b0-9b9b-719dd77a581f')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/df8057c2-50d5-41b0-9b9b-719dd77a581f')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/17fcb87f-9c55-4dd2-b930-17949bcb956f')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/17fcb87f-9c55-4dd2-b930-17949bcb956f')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/4fe5d689-f3f7-409f-9574-93395271d4da')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/4fe5d689-f3f7-409f-9574-93395271d4da')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/20f9f4d3-2780-48b0-a5dd-226dba5235c3')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/20f9f4d3-2780-48b0-a5dd-226dba5235c3')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/763a0c16-8046-41af-b975-aa4d5c25e53d')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/763a0c16-8046-41af-b975-aa4d5c25e53d')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/776079c7-c095-439d-b944-6caed7a60a60')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/776079c7-c095-439d-b944-6caed7a60a60')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/d8703631-d936-4150-b0a7-9ef22f39ce75')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/d8703631-d936-4150-b0a7-9ef22f39ce75')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/348fd132-bd41-4e16-b264-c7a5b41174ce')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/348fd132-bd41-4e16-b264-c7a5b41174ce')"></div>
+        </div>
+        <h2>Joyeria</h2>
+        <div class="category">
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/92665d5a-ade7-4b13-8760-14f7acd9190b')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/92665d5a-ade7-4b13-8760-14f7acd9190b')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/2956db95-4f97-4b46-9f96-a43ff2d2cbc5')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/2956db95-4f97-4b46-9f96-a43ff2d2cbc5')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/09dc8707-715b-424c-ac9d-e73aeab3b7cf')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/09dc8707-715b-424c-ac9d-e73aeab3b7cf')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/034907d5-9511-45de-8220-3f989bd9a8c3')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/034907d5-9511-45de-8220-3f989bd9a8c3')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/6c05fe21-53be-4492-be39-e25e4ede7307')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/6c05fe21-53be-4492-be39-e25e4ede7307')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/137e223c-60d1-4a5c-a382-e0228177a1af')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/137e223c-60d1-4a5c-a382-e0228177a1af')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/7ce72ee8-02bb-466d-b695-6637d1d7e6c6')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/7ce72ee8-02bb-466d-b695-6637d1d7e6c6')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/84f9cb50-48f8-40e1-8a1d-21abaae6fcf1')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/84f9cb50-48f8-40e1-8a1d-21abaae6fcf1')"></div>
+        </div>
+        <h2>Mascotas</h2>
+        <div class="category">
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/2595ee9f-9e23-46cf-a419-15b5cda61ac1')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/2595ee9f-9e23-46cf-a419-15b5cda61ac1')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/060f0c82-3b19-4a3d-bc13-50e4f45cd9be')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/060f0c82-3b19-4a3d-bc13-50e4f45cd9be')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/31a36a62-01da-4193-93f4-faaff0623976')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/31a36a62-01da-4193-93f4-faaff0623976')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/a8b9ad55-b791-41b0-a431-4a18799b64d1')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/a8b9ad55-b791-41b0-a431-4a18799b64d1')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/5c8fe8f8-0690-47e2-af61-9b6704e1368a')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/5c8fe8f8-0690-47e2-af61-9b6704e1368a')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/f3732b1c-1b87-4754-bf24-46c2b0aee1a7')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/f3732b1c-1b87-4754-bf24-46c2b0aee1a7')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/d2f962d8-57a1-4fc5-80fb-096fb1b44a33')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/d2f962d8-57a1-4fc5-80fb-096fb1b44a33')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/e3baba6a-ba70-42da-b294-1377b155fc92')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/e3baba6a-ba70-42da-b294-1377b155fc92')"></div>
+        </div>
+        <h2>Ingles</h2>
+        <div class="category">
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/53787013-7815-4ed0-9dc0-e182e22da609')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/53787013-7815-4ed0-9dc0-e182e22da609')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/469d9ac8-071a-433c-a3b1-9cca6e49ba42')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/469d9ac8-071a-433c-a3b1-9cca6e49ba42')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/8645b6fb-9c54-4876-89d8-7d3286d2b9ac')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/8645b6fb-9c54-4876-89d8-7d3286d2b9ac')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/2e840921-23ce-4687-b510-c6384ae5c84c')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/2e840921-23ce-4687-b510-c6384ae5c84c')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/7f77cdfa-ce30-4ba8-b805-072abcbb3276')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/7f77cdfa-ce30-4ba8-b805-072abcbb3276')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/12611fcb-2113-46e1-8fa6-0609f427c4a9')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/12611fcb-2113-46e1-8fa6-0609f427c4a9')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/74b6bda6-4807-4ac3-b377-78dfefb0f069')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/74b6bda6-4807-4ac3-b377-78dfefb0f069')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/62ef3a09-c275-49f4-964f-768d45211d6a')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/62ef3a09-c275-49f4-964f-768d45211d6a')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/af0eafff-3db3-4181-9ae0-3dc58fd840ec')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/af0eafff-3db3-4181-9ae0-3dc58fd840ec')"></div>
+        </div>
+        <h2>Cabello</h2>
+        <div class="category">
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/28957227-4a11-40cb-a2ce-f8d3fcb00260')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/28957227-4a11-40cb-a2ce-f8d3fcb00260')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/a1040077-5ffc-48a5-8d2b-48b16fa484d3')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/a1040077-5ffc-48a5-8d2b-48b16fa484d3')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/d246b094-3434-46de-8aab-512f5bce599c')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/d246b094-3434-46de-8aab-512f5bce599c')"></div>
+            <div class="video-frame" style="background-image: url('https://iframe.mediadelivery.net/thumbnail/b7f43758-3502-4d03-93cc-d89eea8a0a94')" onclick="showPopup('https://iframe.mediadelivery.net/play/463997/b7f43758-3502-4d03-93cc-d89eea8a0a94')"></div>
+        </div>
+    </div>
+    <div class="popup" id="videoPopup">
+        <span class="close-btn" onclick="closePopup()">×</span>
+        <iframe id="popupVideo" src="" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <script>
+        function showPopup(videoUrl) {
+            const popup = document.getElementById('videoPopup');
+            const iframe = document.getElementById('popupVideo');
+            iframe.src = videoUrl;
+            popup.style.display = 'flex';
+        }
+        function closePopup() {
+            const popup = document.getElementById('videoPopup');
+            const iframe = document.getElementById('popupVideo');
+            iframe.src = '';
+            popup.style.display = 'none';
+        }
+    </script>
+</body>
+</html>

@@ -10,136 +10,6 @@ html, body {
     background-size: cover;
 }
 
-/***************************** TOP MENU *****************************/
-.menu-toggle {
-    width: 30px;
-    height: 24px;
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 1000;
-    cursor: pointer;
-    position: fixed;
-}
-
-/* Relative container */
-.menu-toggle {
-    position: fixed;
-    display: inline-block;
-}
-
-.menu-toggle span {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background-color: rgb(218, 12, 12);
-    border-radius: 2px;
-    transition: all 0.3s ease;
-}
-
-/* Position three lines manually */
-.menu-toggle span:nth-child(1) {
-    top: 0;
-}
-
-.menu-toggle span:nth-child(2) {
-    top: 10px;
-}
-
-.menu-toggle span:nth-child(3) {
-    top: 20px;
-}
-
-/* Active state: X */
-.menu-toggle.active span:nth-child(1) {
-    transform: rotate(45deg);
-    top: 10px;
-    background-color: red;
-}
-
-.menu-toggle.active span:nth-child(2) {
-    opacity: 0;
-}
-
-.menu-toggle.active span:nth-child(3) {
-    transform: rotate(-45deg);
-    top: 10px;
-    background-color: red;
-}
-
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: -250px;
-    width: 250px;
-    height: 100%;
-    background: linear-gradient(180deg, #2f3b35 0%, #4a6156 50%, #3f5048 100%);
-    transition: 0.3s;
-    z-index: 999;
-    display: flex;
-    flex-direction: column;
-    padding-top: 50px;
-    padding-bottom: 20px;
-}
-
-.main-links {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar.active {
-    left: 0;
-}
-
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-}
-
-.sidebar ul li a {
-    color: #fff;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-}
-
-.sidebar ul li a img {
-    width: 30px;
-    height: 30px;
-    margin-right: 10px;
-}
-
-.sidebar ul li a span {
-    display: inline;
-}
-
-.sidebar-bottom {
-    margin-top: auto;
-    padding-top: 10px;
-    padding-bottom: 50px;
-}
-
-.sidebar-bottom ul li a {
-    color: #fff;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-}
-
-.sidebar-bottom ul li a img {
-    width: 30px;
-    height: 30px;
-    margin-right: 10px;
-}
-
-.contact-bar {
-    display: none;
-}
-
 /***************************** MARKET CONTENT *****************************/
 #globe-canvas {
     position: absolute;
@@ -215,6 +85,16 @@ html, body {
     display: block;
 }
 
+.menu-toggle span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: rgb(218, 12, 12);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
 @keyframes blink {
     0%, 100% { opacity: 1; transform: scale(1); }
     50% { opacity: 0.4; transform: scale(0.7); }
@@ -249,57 +129,5 @@ html, body {
     .debris {
         width: 2px !important;
         height: 2px !important;
-    }
-
-    .sidebar ul li a span {
-        display: inline;
-    }
-
-    .sidebar-bottom {
-        display: none; /* Hide sidebar bottom on mobile */
-    }
-
-    .contact-bar {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        background: linear-gradient(180deg, #2f3b35 0%, #4a6156 50%, #3f5048 100%);
-        display: flex;
-        justify-content: space-around;
-        padding: 10px 0;
-        z-index: 10000;
-    }
-
-    .contact-bar ul {
-        list-style: none;
-        display: flex;
-        justify-content: space-around;
-        padding: 0;
-        margin: 0;
-        width: 100%;
-    }
-
-    .contact-bar li {
-        flex: 1;
-        text-align: center;
-    }
-
-    .contact-bar a {
-        color: #fff;
-        text-decoration: none;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 5px;
-    }
-
-    .contact-bar a img {
-        width: 25px;
-        height: 25px;
-        margin: 0;
-    }
-
-    .contact-bar a span {
-        display: none; /* Ensure no text is shown */
     }
 }
