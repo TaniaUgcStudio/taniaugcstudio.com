@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotating Tube Video Gallery</title>
+    <style>
+        body { margin: 0; overflow: auto; background-color: #1a1a1a; }
+        canvas { display: block; position: fixed; top: 0; left: 0; width: 100%; height: 100%; }
+        #welcome-text {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #f5f5dc;
+            text-align: center;
+            z-index: 1;
+            font-family: Georgia, serif;
+            font-size: 1.2em;
+            width: 80%;
+            max-width: 600px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+        }
+        #video-player-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 200;
+            background: linear-gradient(135deg, #f5f5dc, #d2b48c);
+            padding: 25px;
+            display: none;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            max-width: 85%;
+            max-height: 85%;
+        }
+        #video-player {
+            width: 100%;
+            max-width: 900px;
+            border-radius: 10px;
+            border: 2px solid #d2b48c;
+        }
+        #video-description {
+            color: #333;
+            font-family: Georgia, serif;
+            margin-top: 15px;
+            text-align: center;
+            max-width: 900px;
+            line-height: 1.6;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+        }
+        #close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff4444;
+            color: #f5f5dc;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-family: Georgia, serif;
+            font-size: 1em;
+            z-index: 210;
+        }
+        @media (max-width: 768px) {
+            #welcome-text { font-size: 1em; max-width: 90%; }
+            #video-player-container { max-width: 95%; max-height: 90%; padding: 15px; }
+            #video-player { max-width: 100%; }
+            #video-description { font-size: 0.9em; }
+        }
+    </style>
+</head>
+<body>
+    <div id="welcome-text">
+        Bienvenido a los contenidos hechos de UGC con calidad, estos videos son de clientes que cada uno ha sido muy satisfecho. Abajo de cada video puedes ver las reseñas e igual si has trabajado conmigo, te agradecería que pongas tu opinión sobre mi trabajo.
+    </div>
+    <div id="video-player-container">
+        <video id="video-player" controls></video>
+        <div id="video-description"></div>
+        <button id="close-button">Close</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script>
+        // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        document.body.appendChild(renderer.domElement);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+        scene.add(ambientLight);
+        const pointLight = new THREE.PointLight(0xffffff, 2.0, 1000);
+        pointLight.position.set(20, 20, 20);
+        scene.add(pointLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
+        directionalLight.position.set(0, 20, 20);
+        scene.add(directionalLight);
+
+        // Cylinder setup with beige gradient
+        const tubeGeometry = new THREE.CylinderGeometry(30, 30, 400, 32, 1, true);
+        const tubeMaterial = new THREE.ShaderMaterial({
+            vertexShader: `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `,
+            fragmentShader: `
+                varying vec2 vUv;
+                void main() {
+                    vec3 color = mix(vec3(0.96, 0.94, 0.86), vec3(0.82, 0.66, 0.46), vUv.y);
+                    gl_FragColor = vec4(color, 1.0);
+                }
+            `,
+            side: THREE.DoubleSide
+        });
+        const tube = new THREE.Mesh(tubeGeometry, tubeMaterial);
+        tube.rotation.y = Math.PI / 2;
+        scene.add(tube);
+
+        // Movement variables
+        let rotationSpeed = 0;
+        let tubeOffsetY = 0;
+        const dampingFactor = 0.95;
+        const moveSpeed = 2.0;
+        const rotationScale = 0.0001;
+        const maxTubeOffsetY = 200; // Reduced to keep tube visible
+        const scrollHeight = 5000;
+        const tubeRadius = 30;
+        const virtualTubeRadius = 65;
+        const tubeHeight = 400;
+
+        // Video data with bunny.net links
+        const videoData = [
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc371a', description: 'A stunning client video showcasing amazing work.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc371b', description: 'Beautiful footage from a satisfied customer.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc371c', description: 'Incredible quality video with great details.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc371d', description: 'A heartfelt review from a happy client.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc371e', description: 'Dynamic video with excellent production value.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc371f', description: 'Client success story captured beautifully.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3720', description: 'High-quality UGC content from a loyal customer.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3721', description: 'Amazing visuals from a satisfied collaborator.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3722', description: 'Engaging video with rich storytelling.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3723', description: 'Top-notch production by a happy client.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3724', description: 'Creative video showcasing client satisfaction.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3725', description: 'A delightful review with stunning visuals.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3726', description: 'Excellent UGC content from a repeat client.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3727', description: 'Beautifully crafted video testimonial.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3728', description: 'High-resolution video from a satisfied user.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3729', description: 'Captivating content by a loyal customer.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3730', description: 'Impressive video with great feedback.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3731', description: 'A joyful client review with stunning shots.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3732', description: 'High-quality footage from a happy collaborator.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3733', description: 'Engaging UGC video with rich details.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3734', description: 'Beautiful production by a satisfied client.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3735', description: 'Creative video with excellent quality.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3736', description: 'A stunning review from a happy user.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3737', description: 'Top-tier UGC content with great visuals.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3738', description: 'Impressive video testimonial from a client.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3739', description: 'High-resolution footage with rich content.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3740', description: 'Engaging video from a satisfied collaborator.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3741', description: 'Beautifully crafted client review.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3742', description: 'Dynamic UGC content with great quality.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3743', description: 'A joyful video from a happy client.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3744', description: 'Stunning visuals from a loyal customer.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3745', description: 'High-quality production with rich details.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3746', description: 'Creative review by a satisfied user.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3747', description: 'Excellent UGC video with great feedback.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3748', description: 'Beautiful footage from a happy collaborator.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3749', description: 'Engaging content with stunning visuals.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3750', description: 'Top-notch video from a satisfied client.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3751', description: 'Impressive review with rich storytelling.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3752', description: 'High-resolution UGC content.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3753', description: 'A delightful video from a loyal customer.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3754', description: 'Beautiful production with great details.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3755', description: 'Creative video showcasing client satisfaction.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3756', description: 'A stunning review from a happy user.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3757', description: 'Top-tier UGC content with great visuals.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3758', description: 'Impressive video testimonial from a client.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3759', description: 'High-resolution footage with rich content.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3760', description: 'Engaging video from a satisfied collaborator.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3761', description: 'Beautifully crafted client review.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3762', description: 'Dynamic UGC content with great quality.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3763', description: 'A joyful video from a happy client.' },
+            { thumbnail: 'sample.png', videoId: '97615368-c573-4b82-b7c0-f77807bc3764', description: 'Stunning visuals from a loyal customer.' }
+        ];
+
+        // Thumbnail functions
+        const allThumbnails = [];
+        const virtualTube = new THREE.Group();
+        scene.add(virtualTube);
+
+        function createVideoThumbnail(data, yPosition, angle, index) {
+            const x = virtualTubeRadius * Math.sin(angle);
+            const z = virtualTubeRadius * Math.cos(angle);
+
+            const geometry = new THREE.BoxGeometry(40, 30, 5);
+            const texture = new THREE.TextureLoader().load(data.thumbnail);
+            texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+            texture.minFilter = THREE.LinearMipmapLinearFilter;
+            texture.magFilter = THREE.LinearFilter;
+
+            // Material with texture only on front face
+            const materials = [
+                new THREE.MeshBasicMaterial({ color: 0x000000 }), // Left
+                new THREE.MeshBasicMaterial({ color: 0x000000 }), // Right
+                new THREE.MeshBasicMaterial({ color: 0x000000 }), // Top
+                new THREE.MeshBasicMaterial({ color: 0x000000 }), // Bottom
+                new THREE.MeshBasicMaterial({ color: 0x000000 }),    // Front
+                new THREE.MeshBasicMaterial({ map: texture })  // Back
+            ];
+
+            const thumbnail = new THREE.Mesh(geometry, materials);
+            thumbnail.position.set(x, yPosition, z);
+            thumbnail.rotation.set(0, angle + Math.PI/2 + Math.PI/2, 0);
+
+            // Add play button to front layer
+            const playGeometry = new THREE.PlaneGeometry(8, 8);
+            const playTexture = new THREE.TextureLoader().load('play.png');
+            const playMaterial = new THREE.MeshBasicMaterial({ map: playTexture, transparent: true });
+            const playButton = new THREE.Mesh(playGeometry, playMaterial);
+            playButton.position.set(x, yPosition, z + 2.6); // Slightly in front of cube
+            playButton.rotation.set(0, angle, 0);
+            virtualTube.add(playButton);
+
+            thumbnail.userData = {
+                videoUrl: `https://iframe.mediadelivery.net/play/463997/${data.videoId}`,
+                description: data.description,
+                index: index
+            };
+            return thumbnail;
+        }
+
+        // Initialize thumbnails in helical pattern
+        const totalThumbnails = videoData.length;
+        const helixStep = (2 * Math.PI) / 10; // 10 thumbnails per full rotation
+        for (let i = 0; i < totalThumbnails; i++) {
+            const angle = i * helixStep;
+            const yPosition = i * (tubeHeight / totalThumbnails) - 200; // Helical descent
+            const thumbnail = createVideoThumbnail(videoData[i], yPosition, angle, i);
+            virtualTube.add(thumbnail);
+            allThumbnails.push(thumbnail);
+        }
+
+        // Raycast interaction
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+
+        window.addEventListener('click', (event) => {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(allThumbnails);
+
+            if (intersects.length > 0) {
+                const thumbnail = intersects[0].object;
+                showVideoPlayer(thumbnail);
+            }
+            const container = document.getElementById('video-player-container');
+            if (container.style.display === 'block') {
+                event.stopPropagation();
+            }
+        });
+
+        function showVideoPlayer(thumbnail) {
+            const container = document.getElementById('video-player-container');
+            const video = document.getElementById('video-player');
+            const description = document.getElementById('video-description');
+
+            video.src = thumbnail.userData.videoUrl;
+            video.crossOrigin = 'anonymous';
+            description.innerHTML = `
+                <h3 style="color: #8B4513;">Video Description</h3>
+                <p>${thumbnail.userData.description}</p>
+                <p style="font-style: italic;">This captivating video showcases the incredible talent and dedication of our clients. Immerse yourself in the stunning visuals and heartfelt narrative that highlight their unique experiences. We invite you to leave your own review below to share your thoughts on this exceptional work!</p>
+            `;
+            container.style.display = 'block';
+
+            video.play().catch((error) => {
+                console.error('Video playback failed:', error);
+            });
+        }
+
+        // Close video player
+        document.getElementById('close-button').addEventListener('click', (event) => {
+            event.stopPropagation();
+            const container = document.getElementById('video-player-container');
+            const video = document.getElementById('video-player');
+            video.pause();
+            video.src = '';
+            container.style.display = 'none';
+        });
+
+        // Scroll and touch event
+        let lastTouchY = 0;
+        window.addEventListener('wheel', (event) => {
+            const deltaY = event.deltaY;
+            if (tube) {
+                rotationSpeed += deltaY * rotationScale;
+                tubeOffsetY += deltaY * moveSpeed * 0.05;
+                tubeOffsetY = Math.max(-maxTubeOffsetY, Math.min(maxTubeOffsetY, tubeOffsetY)); // Limit scrolling
+                tube.rotation.y = rotationSpeed;
+                tube.position.y = tubeOffsetY;
+                virtualTube.rotation.y = tube.rotation.y;
+                virtualTube.position.y = tubeOffsetY;
+            }
+            event.preventDefault();
+        });
+
+        window.addEventListener('touchstart', (event) => {
+            lastTouchY = event.touches[0].clientY;
+        });
+
+        window.addEventListener('touchmove', (event) => {
+            const touchY = event.touches[0].clientY;
+            const deltaY = lastTouchY - touchY;
+            if (tube) {
+                rotationSpeed += deltaY * rotationScale * 0.1;
+                tubeOffsetY += deltaY * moveSpeed * 0.02;
+                tubeOffsetY = Math.max(-maxTubeOffsetY, Math.min(maxTubeOffsetY, tubeOffsetY));
+                tube.rotation.y = rotationSpeed;
+                tube.position.y = tubeOffsetY;
+                virtualTube.rotation.y = tube.rotation.y;
+                virtualTube.position.y = tubeOffsetY;
+            }
+            lastTouchY = touchY;
+            event.preventDefault();
+        });
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            if (tube) {
+                tube.rotation.y += rotationSpeed;
+                virtualTube.rotation.y = tube.rotation.y;
+                virtualTube.position.y = tubeOffsetY;
+                camera.position.y = 0;
+                rotationSpeed *= dampingFactor;
+                if (Math.abs(rotationSpeed) < 0.00001) {
+                    rotationSpeed = 0;
+                }
+            }
+            renderer.render(scene, camera);
+        }
+
+        camera.position.set(0, 0, 150);
+        camera.lookAt(0, 0, 0);
+        animate();
+        document.body.style.height = `${scrollHeight}px`;
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Market Size</title>
+    <link rel="stylesheet" href="../styles/market.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.9.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.9.0/mapbox-gl.css" rel="stylesheet" />
+</head>
+<body>
+    <!-- Menu toggle button -->
+    <div class="menu-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    
+    <!-- Sidebar navigation -->
+    <nav class="sidebar">
+        <ul class="main-links">
+            <li><a href="../index.html"><img src="../icons/home.png" alt="Home"> <span>Home</span></a></li>
+            <li><a href="../html/works.html"><img src="../icons/ugc.png" alt="Works"> <span>Works</span></a></li>
+            <li><a href="../html/about.html"><img src="../icons/about.png" alt="About"> <span>About</span></a></li>
+            <li><a href="../html/events.html"><img src="../icons/calendar.png" alt="Book with Me"> <span>Book with Me</span></a></li>           
+            <li><a href="../html/contact.html"><img src="../icons/contact.png" alt="Contact"> <span>Contact</span></a></li>
+        </ul>
+
+        <div class="sidebar-bottom">
+            <ul>
+                <li><a href="tel:+34634469846"><img src="../icons/phone.png" alt="Phone"> <span>Phone</span></a></li>
+                <li><a href="mailto:taniaugcstudio@gmail.com"><img src="../icons/mail.png" alt="Email"> <span>Email</span></a></li>
+                <li><a href="https://wa.me/34634469846"><img src="../icons/whatsapp.png" alt="WhatsApp"> <span>WhatsApp</span></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Mobile contact bar -->
+    <nav class="contact-bar">
+        <ul>
+            <li><a href="tel:+34634469846"><img src="../icons/phone.png" alt="Phone"></a></li>
+            <li><a href="mailto:taniaugcstudio@gmail.com"><img src="../icons/mail.png" alt="Email"></a></li>
+            <li><a href="https://wa.me/34634469846"><img src="../icons/whatsapp.png" alt="WhatsApp"></a></li>
+        </ul>
+    </nav>
+
+    <!-- Market Centent -->
+    <div class="text-overlay">
+        Más de <strong>300 creadores y marcas</strong> ya confían en mí cada día para recibir contenidos únicos y hechos a medida.  
+        <br><br>
+        ¿Quieres llevar tus redes al siguiente nivel?  
+        <strong>Escríbeme hoy</strong> y recibe el contenido especial que tu proyecto merece ✨
+    </div>
+    
+    <canvas id="globe-canvas"></canvas>
+    <div id="map"></div>
+    
+    <!-- Scripts -->
+    <script src="../scripts/market.js"></script>
+    <script src="../scripts/menu.js"></script>
+</body>
+</html>
