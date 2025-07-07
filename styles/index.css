@@ -25,16 +25,16 @@ html, body {
     /* Add padding to make room for the border */
     padding: 5px;
     background: 
-        /* Gradient for the rotating border */
-        conic-gradient(
-            from 0deg,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(255, 255, 255, 0.2) 10%,
-            rgba(0, 217, 255, 0.8) 20%, /* Shiny tip (gold/yellow for glow) */
-            rgba(255, 255, 255, 0.2) 30%,
-            rgba(255, 255, 255, 0) 40%,
-            rgba(255, 255, 255, 0) 100%
-        );
+    /* Gradient for the rotating border */
+    conic-gradient(
+        from 0deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.2) 10%,
+        rgba(0, 217, 255, 0.8) 20%, /* Shiny tip (gold/yellow for glow) */
+        rgba(255, 255, 255, 0.2) 30%,
+        rgba(255, 255, 255, 0) 40%,
+        rgba(255, 255, 255, 0) 100%
+    );
     background-size: 100% 100%;
     animation: rotateBorder 3s linear infinite; /* Animation for rotation */
 }

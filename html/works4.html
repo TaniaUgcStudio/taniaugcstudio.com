@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotating Tube Video Gallery</title>
+    <style>
+        body {
+            margin: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+            background-color: #1a1a1a;
+        }
+        
+        canvas {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        #welcome-text {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #f5f5dc;
+            text-align: center;
+            z-index: 1;
+            font-family: Georgia, serif;
+            font-size: 1.2em;
+            width: 80%;
+            max-width: 600px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+        }
+        
+        #video-player-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        #video-frame {
+            width: 90vw;
+            height: 50vh;
+            max-width: 900px;
+            border: none;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        #video-description {
+            color: #fff;
+            font-family: Georgia, serif;
+            max-width: 900px;
+            text-align: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+        }
+        
+        #close-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ff4444;
+            color: #f5f5dc;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-family: Georgia, serif;
+            font-size: 1em;
+            z-index: 1010;
+        }
+        
+        @media (max-width: 768px) {
+            #video-frame {
+                width: 95vw;
+                height: 50vh;
+            }
+            
+            #video-description {
+                font-size: 0.9em;
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="welcome-text">
+        Bienvenido a los contenidos hechos de UGC con calidad, estos videos son de clientes que cada uno ha sido muy satisfecho. Abajo de cada video puedes ver las reseñas e igual si has trabajado conmigo, te agradecería que pongas tu opinión sobre mi trabajo.
+    </div>
+    
+    <div id="video-player-container">
+        <button id="close-button">Close</button>
+        <iframe id="video-frame" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <div id="video-description"></div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script>
+        // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        document.body.appendChild(renderer.domElement);
+        
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+        scene.add(ambientLight);
+        const pointLight = new THREE.PointLight(0xffffff, 2.0, 1000);
+        pointLight.position.set(20, 20, 20);
+        scene.add(pointLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
+        directionalLight.position.set(0, 20, 20);
+        scene.add(directionalLight);
+        
+        // Cylinder setup with beige gradient
+        const tubeGeometry = new THREE.CylinderGeometry(30, 30, 400, 32, 1, true);
+        const tubeMaterial = new THREE.ShaderMaterial({
+            vertexShader: `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `,
+            fragmentShader: `
+                varying vec2 vUv;
+                void main() {
+                    vec3 color = mix(vec3(0.96, 0.94, 0.86), vec3(0.82, 0.66, 0.46), vUv.y);
+                    gl_FragColor = vec4(color, 1.0);
+                }
+            `,
+            side: THREE.DoubleSide
+        });
+        const tube = new THREE.Mesh(tubeGeometry, tubeMaterial);
+        tube.rotation.y = Math.PI / 2;
+        scene.add(tube);
+        
+        // Movement variables
+        let rotationSpeed = 0;
+        let tubeOffsetY = 0;
+        const dampingFactor = 0.95;
+        const moveSpeed = 2.0;
+        const rotationScale = 0.0001;
+        const maxTubeOffsetY = 200; // Reduced to keep tube visible
+        const scrollHeight = 5000;
+        const tubeRadius = 30;
+        const virtualTubeRadius = 65;
+        const tubeHeight = 400;
+        
+        // Video data with bunny.net links
+        const videoData = [
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/de22cd3e-7711-4d9f-96f0-da827adf268b/thumbnail.jpg', videoId: 'de22cd3e-7711-4d9f-96f0-da827adf268b', description: 'A stunning client video showcasing beauty products.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/aa4b7211-fb2a-4bcf-afd3-90a0e73fa76c/thumbnail.jpg', videoId: 'aa4b7211-fb2a-4bcf-afd3-90a0e73fa76c', description: 'Beautiful footage highlighting skincare routines.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/9d57c988-e63a-4446-9fb8-b5d39bcdc99c/thumbnail.jpg', videoId: '9d57c988-e63a-4446-9fb8-b5d39bcdc99c', description: 'Incredible quality video on makeup techniques.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/c0fba4e9-277e-445b-9628-cb690de1ef40/thumbnail.jpg', videoId: 'c0fba4e9-277e-445b-9628-cb690de1ef40', description: 'A heartfelt review of beauty essentials.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/d8a672d5-2b32-4efa-b545-abcb90e1dbb8/thumbnail.jpg', videoId: 'd8a672d5-2b32-4efa-b545-abcb90e1dbb8', description: 'Dynamic video showcasing beauty trends.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/90d11a3e-2ce6-40e1-ac12-e9b04f904bd9/thumbnail.jpg', videoId: '90d11a3e-2ce6-40e1-ac12-e9b04f904bd9', description: 'Client success story in beauty content.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/f6a41e57-71f0-4851-a3a5-e06de1202cb3/thumbnail.jpg', videoId: 'f6a41e57-71f0-4851-a3a5-e06de1202cb3', description: 'High-quality UGC content for beauty products.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/15b440ab-9e3d-47ca-8bb2-ab794ce3134e/thumbnail.jpg', videoId: '15b440ab-9e3d-47ca-8bb2-ab794ce3134e', description: 'Amazing visuals of beauty transformations.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/e4b2cca6-a862-4250-b65b-3819c5bcaa8a/thumbnail.jpg', videoId: 'e4b2cca6-a862-4250-b65b-3819c5bcaa8a', description: 'Engaging lifestyle video with great details.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/45b111ed-ab06-41c8-8da0-3d13cd442433/thumbnail.jpg', videoId: '45b111ed-ab06-41c8-8da0-3d13cd442433', description: 'Top-notch production of daily routines.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/9b3309dc-c63e-44cb-8b1d-5d4cee28dae3/thumbnail.jpg', videoId: '9b3309dc-c63e-44cb-8b1d-5d4cee28dae3', description: 'Creative lifestyle content with stunning visuals.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/ebdc2210-7c66-4ddd-8a36-41768cd48a6c/thumbnail.jpg', videoId: 'ebdc2210-7c66-4ddd-8a36-41768cd48a6c', description: 'A delightful review of lifestyle products.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/468bb66e-9000-4beb-b412-8fec76f8312c/thumbnail.jpg', videoId: '468bb66e-9000-4beb-b412-8fec76f8312c', description: 'High-quality footage of everyday moments.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/74aedb03-b41a-4812-bb23-6b5defaf078e/thumbnail.jpg', videoId: '74aedb03-b41a-4812-bb23-6b5defaf078e', description: 'Dynamic lifestyle video with rich storytelling.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/f57765fb-df60-4463-9599-058062ce4a80/thumbnail.jpg', videoId: 'f57765fb-df60-4463-9599-058062ce4a80', description: 'Impressive lifestyle content from a happy client.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/2f5ef236-840a-4c25-ad94-9a17037a11ab/thumbnail.jpg', videoId: '2f5ef236-840a-4c25-ad94-9a17037a11ab', description: 'Beautifully crafted lifestyle review.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/2cd798f5-9211-4b8a-9cbe-974e32902036/tnumbnail.jpg', videoId: '2cd798f5-9211-4b8a-9cbe-974e32902036', description: 'Stunning home decor video showcase.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/eafb0f78-92c8-40e1-9a97-3061bda8c35a/thumbnail.jpg', videoId: 'eafb0f78-92c8-40e1-9a97-3061bda8c35a', description: 'Creative home organization content.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/6d5e6bc8-ecf4-43da-8617-b101f4fdd97e/thumbnail.jpg', videoId: '6d5e6bc8-ecf4-43da-8617-b101f4fdd97e', description: 'High-quality footage of home essentials.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/e4ecffbb-65cf-47cc-b537-fa32507cdd1a/thumbnail.jpg', videoId: 'e4ecffbb-65cf-47cc-b537-fa32507cdd1a', description: 'Engaging home improvement video.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/ea514a8c-feda-45ac-8be7-dd92372e81de/thumbnail.jpg', videoId: 'ea514a8c-feda-45ac-8be7-dd92372e81de', description: 'A joyful review of home products.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/e86a4e72-0c05-4f2c-b0c5-eabadd4e3573/thumbnail.jpg', videoId: 'e86a4e72-0c05-4f2c-b0c5-eabadd4e3573', description: 'Beautifully crafted home decor video.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/f36b7868-3f97-456a-bcea-54859548dd8a/thumbnail.jpg', videoId: 'f36b7868-3f97-456a-bcea-54859548dd8a', description: 'Top-notch home organization content.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/ed724665-c86a-4967-83d1-c162dd2a4529/thumbnail.jpg', videoId: 'ed724665-c86a-4967-83d1-c162dd2a4529', description: 'Impressive home essentials video.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/1b22e547-df35-482f-ab20-11652453561f/thumbnail.jpg', videoId: '1b22e547-df35-482f-ab20-11652453561f', description: 'Stunning tech product showcase.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/6a142e8f-38fc-41d0-87fb-af736fffe31a/thumbnail.jpg', videoId: '6a142e8f-38fc-41d0-87fb-af736fffe31a', description: 'Engaging app review with great visuals.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/5fd01fe7-3337-48bf-a081-c9b375a22148/thumbnail.jpg', videoId: '5fd01fe7-3337-48bf-a081-c9b375a22148', description: 'High-quality tech gadget video.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/afa94b69-9f26-4809-ba4e-e608f1b66140/thumbnail.jpg', videoId: 'afa94b69-9f26-4809-ba4e-e608f1b66140', description: 'Creative technology content showcase.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/f9a4fcbe-ff84-4535-8cc9-e1ffb33334da/thumbnail.jpg', videoId: 'f9a4fcbe-ff84-4535-8cc9-e1ffb33334da', description: 'Impressive app demonstration video.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/5206c5c9-5ee6-46da-bacc-ea30605d6f3b/thumbnail.jpg', videoId: '5206c5c9-5ee6-46da-bacc-ea30605d6f3b', description: 'Top-notch tech product review.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/a079badd-1c5d-4258-b05b-b2dbe6a430c0/thumbnail.jpg', videoId: 'a079badd-1c5d-4258-b05b-b2dbe6a430c0', description: 'Engaging technology video with rich details.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/df8057c2-50d5-41b0-9b9b-719dd77a581f/thumbnail.jpg', videoId: 'df8057c2-50d5-41b0-9b9b-719dd77a581f', description: 'Stunning fashion showcase video.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/17fcb87f-9c55-4dd2-b930-17949bcb956f/thumbnail.jpg', videoId: '17fcb87f-9c55-4dd2-b930-17949bcb956f', description: 'Beautiful fashion styling content.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/4fe5d689-f3f7-409f-9574-93395271d4da/thumbnail.jpg', videoId: '4fe5d689-f3f7-409f-9574-93395271d4da', description: 'High-quality fashion trend video.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/20f9f4d3-2780-48b0-a5dd-226dba5235c3/thumbnail.jpg', videoId: '20f9f4d3-2780-48b0-a5dd-226dba5235c3', description: 'Creative fashion review with great visuals.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/763a0c16-8046-41af-b975-aa4d5c25e53d/thumbnail.jpg', videoId: '763a0c16-8046-41af-b975-aa4d5c25e53d', description: 'Impressive fashion styling content.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/776079c7-c095-439d-b944-6caed7a60a60/thumbnail.jpg', videoId: '776079c7-c095-439d-b944-6caed7a60a60', description: 'Engaging fashion video with rich details.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/d8703631-d936-4150-b0a7-9ef22f39ce75/thumbnail.jpg', videoId: 'd8703631-d936-4150-b0a7-9ef22f39ce75', description: 'Beautifully crafted fashion showcase.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/348fd132-bd41-4e16-b264-c7a5b41174ce/thumbnail.jpg', videoId: '348fd132-bd41-4e16-b264-c7a5b41174ce', description: 'Top-notch fashion content with stunning visuals.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/92665d5a-ade7-4b13-8760-14f7acd9190b/thumbnail.jpg', videoId: '92665d5a-ade7-4b13-8760-14f7acd9190b', description: 'Stunning jewelry showcase video.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/2956db95-4f97-4b46-9f96-a43ff2d2cbc5/thumbnail.jpg', videoId: '2956db95-4f97-4b46-9f96-a43ff2d2cbc5', description: 'Beautiful jewelry review content.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/09dc8707-715b-424c-ac9d-e73aeab3b7cf/thumbnail.jpg', videoId: '09dc8707-715b-424c-ac9d-e73aeab3b7cf', description: 'High-quality jewelry showcase video.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/034907d5-9511-45de-8220-3f989bd9a8c3/thumbnail.jpg', videoId: '034907d5-9511-45de-8220-3f989bd9a8c3', description: 'Creative jewelry content with great visuals.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/6c05fe21-53be-4492-be39-e25e4ede7307/thumbnail.jpg', videoId: '6c05fe21-53be-4492-be39-e25e4ede7307', description: 'Impressive jewelry review video.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/137e223c-60d1-4a5c-a382-e0228177a1af/thumbnail.jpg', videoId: '137e223c-60d1-4a5c-a382-e0228177a1af', description: 'Engaging jewelry showcase with rich details.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/7ce72ee8-02bb-466d-b695-6637d1d7e6c6/thumbnail.jpg', videoId: '7ce72ee8-02bb-466d-b695-6637d1d7e6c6', description: 'Beautifully crafted jewelry content.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/84f9cb50-48f8-40e1-8a1d-21abaae6fcf1/thumbnail.jpg', videoId: '84f9cb50-48f8-40e1-8a1d-21abaae6fcf1', description: 'Top-notch jewelry video with stunning visuals.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/2595ee9f-9e23-46cf-a419-15b5cda61ac1/thumbnail.jpg', videoId: '2595ee9f-9e23-46cf-a419-15b5cda61ac1', description: 'Stunning pet care video showcase.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/060f0c82-3b19-4a3d-bc13-50e4f45cd9be/thumbnail.jpg', videoId: '060f0c82-3b19-4a3d-bc13-50e4f45cd9be', description: 'Engaging pet training content.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/31a36a62-01da-4193-93f4-faaff0623976/thumbnail.jpg', videoId: '31a36a62-01da-4193-93f4-faaff0623976', description: 'High-quality pet product review.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/a8b9ad55-b791-41b0-a431-4a18799b64d1/thumbnail.jpg', videoId: 'a8b9ad55-b791-41b0-a431-4a18799b64d1', description: 'Creative pet care video with great visuals.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/5c8fe8f8-0690-47e2-af61-9b6704e1368a/thumbnail.jpg', videoId: '5c8fe8f8-0690-47e2-af61-9b6704e1368a', description: 'Impressive pet content showcase.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/f3732b1c-1b87-4754-bf24-46c2b0aee1a7/thumbnail.jpg', videoId: 'f3732b1c-1b87-4754-bf24-46c2b0aee1a7', description: 'Engaging pet video with rich details.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/d2f962d8-57a1-4fc5-80fb-096fb1b44a33/thumbnail.jpg', videoId: 'd2f962d8-57a1-4fc5-80fb-096fb1b44a33', description: 'Beautifully crafted pet care content.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/e3baba6a-ba70-42da-b294-1377b155fc92/thumbnail.jpg', videoId: 'e3baba6a-ba70-42da-b294-1377b155fc92', description: 'Top-notch pet video with stunning visuals.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/53787013-7815-4ed0-9dc0-e182e22da609/thumbnail.jpg', videoId: '53787013-7815-4ed0-9dc0-e182e22da609', description: 'Stunning English learning video.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/469d9ac8-071a-433c-a3b1-9cca6e49ba42/thumbnail.jpg', videoId: '469d9ac8-071a-433c-a3b1-9cca6e49ba42', description: 'Engaging language tutorial content.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/8645b6fb-9c54-4876-89d8-7d3286d2b9ac/thumbnail.jpg', videoId: '8645b6fb-9c54-4876-89d8-7d3286d2b9ac', description: 'High-quality English lesson video.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/2e840921-23ce-4687-b510-c6384ae5c84c/thumbnail.jpg', videoId: '2e840921-23ce-4687-b510-c6384ae5c84c', description: 'Creative language learning content.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/7f77cdfa-ce30-4ba8-b805-072abcbb3276/thumbnail.jpg', videoId: '7f77cdfa-ce30-4ba8-b805-072abcbb3276', description: 'Impressive English tutorial video.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/12611fcb-2113-46e1-8fa6-0609f427c4a9/thumbnail.jpg', videoId: '12611fcb-2113-46e1-8fa6-0609f427c4a9', description: 'Engaging language content with rich details.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/74b6bda6-4807-4ac3-b377-78dfefb0f069/thumbnail.jpg', videoId: '74b6bda6-4807-4ac3-b377-78dfefb0f069', description: 'Beautifully crafted English lesson video.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/62ef3a09-c275-49f4-964f-768d45211d6a/thumbnail.jpg', videoId: '62ef3a09-c275-49f4-964f-768d45211d6a', description: 'Top-notch language learning content.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/af0eafff-3db3-4181-9ae0-3dc58fd840ec/thumbnail.jpg', videoId: 'af0eafff-3db3-4181-9ae0-3dc58fd840ec', description: 'Impressive English video with stunning visuals.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/28957227-4a11-40cb-a2ce-f8d3fcb00260/thumbnail.jpg', videoId: '28957227-4a11-40cb-a2ce-f8d3fcb00260', description: 'Stunning hair care video showcase.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/a1040077-5ffc-48a5-8d2b-48b16fa484d3/thumbnail.jpg', videoId: 'a1040077-5ffc-48a5-8d2b-48b16fa484d3', description: 'Engaging hair styling content.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/d246b094-3434-46de-8aab-512f5bce599c/thumbnail.jpg', videoId: 'd246b094-3434-46de-8aab-512f5bce599c', description: 'High-quality hair product review.' },
+        { thumbnail: 'https://vz-442d8bc3-9f6.b-cdn.net/b7f43758-3502-4d03-93cc-d89eea8a0a94/thumbnail.jpg', videoId: 'b7f43758-3502-4d03-93cc-d89eea8a0a94', description: 'Creative hair care video with great visuals.' }
+        ];
+        
+        // Thumbnail functions
+        const allThumbnails = [];
+        const virtualTube = new THREE.Group();
+        scene.add(virtualTube);
+        
+        function createVideoThumbnail(data, yPosition, angle, index) {
+            const x = virtualTubeRadius * Math.sin(angle);
+            const z = virtualTubeRadius * Math.cos(angle);
+            
+            const geometry = new THREE.BoxGeometry(40, 30, 5);
+            const texture = new THREE.TextureLoader().load(data.thumbnail);
+            texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+            texture.minFilter = THREE.LinearMipmapLinearFilter;
+            texture.magFilter = THREE.LinearFilter;
+            
+            // Material with texture only on front face
+            const materials = [
+            new THREE.MeshBasicMaterial({ color: 0x000000 }), // Left
+            new THREE.MeshBasicMaterial({ color: 0x000000 }), // Right
+            new THREE.MeshBasicMaterial({ color: 0x000000 }), // Top
+            new THREE.MeshBasicMaterial({ color: 0x000000 }), // Bottom
+            new THREE.MeshBasicMaterial({ color: 0x000000 }),    // Front
+            new THREE.MeshBasicMaterial({ map: texture })  // Back
+            ];
+            
+            const thumbnail = new THREE.Mesh(geometry, materials);
+            thumbnail.position.set(x, yPosition, z);
+            thumbnail.rotation.set(0, angle + Math.PI/2 + Math.PI/2, 0);
+            
+            // Add play button to front layer
+            const playGeometry = new THREE.PlaneGeometry(8, 8);
+            const playTexture = new THREE.TextureLoader().load('play.png');
+            const playMaterial = new THREE.MeshBasicMaterial({ map: playTexture, transparent: true });
+            const playButton = new THREE.Mesh(playGeometry, playMaterial);
+            playButton.position.set(x, yPosition, z + 2.6); // Slightly in front of cube
+            playButton.rotation.set(0, angle, 0);
+            virtualTube.add(playButton);
+            
+            thumbnail.userData = {
+                videoUrl: `https://iframe.mediadelivery.net/embed/463997/${data.videoId}?autoplay=true`,
+                description: data.description,
+                index: index
+            };
+            return thumbnail;
+        }
+        
+        // Initialize thumbnails in helical pattern
+        const totalThumbnails = videoData.length;
+        const helixStep = (2 * Math.PI) / 10; // 10 thumbnails per full rotation
+        for (let i = 0; i < totalThumbnails; i++) {
+            const angle = i * helixStep;
+            const yPosition = i * (tubeHeight / totalThumbnails) - 200; // Helical descent
+            const thumbnail = createVideoThumbnail(videoData[i], yPosition, angle, i);
+            virtualTube.add(thumbnail);
+            allThumbnails.push(thumbnail);
+        }
+        
+        // Raycast interaction
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        
+        window.addEventListener('click', (event) => {
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(allThumbnails);
+            
+            if (intersects.length > 0) {
+                const thumbnail = intersects[0].object;
+                showVideoPlayer(thumbnail);
+            }
+            const container = document.getElementById('video-player-container');
+            if (container.style.display === 'block') {
+                event.stopPropagation();
+            }
+        });
+        
+        function showVideoPlayer(thumbnail) {
+            const container = document.getElementById('video-player-container');
+            const iframe = document.getElementById('video-frame');
+            const description = document.getElementById('video-description');
+            
+            iframe.src = `${thumbnail.userData.videoUrl}`;
+            
+            description.innerHTML = `
+        <h3 style="color: #f5f5dc;">Video Description</h3>
+        <p>${thumbnail.userData.description}</p>
+        <p style="font-style: italic;">This captivating video showcases the incredible talent and dedication of our clients. Immerse yourself in the stunning visuals and heartfelt narrative that highlight their unique experiences. We invite you to leave your own review below to share your thoughts on this exceptional work!</p>
+      `;
+            
+            container.style.display = 'flex';
+        }
+        
+        // Close video player
+        document.getElementById('close-button').addEventListener('click', (event) => {
+            event.stopPropagation();
+            const container = document.getElementById('video-player-container');
+            const iframe = document.getElementById('video-frame');
+            iframe.src = '';
+            container.style.display = 'none';
+        });
+        
+        // Scroll and touch event
+        let lastTouchY = 0;
+        window.addEventListener('wheel', (event) => {
+            const deltaY = event.deltaY;
+            if (tube) {
+                rotationSpeed += deltaY * rotationScale;
+                tubeOffsetY += deltaY * moveSpeed * 0.05;
+                tubeOffsetY = Math.max(-maxTubeOffsetY, Math.min(maxTubeOffsetY, tubeOffsetY)); // Limit scrolling
+                tube.rotation.y = rotationSpeed;
+                tube.position.y = tubeOffsetY;
+                virtualTube.rotation.y = tube.rotation.y;
+                virtualTube.position.y = tubeOffsetY;
+            }
+            event.preventDefault();
+        });
+        
+        window.addEventListener('touchstart', (event) => {
+            lastTouchY = event.touches[0].clientY;
+        });
+        
+        window.addEventListener('touchmove', (event) => {
+            const touchY = event.touches[0].clientY;
+            const deltaY = lastTouchY - touchY;
+            if (tube) {
+                rotationSpeed += deltaY * rotationScale * 0.1;
+                tubeOffsetY += deltaY * moveSpeed * 0.02;
+                tubeOffsetY = Math.max(-maxTubeOffsetY, Math.min(maxTubeOffsetY, tubeOffsetY));
+                tube.rotation.y = rotationSpeed;
+                tube.position.y = tubeOffsetY;
+                virtualTube.rotation.y = tube.rotation.y;
+                virtualTube.position.y = tubeOffsetY;
+            }
+            lastTouchY = touchY;
+            event.preventDefault();
+        });
+        
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            if (tube) {
+                tube.rotation.y += rotationSpeed;
+                virtualTube.rotation.y = tube.rotation.y;
+                virtualTube.position.y = tubeOffsetY;
+                camera.position.y = 0;
+                rotationSpeed *= dampingFactor;
+                if (Math.abs(rotationSpeed) < 0.00001) {
+                    rotationSpeed = 0;
+                }
+            }
+            renderer.render(scene, camera);
+        }
+        
+        camera.position.set(0, 0, 150);
+        camera.lookAt(0, 0, 0);
+        animate();
+        document.body.style.height = `${scrollHeight}px`;
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
