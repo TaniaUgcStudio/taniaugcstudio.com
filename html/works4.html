@@ -52,12 +52,13 @@
         }
         .close-btn:hover {
             background: #cc4444;
+            z-index: 1500;
         }
     </style>
 </head>
 <body>
     <div id="popup" class="popup">
-        <button class="close-btn" onclick="closePopup()">Close</button>
+        <button id="closeBtn" class="close-btn">Close</button>
         <iframe id="videoFrame" src=""></iframe>
     </div>
     
@@ -261,22 +262,42 @@
         const mouse = new THREE.Vector2();
         let selectedCube = null;
         
-        // Handle mouse click
-        window.addEventListener('click', (event) => {
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        // Handle mouse click / touch
+        function handleInteraction(event) {
+            event.preventDefault();
             
+            let x, y;
+            
+            if (event.type.startsWith('touch')) {
+                const touch = event.changedTouches[0];
+                x = touch.clientX;
+                y = touch.clientY;
+            } else {
+                x = event.clientX;
+                y = event.clientY;
+            }
+            
+            mouse.x = (x / window.innerWidth) * 2 - 1;
+            mouse.y = -(y / window.innerHeight) * 2 + 1;
             raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(cubes);
+            const intersects = raycaster.intersectObjects(cubes, true);
             
             if (intersects.length > 0) {
                 const intersect = intersects[0];
-                const cube = intersect.object;
-                const faceIndex = Math.floor(intersect.faceIndex / 2);
-                const videoUrl = cube.userData.videos[faceIndex % cube.userData.videos.length].url;
-                showPopup(videoUrl);
+                const object = intersect.object;
+                
+                // Cube case
+                if (object.userData.videos) {
+                    const faceIndex = Math.floor(intersect.faceIndex / 2);
+                    const videoUrl = object.userData.videos[faceIndex % object.userData.videos.length].url;
+                    showPopup(videoUrl);
+                }
             }
-        });
+        }
+        
+        // Click evenets for both Desktop and Mobile
+        window.addEventListener('click', handleInteraction);
+        window.addEventListener('touchend', handleInteraction);
         
         // Handle mouse down for dragging
         window.addEventListener('mousedown', (event) => {
@@ -322,6 +343,12 @@
             videoFrame.src = '';
             popup.style.display = 'none';
         }
+        document.getElementById('closeBtn').addEventListener('click', closePopup);
+        document.getElementById('popup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePopup();
+            }
+        });
         
         // Animation loop
         function animate() {
