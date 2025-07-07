@@ -99,8 +99,8 @@
         
         .video-frame {
             position: relative;
-            width: 80px;
-            height: 120px;
+            width: 100px;
+            height: 190px;
             background-size: cover;
             background-position: center;
             clip-path: polygon(
@@ -195,23 +195,25 @@
             cursor: pointer;
         }
         
-        @media (max-width: 768px) {
+        @media (max-width: 1000px) {
             .intro-banner {
-                font-size: 1em;
                 padding: 20px 15px;
             }
             
             .video-strip {
-                gap: 12px;
+                margin-left: 20px;
+                gap: 25px;
                 padding-bottom: 20px;
                 overflow-x: auto;
             }
             
             .video-frame {
-                width: 180px;
-                height: 250px;
-                min-width: 180px;
-                min-height: 250px;
+                width: 170px;
+                height: 340px;
+                min-width: 120px;
+                max-width: 180px;
+                min-height: 340px;
+                max-height: 340px;
                 flex: 0 0 300px; /* Fixed size, no shrinking */
                 border-radius: 20px;
                 opacity: 1;
@@ -223,6 +225,8 @@
             h2 {
                 font-size: 1.4rem;
                 margin: 30px 0 10px;
+                margin-left: 25px;
+                margin-bottom: 20px;
             }
             
             .container {
@@ -326,7 +330,7 @@
         const baseUrl = 'https://vz-442d8bc3-9f6.b-cdn.net/';
         const embedUrl = 'https://iframe.mediadelivery.net/embed/463997/';
         
-        for (const [title, videos] of Object.entries(videoData)) {
+        for (const [title, videos] of Object.entries(videoData)) {     
             const h2 = document.createElement('h2');
             h2.textContent = title;
             const strip = document.createElement('div');
@@ -339,23 +343,25 @@
                 div.style.backgroundImage = `url('${baseUrl}${id}/preview.webp?v=1751979933')`;
 
                 // Default desktop styles
-                div.style.width = '100px';
+                /*div.style.width = '100px';
                 div.style.height = '180px';
                 div.style.minWidth = '100px';
                 div.style.minHeight = '180px';
 
                 // Apply mobile styles and animations if screen width is <= 768px
                 if (window.innerWidth <= 1000) {
-                    div.style.width = '170px';
-                    div.style.height = '320px';
-                    div.style.minWidth = '170px';
-                    div.style.minHeight = '320px';
+                    h2.style.fontSize = '2rem';
+                    strip.style.gap = '20px';
+                    div.style.width = '180px';
+                    div.style.height = '330px';
+                    div.style.minWidth = '180px';
+                    div.style.minHeight = '330px';
                 }
 
                 div.style.opacity = '1';
                 div.style.backgroundSize = 'cover';
                 div.style.backgroundPosition = 'center';
-                div.style.display = 'block';
+                div.style.display = 'block';*/
                 div.onclick = () => showPopup(`${embedUrl}${id}?autoplay=true`);
                 strip.appendChild(div);
             });
