@@ -5,8 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Video Gallery</title>
     <style>
-        body { margin: 0; overflow: hidden; background: #000; }
+        html, body {
+            margin: 0;
+            font-family: Georgia, serif, Arial, sans-serif;
+            background: linear-gradient(180deg, #fbe9f1 0%, #f1d1b1 20%, #e6e2db 60%, #eeebe6 100%);
+            color: #15025c;
+            overflow-x: hidden;
+            position: relative;
+        }
         canvas {
+            background: transparent;
             display: block;
             width: 100vw;
             height: 100vh;
@@ -54,15 +62,15 @@
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
     <script>
         // Scene setup
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
         camera.position.set(0, 5, 15); // Move camera up and back for a better view
         camera.lookAt(0, 0, 0); // Ensure camera points at scene center        
-        const renderer = new THREE.WebGLRenderer();
+        const renderer = new THREE.WebGLRenderer({ alpha: true }); // Habilita transparencia
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
         
@@ -83,9 +91,6 @@
         const pointLight = new THREE.PointLight(0xffffff, 2, 100); // Increase intensity
         pointLight.position.set(10, 10, 10);
         scene.add(pointLight);
-        
-        // Dark space background
-        scene.background = new THREE.Color(0x000022);
         
         // Categories and videos data (Paste your categories here)
         const categories = [
@@ -216,7 +221,7 @@
                 const video = category.videos[i % category.videos.length];
                 const material = new THREE.MeshBasicMaterial({
                     map: loader.load(video.thumbnail, () => console.log(`Loaded: ${video.thumbnail}`), undefined, (err) => console.error(`Error loading: ${video.thumbnail}`, err)),
-                    color: 0x00ffff, // Cyan fallback color
+                    color: 0xf0f0f0, // Cyan fallback color
                     transparent: true,
                     opacity: 1.0 // Full opacity for visibility
                 });
@@ -236,7 +241,7 @@
             canvas.width = 256;
             canvas.height = 64;
             const context = canvas.getContext('2d');
-            context.fillStyle = 'rgba(0, 255, 255, 0.8)';
+            context.fillStyle = 'rgba(150, 150, 150, 1.0)';
             context.font = 'bold 40px Arial';
             context.textAlign = 'center';
             context.fillText(category.name, 128, 40);
