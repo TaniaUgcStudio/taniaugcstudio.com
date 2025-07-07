@@ -24,7 +24,7 @@
             <li><a href="../html/market.html"><img src="../icons/market.png" alt="Market Size"> <span>Alcance del mercado</span></a></li>    
             <li><a href="../html/contact.html"><img src="../icons/contact.png" alt="Contact"> <span>Contacto</span></a></li>
         </ul>
-
+        
         <div class="sidebar-bottom">
             <ul>
                 <li><a href="tel:+34634469846"><img src="../icons/phone.png" alt="Phone"> <span>Teléfono</span></a></li>
@@ -33,7 +33,7 @@
             </ul>
         </div>
     </nav>
-
+    
     <!-- Mobile contact bar -->
     <nav class="contact-bar">
         <ul>
@@ -42,7 +42,7 @@
             <li><a href="https://wa.me/34634469846"><img src="../icons/whatsapp.png" alt="WhatsApp"></a></li>
         </ul>
     </nav>
-
+    
     <!-- Works Centent -->
     <div class="intro-banner">
         <p>
@@ -179,10 +179,35 @@
             <span class="close-btn" onclick="closePopup()">&times;</span>
             <iframe id="popupVideo" src="" frameborder="0" allowfullscreen allow="autoplay; encrypted-media"></iframe>
         </div>
-
+        
         <!-- Scripts -->
         <script src="../scripts/works.js"></script>
         <script src="../scripts/menu.js"></script>
+        
+        <!-- Random flips for vidoe frames -->
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const frames = Array.from(document.querySelectorAll('.video-frame'));
+                
+                // Shuffle the array
+                for (let i = frames.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [frames[i], frames[j]] = [frames[j], frames[i]];
+                }
+                
+                // Apply the flip to a random 30% of the shuffled list
+                const flipCount = Math.floor(frames.length * 0.3);
+                for (let i = 0; i < flipCount; i++) {
+                    const frame = frames[i];
+                    frame.classList.add('flip');
+                    
+                    // Add random animation delay and duration
+                    frame.style.setProperty('--delay', `${Math.random() * 2}s`);
+                    frame.style.setProperty('--duration', `${2 + Math.random() * 2}s`);
+                }
+            });
+        </script>
+        
     </body>
     </html>
     
