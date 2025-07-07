@@ -2,16 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rotating Tube Video Gallery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Flux Video Gallery</title>
     <style>
         html, body {
             margin: 0;
             font-family: Georgia, serif, Arial, sans-serif;
             background: linear-gradient(180deg, #fbe9f1 0%, #f1d1b1 20%, #e6e2db 60%, #eeebe6 100%);
             color: #15025c;
-            overflow-x: hidden;
+            overflow: hidden;
             position: relative;
+            touch-action: none;
         }
         
         canvas {
@@ -91,18 +92,18 @@
         
         @media (max-width: 768px) {
             #welcome-text {
-                font-size: 1em;
+                font-size: 0.9em;
                 width: 90%;
                 padding: 8px;
             }
             
             #video-frame {
                 width: 95vw;
-                height: 40vh;
+                height: 45vh;
             }
             
             #video-description {
-                font-size: 0.9em;
+                font-size: 0.8em;
                 padding: 8px;
             }
             
@@ -130,9 +131,9 @@
         // Scene setup
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Optimize for mobile
         document.body.appendChild(renderer.domElement);
         
         // Lighting
@@ -147,10 +148,12 @@
         
         // Movement variables
         let rotationSpeed = 0;
+        let targetRotationSpeed = 0;
         let tubeOffsetY = 0;
-        const dampingFactor = 0.95;
-        const moveSpeed = 2.0;
-        const rotationScale = 0.0001;
+        let targetTubeOffsetY = 0;
+        const dampingFactor = 0.9;
+        const moveSpeed = 1.5;
+        const rotationScale = 0.0003;
         const maxTubeOffsetY = 200;
         const scrollHeight = 5000;
         const virtualTubeRadius = 65;
@@ -238,40 +241,62 @@
             const z = virtualTubeRadius * Math.cos(angle);
             
             const geometry = new THREE.BoxGeometry(40, 30, 5);
-            const texture = new THREE.TextureLoader().load(data.thumbnail);
-            texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-            texture.minFilter = THREE.LinearMipmapLinearFilter;
-            texture.magFilter = THREE.LinearFilter;
+            const texture = new THREE.TextureLoader().load(data.thumbnail, (tex) => {
+                tex.encoding = THREE.sRGBEncoding;
+                tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+                tex.minFilter = THREE.LinearMipmapLinearFilter;
+                tex.magFilter = THREE.LinearFilter;
+            });
             
-            // Material with texture only on front face
             const materials = [
-            new THREE.MeshBasicMaterial({ color: 0x000000 }), // Left
-            new THREE.MeshBasicMaterial({ color: 0x000000 }), // Right
-            new THREE.MeshBasicMaterial({ color: 0x000000 }), // Top
-            new THREE.MeshBasicMaterial({ color: 0x000000 }), // Bottom
-            new THREE.MeshBasicMaterial({ color: 0x000000 }), // Front
-            new THREE.MeshBasicMaterial({ map: texture })     // Back
+                new THREE.MeshBasicMaterial({ color: 0x000000 }),
+                new THREE.MeshBasicMaterial({ color: 0x000000 }),
+                new THREE.MeshBasicMaterial({ color: 0x000000 }),
+                new THREE.MeshBasicMaterial({ color: 0x000000 }),
+                new THREE.MeshBasicMaterial({ color: 0x000000 }),
+                new THREE.MeshStandardMaterial({ map: texture, emissive: 0x333333, emissiveIntensity: 0.2 })
             ];
             
             const thumbnail = new THREE.Mesh(geometry, materials);
             thumbnail.position.set(x, yPosition, z);
             thumbnail.rotation.set(0, angle + Math.PI, 0);
-            
-            const playGeometry = new THREE.PlaneGeometry(8, 8);
-            const playTexture = new THREE.TextureLoader().load('play.png');
-            const playMaterial = new THREE.MeshBasicMaterial({ map: playTexture, transparent: true });
-            const playButton = new THREE.Mesh(playGeometry, playMaterial);
-            playButton.position.set(x, yPosition, z + 2.6);
-            playButton.rotation.set(0, angle, 0);
-            virtualTube.add(playButton);
-            
             thumbnail.userData = {
                 videoUrl: `https://iframe.mediadelivery.net/embed/463997/${data.videoId}?autoplay=true`,
                 description: data.description,
-                index: index
+                index: index,
+                baseScale: 1,
+                targetScale: 1
             };
+            
+            // Add glow effect
+            const glowMaterial = new THREE.MeshBasicMaterial({ color: 0x00aaff, transparent: true, opacity: 0 });
+            const glowGeometry = new THREE.PlaneGeometry(44, 34);
+            const glowMesh = new THREE.Mesh(glowGeometry, glowMaterial);
+            glowMesh.position.set(x, yPosition, z + 2.7);
+            glowMesh.rotation.set(0, angle, 0);
+            virtualTube.add(glowMesh);
+            thumbnail.userData.glowMesh = glowMesh;
+            
             return thumbnail;
         }
+        
+        // Particle system for flux effect
+        const particleCount = 100;
+        const particles = new THREE.Group();
+        const particleGeometry = new THREE.SphereGeometry(0.5, 8, 8);
+        const particleMaterial = new THREE.MeshBasicMaterial({ color: 0x00aaff, transparent: true, opacity: 0.5 });
+        
+        for (let i = 0; i < particleCount; i++) {
+            const particle = new THREE.Mesh(particleGeometry, particleMaterial);
+            particle.position.set(
+                (Math.random() - 0.5) * 500,
+                (Math.random() - 0.5) * 500,
+                (Math.random() - 0.5) * 500
+            );
+            particle.userData = { velocity: new THREE.Vector3((Math.random() - 0.5) * 0.1, (Math.random() - 0.5) * 0.1, (Math.random() - 0.5) * 0.1) };
+            particles.add(particle);
+        }
+        scene.add(particles);
         
         // Model loading
         const loader = new THREE.GLTFLoader();
@@ -318,21 +343,41 @@
         // Raycast interaction
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
+        let lastHovered = null;
         
-        window.addEventListener('click', (event) => {
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        function handleInteraction(event, isTouch = false) {
+            event.preventDefault();
+            const clientX = isTouch ? event.changedTouches[0].clientX : event.clientX;
+            const clientY = isTouch ? event.changedTouches[0].clientY : event.clientY;
+            
+            mouse.x = (clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(clientY / window.innerHeight) * 2 + 1;
             
             raycaster.setFromCamera(mouse, camera);
             const intersects = raycaster.intersectObjects(allThumbnails);
             
             if (intersects.length > 0) {
                 const thumbnail = intersects[0].object;
-                showVideoPlayer(thumbnail);
+                if (!isTouch) {
+                    thumbnail.userData.targetScale = 1.2; // Hover effect for desktop
+                    thumbnail.userData.glowMesh.material.opacity = 0.5;
+                } else {
+                    showVideoPlayer(thumbnail); // Direct click on touch
+                }
             }
-            const container = document.getElementById('video-player-container');
-            if (container.style.display === 'block') {
-                event.stopPropagation();
+            
+            if (!isTouch && lastHovered && lastHovered !== intersects[0]?.object) {
+                lastHovered.userData.targetScale = 1;
+                lastHovered.userData.glowMesh.material.opacity = 0;
+            }
+            lastHovered = intersects[0]?.object;
+        }
+        
+        window.addEventListener('mousemove', (event) => handleInteraction(event));
+        window.addEventListener('touchend', (event) => handleInteraction(event, true));
+        window.addEventListener('click', (event) => {
+            if (window.innerWidth > 768) {
+                handleInteraction(event);
             }
         });
         
@@ -341,7 +386,7 @@
             const iframe = document.getElementById('video-frame');
             const description = document.getElementById('video-description');
             
-            iframe.src = `${thumbnail.userData.videoUrl}`;
+            iframe.src = thumbnail.userData.videoUrl;
             
             description.innerHTML = `
                 <h3 style="color: #f5f5dc;">Video Description</h3>
@@ -361,59 +406,117 @@
             container.style.display = 'none';
         });
         
-        // Scroll and touch events
+        // Gesture handling
+        let isDragging = false;
+        let lastTouchX = 0;
         let lastTouchY = 0;
-        window.addEventListener('wheel', (event) => {
-            const deltaY = event.deltaY;
-            if (tubeModel) {
-                rotationSpeed += deltaY * rotationScale;
-                tubeOffsetY += deltaY * moveSpeed * 0.05;
-                tubeOffsetY = Math.max(-maxTubeOffsetY, Math.min(maxTubeOffsetY, tubeOffsetY));
-                tubeModel.rotation.y = rotationSpeed;
-                tubeModel.position.y = tubeOffsetY;
-                virtualTube.rotation.y = tubeModel.rotation.y;
-                virtualTube.position.y = tubeOffsetY;
-            }
+        let touchStartTime = 0;
+        const touchThreshold = 10; // Pixels to determine swipe vs tap
+        
+        window.addEventListener('touchstart', (event) => {
+            isDragging = true;
+            lastTouchX = event.touches[0].clientX;
+            lastTouchY = event.touches[0].clientY;
+            touchStartTime = Date.now();
             event.preventDefault();
         });
         
-        window.addEventListener('touchstart', (event) => {
-            lastTouchY = event.touches[0].clientY;
-        });
-        
         window.addEventListener('touchmove', (event) => {
+            if (!isDragging || event.touches.length > 1) return;
+            
+            const touchX = event.touches[0].clientX;
             const touchY = event.touches[0].clientY;
+            const deltaX = touchX - lastTouchX;
             const deltaY = lastTouchY - touchY;
-            if (tubeModel) {
-                rotationSpeed += deltaY * rotationScale * 0.1;
-                tubeOffsetY += deltaY * moveSpeed * 0.02;
-                tubeOffsetY = Math.max(-maxTubeOffsetY, Math.min(maxTubeOffsetY, tubeOffsetY));
-                tubeModel.rotation.y = rotationSpeed;
-                tubeModel.position.y = tubeOffsetY;
-                virtualTube.rotation.y = tubeModel.rotation.y;
-                virtualTube.position.y = tubeOffsetY;
+            
+            if (Math.abs(deltaX) > touchThreshold || Math.abs(deltaY) > touchThreshold) {
+                if (tubeModel) {
+                    // Horizontal swipe for rotation
+                    targetRotationSpeed += deltaX * rotationScale * 0.3;
+                    
+                    // Vertical swipe for movement
+                    targetTubeOffsetY += deltaY * moveSpeed * 0.04;
+                    targetTubeOffsetY = Math.max(-maxTubeOffsetY, Math.min(maxTubeOffsetY, targetTubeOffsetY));
+                }
             }
+            
+            lastTouchX = touchX;
             lastTouchY = touchY;
             event.preventDefault();
         });
         
-        // Animation loop
+        window.addEventListener('touchend', (event) => {
+            isDragging = false;
+            const touchDuration = Date.now() - touchStartTime;
+            if (touchDuration < 200) {
+                handleInteraction(event, true); // Handle tap as click
+            }
+            event.preventDefault();
+        });
+        
+        window.addEventListener('touchcancel', (event) => {
+            isDragging = false;
+            event.preventDefault();
+        });
+        
+        window.addEventListener('wheel', (event) => {
+            const deltaY = event.deltaY;
+            if (tubeModel) {
+                targetRotationSpeed += deltaY * rotationScale;
+                targetTubeOffsetY += deltaY * moveSpeed * 0.05;
+                targetTubeOffsetY = Math.max(-maxTubeOffsetY, Math.min(maxTubeOffsetY, targetTubeOffsetY));
+            }
+            event.preventDefault();
+        });
+        
+        // Animation loop with easing
         function animate() {
             requestAnimationFrame(animate);
+            
             if (tubeModel) {
+                // Smooth rotation and movement
+                rotationSpeed += (targetRotationSpeed - rotationSpeed) * 0.1;
+                tubeOffsetY += (targetTubeOffsetY - tubeOffsetY) * 0.1;
+                
                 tubeModel.rotation.y += rotationSpeed;
+                tubeModel.position.y = tubeOffsetY;
                 virtualTube.rotation.y = tubeModel.rotation.y;
                 virtualTube.position.y = tubeOffsetY;
-                camera.position.y = 0;
+                
                 rotationSpeed *= dampingFactor;
+                targetRotationSpeed *= dampingFactor;
+                
                 if (Math.abs(rotationSpeed) < 0.00001) {
                     rotationSpeed = 0;
+                    targetRotationSpeed = 0;
                 }
             }
+            
+            // Animate thumbnails based on distance
+            allThumbnails.forEach(thumbnail => {
+                const distance = camera.position.distanceTo(thumbnail.position);
+                const scale = Math.max(0.8, Math.min(1.2, 100 / distance));
+                thumbnail.userData.targetScale = scale;
+                thumbnail.scale.lerp(new THREE.Vector3(scale, scale, scale), 0.1);
+                thumbnail.userData.glowMesh.scale.lerp(new THREE.Vector3(scale, scale, 1), 0.1);
+            });
+            
+            // Animate particles
+            particles.children.forEach(particle => {
+                particle.position.add(particle.userData.velocity);
+                if (particle.position.length() > 500) {
+                    particle.position.set(
+                        (Math.random() - 0.5) * 500,
+                        (Math.random() - 0.5) * 500,
+                        (Math.random() - 0.5) * 500
+                    );
+                }
+            });
+            
             renderer.render(scene, camera);
         }
         
-        camera.position.set(0, 0, 150);
+        camera.position.set(0, 0, window.innerWidth <= 768 ? 120 : 150);
         camera.lookAt(0, 0, 0);
         animate();
         document.body.style.height = `${scrollHeight}px`;
@@ -423,6 +526,7 @@
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.position.z = window.innerWidth <= 768 ? 120 : 150;
         });
     </script>
 </body>
