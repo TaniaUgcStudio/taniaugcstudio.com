@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <title>Galería Fantástica</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
+            margin: 0;
+            padding: 0;
             font-family: Georgia, serif, Arial, sans-serif;
             background: linear-gradient(to bottom, #0a0f2e, #1f5e8c);
             overflow-x: hidden;
@@ -104,10 +105,10 @@
             background-size: cover;
             background-position: center;
             clip-path: polygon(
-                15% 0%, 85% 0%,
-                100% 15%, 100% 85%,
-                85% 100%, 15% 100%,
-                0% 85%, 0% 15%
+            15% 0%, 85% 0%,
+            100% 15%, 100% 85%,
+            85% 100%, 15% 100%,
+            0% 85%, 0% 15%
             );            
             border-radius: 0;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
@@ -167,36 +168,40 @@
         }
         
         .popup {
+            display: none;
             position: fixed;
-            top: 0; left: 0;
+            top: 0;
+            left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(0,0,0,0.8);
-            display: none;
+            background: #3f5048;
             justify-content: center;
             align-items: center;
-            z-index: 999;
+            z-index: 1000;
         }
         
         .popup iframe {
-            width: 80vw;
-            height: 45vw;
-            max-width: 1000px;
+            height: 100vh;
+            width: 100vw;
+            max-width: 100vw;
+            max-height: 100vh;
             border: none;
-            border-radius: 20px;
+            border-radius: 0;
+            display: block;
         }
         
         .close-btn {
             position: absolute;
             top: 20px;
-            right: 30px;
-            font-size: 2rem;
-            color: white;
+            right: 20px;
+            color: #ff0202;
+            font-size: 30px;
             cursor: pointer;
         }
         
         @media (max-width: 1000px) {
             .intro-banner {
+                font-size: 1.7rem;
                 padding: 20px 15px;
             }
             
@@ -237,7 +242,7 @@
                 max-height: 95%;
                 align-items: center;
             }
-
+            
             .popup iframe {
                 max-height: 90%;
                 z-index: 1000;
@@ -248,6 +253,7 @@
                 font-size: 3rem;
                 top: 20px;
                 right: 20px;
+                z-index: 1100;
             }
         }
     </style>
@@ -347,23 +353,23 @@
                 div.className = 'video-frame';
                 if (Math.random() < 0.3) div.classList.add('flip'); // random flip
                 div.style.backgroundImage = `url('${baseUrl}${id}/preview.webp?v=1751979933')`;
-
+                
                 // Default desktop styles
                 /*div.style.width = '100px';
                 div.style.height = '180px';
                 div.style.minWidth = '100px';
                 div.style.minHeight = '180px';
-
+                
                 // Apply mobile styles and animations if screen width is <= 768px
                 if (window.innerWidth <= 1000) {
-                    h2.style.fontSize = '2rem';
-                    strip.style.gap = '20px';
-                    div.style.width = '180px';
-                    div.style.height = '330px';
-                    div.style.minWidth = '180px';
-                    div.style.minHeight = '330px';
+                h2.style.fontSize = '2rem';
+                strip.style.gap = '20px';
+                div.style.width = '180px';
+                div.style.height = '330px';
+                div.style.minWidth = '180px';
+                div.style.minHeight = '330px';
                 }
-
+                
                 div.style.opacity = '1';
                 div.style.backgroundSize = 'cover';
                 div.style.backgroundPosition = 'center';
