@@ -2,19 +2,171 @@
 html, body {
     margin: 0;
     font-family: Georgia, serif, Arial, sans-serif;
-    background: linear-gradient(180deg, #fbe9f1 0%, #f1d1b1 20%, #e6e2db 60%, #eeebe6 100%);
     color: #15025c;
     overflow-x: hidden;
     position: relative;
+    transition: background 0.5s ease;
 }
 
-/***************************** INDEX CONTENT *****************************/
+/***************************** BUTTERFLY ANIMATION *****************************/
+.butterfly-container {
+    position: fixed;
+    top: 80px;
+    left: 15px;
+    width: 60px;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 900;
+}
+
+.butterfly {
+    position: absolute;
+    width: 40px;
+    height: auto;
+    transform-origin: center center;
+}
+
+.plant-track {
+    position: fixed;
+    top: 50px;
+    left: 15px;
+    width: 60px;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.plant-track svg {
+    width: 100%;
+    height: 100%;
+}
+
+/***************************** INTRO CONTENT *****************************/
 .hero {
     min-height: 100vh;
     text-align: center;
     padding: 100px 20px;
+    background: linear-gradient(180deg, #fbe9f1 0%, #f1d1b1 20%, #e6e2db 60%, #eeebe6 100%);
 }
 
+.content-section {
+    min-height: 100vh;
+    padding: 100px 20px;
+    text-align: center;
+}
+
+/***************************** ABOUT ME CONTENT *****************************/
+.sobre-mi {
+    background: linear-gradient(to right, #44514a 0%, #9aa690 100%);
+    color: #edeae5;
+}
+
+.sobre-mi-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    max-width: 1200px;
+    margin: auto;
+    padding: 60px 20px;
+    flex-direction: row;
+}
+
+.sobre-mi-text {
+    flex: 1 1 55%;
+    font-size: 1.1em;
+    line-height: 1.7em;
+    color: #edeae5;
+}
+
+.sobre-mi-text h2 {
+    font-size: 2em;
+    margin-bottom: 1em;
+}
+
+.sobre-mi-text p {
+    margin-bottom: 1.2em;
+}
+
+.sobre-mi-text p:nth-child(2) { color: #fcbf49; } /* dorado */
+.sobre-mi-text p:nth-child(3) { color: #90e0ef; } /* azul claro */
+.sobre-mi-text p:nth-child(4) { color: #9ef01a; } /* verde claro */
+.sobre-mi-text p:nth-child(5) { color: #8c7c6d; font-weight: bold; } /* rosa coral */
+
+.sobre-mi-image {
+    flex: 1 1 35%;
+    text-align: right;
+}
+
+.sobre-mi-image img {
+    max-width: 250%;
+    height: auto;
+    border-radius: 0;
+    margin-top: -30%;
+}
+
+/* Last sentence */
+.cta-full {
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+    padding: 0;
+    margin-top: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+    display: block;
+}
+
+/* Animaciones */
+@keyframes slideInRight {
+    0% { transform: translateX(100%); opacity: 0; }
+    100% { transform: translateX(-20%); opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Animación de imagen */
+.sobre-mi-image img {
+    animation: slideInRight 1.2s ease forwards;
+    opacity: 0;
+}
+
+/* Texto animado por párrafo */
+.sobre-mi-text p {
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+    animation-delay: var(--delay);
+}
+
+/* Para aplicar delay progresivo */
+.sobre-mi-text p:nth-child(2) { --delay: 0.2s; }
+.sobre-mi-text p:nth-child(3) { --delay: 0.5s; }
+.sobre-mi-text p:nth-child(4) { --delay: 0.8s; }
+.sobre-mi-text p:nth-child(5) { --delay: 1.1s; }
+
+/* Animación inicial */
+.scroll-animate-up,
+.scroll-animate-right {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.scroll-animate-right {
+    transform: translateX(50px);
+}
+
+/* Cuando está en pantalla */
+.scroll-animate-visible {
+    opacity: 1;
+    transform: translate(0, 0);
+}
+
+
+/***************************** PROFILE CONTENT *****************************/
 .profile-circle {
     width: 200px;
     height: 200px;
@@ -22,51 +174,82 @@ html, body {
     overflow: hidden;
     margin: 0 auto 20px;
     position: relative;
-    /* Add padding to make room for the border */
     padding: 5px;
-    background: 
-    /* Gradient for the rotating border */
-    conic-gradient(
-        from 0deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.2) 10%,
-        rgba(0, 217, 255, 0.8) 20%, /* Shiny tip (gold/yellow for glow) */
-        rgba(255, 255, 255, 0.2) 30%,
-        rgba(255, 255, 255, 0) 40%,
-        rgba(255, 255, 255, 0) 100%
+    background: conic-gradient(
+    from 0deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 10%,
+    rgba(0, 217, 255, 0.8) 20%,
+    rgba(255, 255, 255, 0.2) 30%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0) 100%
     );
     background-size: 100% 100%;
-    animation: rotateBorder 3s linear infinite; /* Animation for rotation */
+    animation: rotateBorder 3s linear infinite;
 }
 
-/* Ensure the image remains circular and unaffected by the border */
 .profile-circle img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 50%;
     display: block;
-    /* Add a solid background to prevent the gradient from showing through */
-    background: #fff; /* Or match your page background */
+    background: #fff;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-/* Keyframes for the rotating animation */
 @keyframes rotateBorder {
-    0% {
-        background-position: 0deg;
-    }
-    100% {
-        background-position: 360deg;
-    }
-}
-
-/* Optional: Add a subtle inner glow to the image */
-.profile-circle img {
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3); /* Subtle inner shadow */
+    0% { background-position: 0deg; }
+    100% { background-position: 360deg; }
 }
 
 /***************************** MOBILE STYLES *****************************/
 @media (max-width: 600px) {
+    .sobre-mi-container {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 10px;
+        padding: 20px 10px;
+        z-index: 910;
+    }
+    
+    .sobre-mi-text {
+        flex: 1 1 60%;
+        text-align: left;
+        z-index: 910;
+        position: relative;
+        padding-right: 10px;
+    }
+    
+    .sobre-mi-image {
+        flex: 1 1 40%;
+        text-align: right;
+        position: relative;
+        z-index: 1;
+        margin-top: -90%;
+    }
+    
+    .sobre-mi-image img {
+        max-width: 450%;
+        height: auto;
+        object-fit: contain;
+        transform: scale(4);
+        animation: slideInRight 1.2s ease forwards;
+    }
+    
+    .cta-full {
+        flex: 1 1 100%;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        max-width: 100%;
+    }
+    
+    @keyframes slideInRight {
+        0% { transform: translateX(100%); opacity: 0; }
+        100% { transform: translateX(-42%); opacity: 1; }
+    }
+    
     .profile-circle {
         width: 150px;
         height: 150px;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,13 +8,28 @@
     <link rel="stylesheet" href="styles/menu.css">
 </head>
 <body>
+    <div class="plant-track">
+        <svg viewBox="0 0 100 2000" preserveAspectRatio="xMinYMin meet">
+            <!-- Tallos en forma de S -->
+            <path id="plantPath" d="M10,0 C20,100 0,200 10,300 C20,400 0,500 10,600 C20,700 0,800 10,900 C20,1000 0,1100 10,1200 C20,1300 0,1400 10,1500 C20,1600 0,1700 10,1800 C20,1900 0,2000 10,2100" stroke="#5e3d2a" stroke-width="2" fill="none"/>
+            
+            <!-- Hojas -->
+            <ellipse cx="15" cy="100" rx="5" ry="10" fill="#4b8f29"/>
+            <ellipse cx="5" cy="300" rx="5" ry="10" fill="#4b8f29"/>
+            <ellipse cx="15" cy="500" rx="5" ry="10" fill="#4b8f29"/>
+            <ellipse cx="5" cy="700" rx="5" ry="10" fill="#4b8f29"/>
+            <!-- Agrega más hojas si quieres -->
+        </svg>
+    </div>
+    
+    
     <!-- Menu toggle button -->
     <div class="menu-toggle">
         <span></span>
         <span></span>
         <span></span>
     </div>
-
+    
     <!-- Sidebar navigation -->
     <nav class="sidebar">
         <ul class="main-links">
@@ -24,7 +39,7 @@
             <li><a href="html/market.html"><img src="icons/market.png" alt="Market Size"> <span>Alcance del mercado</span></a></li>
             <li><a href="html/contact.html"><img src="icons/contact.png" alt="Contact"> <span>Contacto</span></a></li>
         </ul>
-
+        
         <div class="sidebar-bottom">
             <ul>
                 <li><a href="tel:+34634469846"><img src="icons/phone.png" alt="Phone"> <span>Phone</span></a></li>
@@ -33,7 +48,7 @@
             </ul>
         </div>
     </nav>
-
+    
     <!-- Mobile contact bar -->
     <nav class="contact-bar">
         <ul>
@@ -42,7 +57,7 @@
             <li><a href="https://wa.me/34634469846"><img src="icons/whatsapp.png" alt="WhatsApp"></a></li>
         </ul>
     </nav>
-
+    
     <!-- Hero section with profile -->
     <div class="hero">
         <div class="profile-circle">
@@ -51,14 +66,84 @@
         <h1>Tania López - UGC Creator</h1>
         <p>Soy creadora de más de 250 videos UGC para marcas de distintos sectores.</p>
     </div>
+    
+    <!-- Sobre Mi section -->
+<div class="content-section sobre-mi">
+    <div class="sobre-mi-container">
+        <div class="sobre-mi-text">
+            <h2 class="scroll-animate-up">Sobre Mí</h2>
+            <p class="scroll-animate-up"><strong style="color:#fff">Soy <span style="color:#70e000">Tania</span></strong>, creadora de contenido <strong><span style="color:#70e000">UGC</span></strong> con <span style="color:#ffb703">pasión por comunicar</span> y conectar con las personas a través de <span style="color:#80ed99">vídeos reales y naturales</span>.</p>
+            
+            <p class="scroll-animate-up">Trabajo con <strong style="color:#ff006e">marcas</strong> que buscan <span style="color:#00b4d8">destacar en redes sociales</span>, aumentar su visibilidad y <strong style="color:#aacc00">generar ventas</strong> con contenido que marca la diferencia.</p>
+            
+            <p class="scroll-animate-up">Me <span style="color:#70e000">implico en cada proyecto</span> desde el primer momento, cuidando los detalles y <strong style="color:#ff006e">creando con intención</strong>: para <span style="color:#ff4d6d">emocionar</span>, <span style="color:#5f0f40">conectar</span> y <span style="color:#3a0ca3">convertir</span>.</p>
+            
+            <p class="cta-full scroll-animate-up">
+                <strong style="color:#edeae5;">¡Acompáñame en esta aventura creativa!</strong>
+            </p>
+        </div>
+        <div class="sobre-mi-image scroll-animate-right">
+            <img src="images/classic, bk.png" alt="Tania López vertical">
+        </div>
+    </div>
+</div>
 
+    
+    <!-- Placeholder for additional sections -->
+    <div class="content-section next-section">
+        <h2>Próxima Sección</h2>
+        <p>Contenido adicional aquí.</p>
+    </div>
+    
+    <!-- Butterfly animation container -->
+    <div class="butterfly-container">
+        <img src="icons/butterfly.png" alt="Butterfly" class="butterfly">
+    </div>
+    
     <!-- Footer -->
     <footer class="site-footer">
-        <p>&copy; 2025 Tania López. All rights reserved.</p>
+        <p>© 2025 Tania López. All rights reserved.</p>
     </footer>
-
+    
     <!-- Scripts -->
-    <!-- Menu -->
     <script src="scripts/menu.js"></script>
+    <script>
+        const butterfly = document.querySelector('.butterfly');
+        const path = document.getElementById('plantPath');
+        const pathLength = path.getTotalLength();
+        
+        function updateButterflyPosition() {
+            const scrollTop = window.scrollY;
+            const maxScroll = document.body.scrollHeight - window.innerHeight;
+            const scrollRatio = scrollTop / maxScroll / 3;
+            const pointAtLength = scrollRatio * pathLength;
+            
+            const point = path.getPointAtLength(pointAtLength);
+            const pointNext = path.getPointAtLength(pointAtLength + 1);
+            
+            butterfly.style.transform = `translate(${point.x - 25}px, ${point.y - 25}px) rotate(0)`;
+        }
+        
+        window.addEventListener('scroll', updateButterflyPosition);
+        window.addEventListener('load', updateButterflyPosition);
+    </script>
+
+    <script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('scroll-animate-visible');
+            } else {
+                entry.target.classList.remove('scroll-animate-visible'); // Elimínalo si quieres animar solo una vez
+            }
+        });
+    }, {
+        threshold: 0.3
+    });
+
+    document.querySelectorAll('.scroll-animate-up, .scroll-animate-right').forEach(el => {
+        observer.observe(el);
+    });
+</script>
+
 </body>
-</html>
