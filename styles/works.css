@@ -65,7 +65,7 @@ h2 {
 .video-strip {
     display: flex;
     flex-wrap: nowrap;
-    gap: 0px;
+    gap: 0;
     overflow-x: auto;
     padding-bottom: 10px;
     scrollbar-width: thin;
@@ -171,13 +171,18 @@ h2 {
 /***************************** MOBILE STYLES *****************************/
 @media (max-width: 768px) {   
     .intro-banner {
-        font-size: 1.1em;
+        font-size: 1em;
         padding: 35px 5px;
+        margin-bottom: 3px;
+    }
+
+    h2 {
+        margin-top: 3px;
     }
 
     .video-frame {
-        width: 95px;
-        height: 180px;
+        width: 50px;
+        height: 130px;
     }
     
     .popup {
