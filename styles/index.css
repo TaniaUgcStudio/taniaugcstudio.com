@@ -181,10 +181,10 @@ html, body {
     margin-bottom: 1.2em;
 }
 
-.sobre-mi-text p:nth-child(2) { color: #fcbf49; } /* dorado */
-.sobre-mi-text p:nth-child(3) { color: #90e0ef; } /* azul claro */
-.sobre-mi-text p:nth-child(4) { color: #9ef01a; } /* verde claro */
-.sobre-mi-text p:nth-child(5) { color: #8c7c6d; font-weight: bold; } /* rosa coral */
+.sobre-mi-text p:nth-child(2) { color: #d7cbbd; } /* dorado */
+.sobre-mi-text p:nth-child(3) { color: #d7cbbd; } /* azul claro */
+.sobre-mi-text p:nth-child(4) { color: #d7cbbd; } /* verde claro */
+.sobre-mi-text p:nth-child(5) { color: #d7cbbd; font-weight: bold; } /* rosa coral */
 
 .sobre-mi-image {
     flex: 1 1 35%;
