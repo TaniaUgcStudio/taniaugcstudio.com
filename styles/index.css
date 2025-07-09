@@ -473,39 +473,21 @@ html, body {
     /**************************************************************************/
     .content-section h2 {
         font-size: 2rem;
-        color: #3f5048;
-        margin-bottom: 30px;
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.5s ease, transform 0.5s ease;
     }
     
-    .content-list {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 20px;
-        max-width: 800px;
-        margin: 0 auto;
+    .content-item {
+        flex: 1 1 300px;
     }
     
     .content-item h3 {
         font-size: 1.3rem;
-        color: #252525;
-        margin-bottom: 10px;
     }
     
     .content-item ul li {
         font-size: 1.1rem;
-        color: #252525;
-        margin-bottom: 8px;
-        display: flex;
-        align-items: center;
     }
     
     .content-item ul li::before {
-        content: attr(data-emoji);
-        margin-right: 10px;
         font-size: 1.2rem;
     }
     
