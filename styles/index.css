@@ -266,6 +266,7 @@ html, body {
     background: #edeae5;
     background-image: url("https://www.transparenttextures.com/patterns/skulls.png");
     position: relative;
+    overflow: hidden;
 }
 
 .content-section h2 {
@@ -297,6 +298,7 @@ html, body {
     background: #d5cdc2;
     border-radius: 10px;
     text-align: left;
+    min-height: 100px;
 
     /* Shading toward all sides */
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
@@ -329,7 +331,7 @@ html, body {
 
 .content-item ul li span {
     display: inline-block;
-    white-space: nowrap;
+    white-space: normal;
     opacity: 0;
 }
 

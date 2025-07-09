@@ -8,7 +8,14 @@
     <link rel="stylesheet" href="styles/menu.css">
 </head>
 <body>
-
+    <!-- UGC Loader Intro -->
+    <div class="ugc-loader">
+        <div class="ugc-circle">
+            <span class="ugc-label">Tania<br>UGC<br>Studio</span>
+            <div class="ugc-fill"></div>
+        </div>
+        <div class="ugc-percent">0%</div>
+    </div>
     
     <!-- Menu toggle button -->
     <div class="menu-toggle">
@@ -119,18 +126,22 @@
     <script>
         // Typewriter effect inspired by typeSentence
         function typeSentence(target, sentence, speed, callback) {
-            target.innerHTML = '';
-            target.style.opacity = 1; // Se vuelve visible ahora
             let i = 0;
+            target.textContent = ''; // Limpia el texto
+            target.style.opacity = 1;
+
             function type() {
                 if (i < sentence.length) {
-                    target.innerHTML += sentence.charAt(i);
+                    target.textContent += sentence.charAt(i);
                     i++;
                     setTimeout(type, speed);
                 } else if (callback) {
                     callback();
                 }
             }
+
+            // Asegura altura desde el principio
+            target.style.minHeight = '1em';
             type();
         }
         
@@ -246,6 +257,37 @@
         });
     </script>
     
+    <!-- UGC Loader -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const loader = document.querySelector('.ugc-loader');
+            const fill = document.querySelector('.ugc-fill');
+            const percentText = document.querySelector('.ugc-percent');
+            const body = document.querySelector('body');
+            
+            // Oculta el resto de la página mientras carga
+            const content = Array.from(body.children).filter(el => !el.classList.contains('ugc-loader'));
+            content.forEach(el => el.style.display = 'none');
+            
+            let percent = 0;
+            
+            const interval = setInterval(() => {
+                percent++;
+                fill.style.height = percent + '%';
+                percentText.textContent = percent + '%';
+                
+                if (percent >= 100) {
+                    clearInterval(interval);
+                    loader.style.opacity = 0;
+                    
+                    setTimeout(() => {
+                        loader.remove(); // ✅ esto quita el div del DOM
+                        content.forEach(el => el.style.display = ''); // muestra el resto
+                    }, 800);
 
+                }
+            }, 25); // 100 * 25ms = 2.5s total
+        });
+    </script>
     
 </body>
