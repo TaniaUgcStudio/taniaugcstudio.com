@@ -155,6 +155,7 @@ html, body {
 }
 
 .sobre-mi-container {
+    min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -292,13 +293,11 @@ html, body {
 .content-item {
     flex: 1 1 400px;
     padding: 20px;
-    background: #d5cdc2;
+    background: #d5cdc294;
     border-radius: 10px;
     text-align: left;
     min-height: 100px;
-    
-    /* Shading toward all sides */
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.15); /* Shading toward all sides */
 }
 
 .content-item h3 {
@@ -419,6 +418,9 @@ html, body {
 
 /***************************** MOBILE STYLES *****************************/
 @media (max-width: 600px) {
+    .hero {
+        min-height: 70vh;
+    }
     .profile-circle {
         width: 150px;
         height: 150px;
@@ -426,6 +428,7 @@ html, body {
 
     /**************************************************************************/
     .sobre-mi-container {
+        min-height: 70vh;
         flex-direction: row;
         flex-wrap: nowrap;
         gap: 10px;
@@ -485,6 +488,10 @@ html, body {
     }
     
     /**************************************************************************/
+    .content-section {
+        min-height: 70vh;
+    }
+
     .content-section h2 {
         font-size: 2rem;
     }
@@ -508,6 +515,6 @@ html, body {
     .stamp {
         width: 200px;
         height: 200px;
-        top: 75%;
+        top: 90%;
     }
 }
