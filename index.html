@@ -277,10 +277,10 @@
                     loader.style.opacity = 0;
                     
                     setTimeout(() => {
-                        loader.remove();
-                        // Muestra el resto del contenido
-                        content.forEach(el => el.style.display = '');
+                        loader.remove(); // ✅ esto quita el div del DOM
+                        content.forEach(el => el.style.display = ''); // muestra el resto
                     }, 800);
+
                 }
             }, 25); // 100 * 25ms = 2.5s total
         });
