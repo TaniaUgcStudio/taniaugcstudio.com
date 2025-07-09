@@ -423,13 +423,15 @@ html, body {
         width: 150px;
         height: 150px;
     }
-    
+
+    /**************************************************************************/
     .sobre-mi-container {
         flex-direction: row;
         flex-wrap: nowrap;
         gap: 10px;
         padding: 20px 10px;
         z-index: 910;
+        position: relative; /* Added to position .cta-full */
     }
     
     .sobre-mi-text {
@@ -439,7 +441,11 @@ html, body {
         line-height: 1.7em;
         z-index: 910;
         position: relative;
-        padding-right: 10px;
+        padding-right: 5px; /* Reduced padding to give more space */
+    }
+
+    .sobre-mi-text p:nth-child(2) {
+        margin-right: -50px;
     }
     
     .sobre-mi-image {
@@ -452,17 +458,25 @@ html, body {
     
     .sobre-mi-image img {
         max-width: 400%;
+        margin-bottom: -170%;
         height: auto;
         object-fit: contain;
         animation: slideInRight 1.2s ease forwards;
     }
     
     .cta-full {
-        flex: 1 1 100%;
+        position: absolute; /* Break out of .sobre-mi-text */
+        left: 0;
+        right: 0;
+        bottom: -30px;
         text-align: center;
-        margin: 0;
-        padding: 0;
-        max-width: 100%;
+        margin: 10px 0 0 0;
+        padding: 0 10px;
+        font-size: 1.05em;
+        line-height: 1.5em;
+        white-space: nowrap;
+        width: 100%;
+        z-index: 920;
     }
     
     @keyframes slideInRight {
@@ -478,7 +492,7 @@ html, body {
     .content-item {
         flex: 1 1 300px;
     }
-    
+
     .content-item h3 {
         font-size: 1.3rem;
     }
