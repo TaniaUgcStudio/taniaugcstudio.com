@@ -8,20 +8,14 @@
     <link rel="stylesheet" href="styles/menu.css">
 </head>
 <body>
-    <div class="plant-track">
-        <svg viewBox="0 0 100 2000" preserveAspectRatio="xMinYMin meet">
-            <!-- Tallos en forma de S -->
-            <path id="plantPath" d="M10,0 C20,100 0,200 10,300 C20,400 0,500 10,600 C20,700 0,800 10,900 C20,1000 0,1100 10,1200 C20,1300 0,1400 10,1500 C20,1600 0,1700 10,1800 C20,1900 0,2000 10,2100" stroke="#5e3d2a" stroke-width="2" fill="none"/>
-            
-            <!-- Hojas -->
-            <ellipse cx="15" cy="100" rx="5" ry="10" fill="#4b8f29"/>
-            <ellipse cx="5" cy="300" rx="5" ry="10" fill="#4b8f29"/>
-            <ellipse cx="15" cy="500" rx="5" ry="10" fill="#4b8f29"/>
-            <ellipse cx="5" cy="700" rx="5" ry="10" fill="#4b8f29"/>
-            <!-- Agrega más hojas si quieres -->
-        </svg>
+    <!-- UGC Loader Intro -->
+    <div class="ugc-loader">
+        <div class="ugc-circle">
+            <span class="ugc-label">Tania<br>UGC<br>Studio</span>
+            <div class="ugc-fill"></div>
+        </div>
+        <div class="ugc-percent">0%</div>
     </div>
-    
     
     <!-- Menu toggle button -->
     <div class="menu-toggle">
@@ -29,7 +23,6 @@
         <span></span>
         <span></span>
     </div>
-    
     <!-- Sidebar navigation -->
     <nav class="sidebar">
         <ul class="main-links">
@@ -48,7 +41,6 @@
             </ul>
         </div>
     </nav>
-    
     <!-- Mobile contact bar -->
     <nav class="contact-bar">
         <ul>
@@ -58,39 +50,151 @@
         </ul>
     </nav>
     
-    <!-- Hero section with profile -->
+    <!-- Left Plant -->
+    <div class="plant-track">
+        <svg viewBox="0 0 100 2000" preserveAspectRatio="xMinYMin meet">
+            <!-- Tallos en forma de S -->
+            <path id="plantPath" d="M10,0 C20,100 0,200 10,300 C20,400 0,500 10,600 C20,700 0,800 10,900 C20,1000 0,1100 10,1200 C20,1300 0,1400 10,1500 C20,1600 0,1700 10,1800 C20,1900 0,2000 10,2100" stroke="#5e3d2a" stroke-width="2" fill="none"/>
+            
+            <!-- Hojas -->
+            <ellipse cx="15" cy="100" rx="5" ry="10" fill="#4b8f29"/>
+            <ellipse cx="5" cy="300" rx="5" ry="10" fill="#4b8f29"/>
+            <ellipse cx="15" cy="500" rx="5" ry="10" fill="#4b8f29"/>
+            <ellipse cx="5" cy="700" rx="5" ry="10" fill="#4b8f29"/>
+        </svg>
+    </div>
+    
+    <!-- Intro section with profile -->
     <div class="hero">
         <div class="profile-circle">
             <img src="images/me, bk.png" alt="Tania López">
         </div>
         <h1>Tania López - UGC Creator</h1>
-        <p>Soy creadora de más de 250 videos UGC para marcas de distintos sectores.</p>
+        <p class="intro-hook">Creando historias auténticas que hacen brillar a las marcas en redes sociales.</p>
     </div>
     
     <!-- Sobre Mi section -->
-<div class="content-section sobre-mi">
-    <div class="sobre-mi-container">
-        <div class="sobre-mi-text">
-            <h2 class="scroll-animate-up">Sobre Mí</h2>
-            <p class="scroll-animate-up"><strong style="color:#fff">Soy <span style="color:#70e000">Tania</span></strong>, creadora de contenido <strong><span style="color:#70e000">UGC</span></strong> con <span style="color:#ffb703">pasión por comunicar</span> y conectar con las personas a través de <span style="color:#80ed99">vídeos reales y naturales</span>.</p>
-            
-            <p class="scroll-animate-up">Trabajo con <strong style="color:#ff006e">marcas</strong> que buscan <span style="color:#00b4d8">destacar en redes sociales</span>, aumentar su visibilidad y <strong style="color:#aacc00">generar ventas</strong> con contenido que marca la diferencia.</p>
-            
-            <p class="scroll-animate-up">Me <span style="color:#70e000">implico en cada proyecto</span> desde el primer momento, cuidando los detalles y <strong style="color:#ff006e">creando con intención</strong>: para <span style="color:#ff4d6d">emocionar</span>, <span style="color:#5f0f40">conectar</span> y <span style="color:#3a0ca3">convertir</span>.</p>
-            
-            <p class="cta-full scroll-animate-up">
-                <strong style="color:#edeae5;">¡Acompáñame en esta aventura creativa!</strong>
-            </p>
-        </div>
-        <div class="sobre-mi-image scroll-animate-right">
-            <img src="images/classic, bk.png" alt="Tania López vertical">
+    <div class="sobre-mi">
+        <div class="sobre-mi-container">
+            <div class="sobre-mi-text">
+                <h2 class="scroll-animate-up">Sobre Mí</h2>
+                <p class="scroll-animate-up"><strong style="color:#fff">Soy <span style="color:#70e000">Tania</span></strong>, creadora de contenido <strong><span style="color:#70e000">UGC</span></strong> con <span style="color:#ffb703">pasión por comunicar</span> y conectar con las personas a través de <span style="color:#80ed99">vídeos reales y naturales</span>.</p>
+                
+                <p class="scroll-animate-up">Trabajo con <strong style="color:#ff006e">marcas</strong> que buscan <span style="color:#00b4d8">destacar en redes sociales</span>, aumentar su visibilidad y <strong style="color:#aacc00">generar ventas</strong> con contenido que marca la diferencia.</p>
+                
+                <p class="scroll-animate-up">Me <span style="color:#70e000">implico en cada proyecto</span> desde el primer momento, cuidando los detalles y <strong style="color:#ff006e">creando con intención</strong>: para <span style="color:#ff4d6d">emocionar</span>, <span style="color:#5f0f40">conectar</span> y <span style="color:#3a0ca3">convertir</span>.</p>
+                
+                <p class="cta-full scroll-animate-up">
+                    <strong style="color:#edeae5;">¡Acompáñame en esta aventura creativa!</strong>
+                </p>
+            </div>
+            <div class="sobre-mi-image scroll-animate-right">
+                <img src="images/classic, bk.png" alt="Tania López vertical">
+            </div>
         </div>
     </div>
-</div>
-
+    
+    <!-- Content Types Section -->
+    <div class="content-section">
+        <h2>Tipos de Contenido</h2>
+        <div class="content-list">
+            <div class="content-item">
+                <h3>Vídeos UGC</h3>
+                <ul>
+                    <li data-emoji="📦"><span>Unboxings creativos con toque personal</span></li>
+                    <li data-emoji="🎥"><span>Estilo Reels / TikTok que conecta</span></li>
+                    <li data-emoji="💬"><span>Opiniones naturales y auténticas</span></li>
+                    <li data-emoji="💄"><span>Demostraciones que inspiran confianza</span></li>
+                    <li data-emoji="☕"><span>Momentos cotidianos con estilo chill</span></li>
+                </ul>
+            </div>
+            <div class="content-item">
+                <h3>Modos de Comunicación</h3>
+                <ul>
+                    <li data-emoji="📢"><span>Habla directa a cámara con energía</span></li>
+                    <li data-emoji="📢"><span>Voz en off que guía sin distraer</span></li>
+                    <li data-emoji="📢"><span>Visual limpio y potente sin palabras</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="stamp"></div>
+        <div class="ink-drop"></div>
+        <div class="ink-drop"></div>
+        <div class="ink-drop"></div>
+    </div>
+    
+    <script>
+        // Typewriter effect inspired by typeSentence
+        function typeSentence(target, sentence, speed, callback) {
+            target.innerHTML = '';
+            target.style.opacity = 1; // Se vuelve visible ahora
+            let i = 0;
+            function type() {
+                if (i < sentence.length) {
+                    target.innerHTML += sentence.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else if (callback) {
+                    callback();
+                }
+            }
+            type();
+        }
+        
+        // Initialize typewriter effect for content items
+        function startTypewriterEffect() {
+            const contentSection = document.querySelector('.content-section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        contentSection.classList.add('visible');
+                        const items = document.querySelectorAll('.content-item ul li span');
+                        let index = 0;
+                        
+                        function typeNext() {
+                            if (index < items.length) {
+                                const text = items[index].textContent;
+                                typeSentence(items[index], text, 16, () => {
+                                    index++;
+                                    typeNext();
+                                });
+                            } else {
+                                // Activate the stamp animation
+                                const stamp = document.querySelector('.stamp');
+                                stamp.classList.add('animate');
+                            }
+                        }
+                        
+                        typeNext();
+                        observer.unobserve(contentSection);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            observer.observe(contentSection);
+        }
+        
+        // Start the animation when the DOM reaches here
+        document.addEventListener("DOMContentLoaded", () => {
+            const contentSection = document.querySelector('.content-section');
+            
+            const observer = new IntersectionObserver((entries, observerInstance) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        startTypewriterEffect();
+                        observerInstance.unobserve(contentSection); // Solo se ejecuta una vez
+                    }
+                });
+            }, {
+                threshold: 0.2
+            });
+            
+            observer.observe(contentSection);
+        });
+    </script>
     
     <!-- Placeholder for additional sections -->
-    <div class="content-section next-section">
+    <div class="next-section">
         <h2>Próxima Sección</h2>
         <p>Contenido adicional aquí.</p>
     </div>
@@ -107,6 +211,8 @@
     
     <!-- Scripts -->
     <script src="scripts/menu.js"></script>
+    
+    <!-- Butterfly animation -->
     <script>
         const butterfly = document.querySelector('.butterfly');
         const path = document.getElementById('plantPath');
@@ -127,23 +233,57 @@
         window.addEventListener('scroll', updateButterflyPosition);
         window.addEventListener('load', updateButterflyPosition);
     </script>
-
+    
+    <!-- About me animation -->
     <script>
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('scroll-animate-visible');
-            } else {
-                entry.target.classList.remove('scroll-animate-visible'); // Elimínalo si quieres animar solo una vez
-            }
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('scroll-animate-visible');
+                } else {
+                    entry.target.classList.remove('scroll-animate-visible'); // Elimínalo si quieres animar solo una vez
+                }
+            });
+        }, {
+            threshold: 0.3
         });
-    }, {
-        threshold: 0.3
-    });
-
-    document.querySelectorAll('.scroll-animate-up, .scroll-animate-right').forEach(el => {
-        observer.observe(el);
-    });
-</script>
-
+        
+        document.querySelectorAll('.scroll-animate-up, .scroll-animate-right').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+    
+    <!-- UGC Loader -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const loader = document.querySelector('.ugc-loader');
+            const fill = document.querySelector('.ugc-fill');
+            const percentText = document.querySelector('.ugc-percent');
+            const body = document.querySelector('body');
+            
+            // Oculta el resto de la página mientras carga
+            const content = Array.from(body.children).filter(el => !el.classList.contains('ugc-loader'));
+            content.forEach(el => el.style.display = 'none');
+            
+            let percent = 0;
+            
+            const interval = setInterval(() => {
+                percent++;
+                fill.style.height = percent + '%';
+                percentText.textContent = percent + '%';
+                
+                if (percent >= 100) {
+                    clearInterval(interval);
+                    loader.style.opacity = 0;
+                    
+                    setTimeout(() => {
+                        loader.remove();
+                        // Muestra el resto del contenido
+                        content.forEach(el => el.style.display = '');
+                    }, 800);
+                }
+            }, 25); // 100 * 25ms = 2.5s total
+        });
+    </script>
+    
 </body>

@@ -41,6 +41,62 @@ html, body {
     height: 100%;
 }
 
+/***************************** UGC LOADER *****************************/
+.ugc-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #fefefe;
+    background-image: url("https://www.transparenttextures.com/patterns/tileable-wood-colored.png");
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 1s ease;
+}
+
+.ugc-circle {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border: 5px solid #333;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ugc-label {
+    position: relative;
+    z-index: 2;
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+
+.ugc-fill {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    background: rgba(51, 51, 51, 0.3);
+    z-index: 1;
+    transition: height 0.1s ease;
+}
+
+.ugc-percent {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #555;
+}
+
 /***************************** INTRO CONTENT *****************************/
 .hero {
     min-height: 100vh;
@@ -49,10 +105,47 @@ html, body {
     background: linear-gradient(180deg, #fbe9f1 0%, #f1d1b1 20%, #e6e2db 60%, #eeebe6 100%);
 }
 
-.content-section {
-    min-height: 100vh;
-    padding: 100px 20px;
-    text-align: center;
+.hero .intro-hook {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #333;
+    margin-top: 10px;
+}
+
+.profile-circle {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 20px;
+    position: relative;
+    padding: 5px;
+    background: conic-gradient(
+    from 0deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 10%,
+    rgba(0, 217, 255, 0.8) 20%,
+    rgba(255, 255, 255, 0.2) 30%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 100% 100%;
+    animation: rotateBorder 3s linear infinite;
+}
+
+.profile-circle img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    background: #fff;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes rotateBorder {
+    0% { background-position: 0deg; }
+    100% { background-position: 360deg; }
 }
 
 /***************************** ABOUT ME CONTENT *****************************/
@@ -119,7 +212,7 @@ html, body {
 
 /* Animaciones */
 @keyframes slideInRight {
-    0% { transform: translateX(100%); opacity: 0; }
+    0% { transform: translateX(150%); opacity: 0; }
     100% { transform: translateX(-20%); opacity: 1; }
 }
 
@@ -165,42 +258,164 @@ html, body {
     transform: translate(0, 0);
 }
 
+/***************************** TYPES CONTENT *****************************/
+.content-section {
+    min-height: 100vh;
+    padding: 100px 20px;
+    text-align: center;
+    background: #edeae5;
+    background-image: url("https://www.transparenttextures.com/patterns/skulls.png");
+    position: relative;
+}
 
-/***************************** PROFILE CONTENT *****************************/
-.profile-circle {
+.content-section h2 {
+    font-size: 2rem;
+    color: #3f5048;
+    margin-bottom: 30px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.content-section.visible h2 {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.content-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.content-item {
+    flex: 1 1 300px;
+    padding: 20px;
+    background: #d5cdc2;
+    border-radius: 10px;
+    text-align: left;
+
+    /* Shading toward all sides */
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
+}
+
+.content-item h3 {
+    font-size: 1.3rem;
+    color: #252525;
+    margin-bottom: 10px;
+}
+
+.content-item ul {
+    list-style: none;
+    padding: 0;
+}
+
+.content-item ul li {
+    font-size: 1.1rem;
+    color: #252525;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.content-item ul li::before {
+    content: attr(data-emoji);
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+.content-item ul li span {
+    display: inline-block;
+    white-space: nowrap;
+    opacity: 0;
+}
+
+.stamp {
+    position: absolute;
+    top: 68%;
+    left: 50%;
     width: 200px;
     height: 200px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin: 0 auto 20px;
-    position: relative;
-    padding: 5px;
-    background: conic-gradient(
-    from 0deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.2) 10%,
-    rgba(0, 217, 255, 0.8) 20%,
-    rgba(255, 255, 255, 0.2) 30%,
-    rgba(255, 255, 255, 0) 40%,
-    rgba(255, 255, 255, 0) 100%
-    );
-    background-size: 100% 100%;
-    animation: rotateBorder 3s linear infinite;
+    opacity: 0;
+    z-index: 100;
+    transform: translate(100vw, 100vh) scale(0.5) rotate(45deg);
+    pointer-events: none;
 }
 
-.profile-circle img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-    display: block;
-    background: #fff;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+.stamp::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('../icons/stamp\,\ txt.png') no-repeat center/contain;
+    background-size: contain;
 }
 
-@keyframes rotateBorder {
-    0% { background-position: 0deg; }
-    100% { background-position: 360deg; }
+.stamp.animate {
+    animation: stampMove 1s ease forwards;
+}
+
+.content-section.visible .stamp {
+    animation: stampMove 1s ease 4s forwards;
+}
+
+@keyframes stampMove {
+    0% {
+        opacity: 0;
+        transform: translate(100vw, 100vh) scale(0.5) rotate(30deg);
+    }
+    70% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2) rotate(-5deg);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1) rotate(-10deg);
+    }
+}
+
+.ink-drop {
+    position: absolute;
+    background: rgba(139, 0, 0, 0.7);
+    border-radius: 50%;
+    opacity: 0;
+}
+
+.content-section.visible .ink-drop:nth-child(1) {
+    width: 20px;
+    height: 20px;
+    top: 40%;
+    left: 40%;
+    animation: inkSpread 0.5s ease 5s forwards;
+}
+
+.content-section.visible .ink-drop:nth-child(2) {
+    width: 15px;
+    height: 15px;
+    top: 60%;
+    left: 60%;
+    animation: inkSpread 0.5s ease 5.2s forwards;
+}
+
+.content-section.visible .ink-drop:nth-child(3) {
+    width: 25px;
+    height: 25px;
+    top: 45%;
+    left: 55%;
+    animation: inkSpread 0.5s ease 5.1s forwards;
+}
+
+@keyframes inkSpread {
+    0% {
+        opacity: 0.7;
+        transform: scale(0);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(2);
+    }
 }
 
 /***************************** MOBILE STYLES *****************************/
@@ -230,10 +445,9 @@ html, body {
     }
     
     .sobre-mi-image img {
-        max-width: 450%;
+        max-width: 400%;
         height: auto;
         object-fit: contain;
-        transform: scale(4);
         animation: slideInRight 1.2s ease forwards;
     }
     
