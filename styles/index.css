@@ -428,7 +428,7 @@ html, body {
 
     /**************************************************************************/
     .sobre-mi-container {
-        min-height: 70vh;
+        min-height: 80vh;
         flex-direction: row;
         flex-wrap: nowrap;
         gap: 10px;
