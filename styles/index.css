@@ -8,6 +8,15 @@ html, body {
     transition: background 0.5s ease;
 }
 
+/* Global CSS */
+:root {
+  --vh: 100%; /* fallback */
+}
+
+.full-height {
+  height: calc(var(--vh, 1vh) * 100);
+}
+
 /***************************** BUTTERFLY ANIMATION *****************************/
 .butterfly-container {
     position: fixed;
@@ -99,7 +108,7 @@ html, body {
 
 /***************************** INTRO CONTENT *****************************/
 .hero {
-    min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100);
     text-align: center;
     padding: 100px 20px;
     background: linear-gradient(180deg, #fbe9f1 0%, #f1d1b1 20%, #e6e2db 60%, #eeebe6 100%);
@@ -155,7 +164,7 @@ html, body {
 }
 
 .sobre-mi-container {
-    min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -258,7 +267,7 @@ html, body {
 
 /***************************** TYPES CONTENT *****************************/
 .content-section {
-    min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100);
     padding: 100px 20px;
     text-align: center;
     background: #edeae5;
@@ -418,9 +427,6 @@ html, body {
 
 /***************************** MOBILE STYLES *****************************/
 @media (max-width: 600px) {
-    .hero {
-        min-height: 70vh;
-    }
     .profile-circle {
         width: 150px;
         height: 150px;
@@ -428,7 +434,6 @@ html, body {
 
     /**************************************************************************/
     .sobre-mi-container {
-        min-height: 80vh;
         flex-direction: row;
         flex-wrap: nowrap;
         gap: 10px;
@@ -490,7 +495,6 @@ html, body {
     /**************************************************************************/
     .content-section {
         padding: 50px 20px;
-        min-height: 70vh;
     }
 
     .content-section h2 {
@@ -516,6 +520,6 @@ html, body {
     .stamp {
         width: 200px;
         height: 200px;
-        top: 90%;
+        top: 75%;
     }
 }

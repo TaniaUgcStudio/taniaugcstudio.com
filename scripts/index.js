@@ -1,3 +1,11 @@
+// Global JS
+function updateVH() {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
+updateVH();
+window.addEventListener('resize', updateVH);
+
 // UGC Loader
 document.addEventListener("DOMContentLoaded", () => {
     const loader = document.querySelector('.ugc-loader');
