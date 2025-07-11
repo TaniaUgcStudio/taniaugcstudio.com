@@ -1,4 +1,4 @@
-// Global JS
+//////////////////////////////////// Global HEIGHT 100% ////////////////////////////////////
 function updateVH() {
     let vh = window.innerHeight * 0.01;
     document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -6,7 +6,7 @@ function updateVH() {
 updateVH();
 window.addEventListener('resize', updateVH);
 
-// UGC Loader
+//////////////////////////////////// UGC Loader ////////////////////////////////////
 document.addEventListener("DOMContentLoaded", () => {
     const loader = document.querySelector('.ugc-loader');
     const fill = document.querySelector('.ugc-fill');
@@ -37,7 +37,65 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 25); // 100 * 25ms = 2.5s total
 });
 
-// Butterfly animation
+//////////////////////////////////// Stars Animation ////////////////////////////////////
+function createStar() {
+    const circleImg = document.querySelector('.circle-img');
+    const rect = circleImg.getBoundingClientRect();
+
+    const star = document.createElement('div');
+    star.classList.add('star');
+    
+    // Calculate center of the image
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    star.style.left = `${centerX}px`;
+    star.style.top = `${centerY}px`;
+    
+    // Random direction
+    const angle = Math.random() * 2 * Math.PI;
+    const distance = 150 + Math.random() * 100;
+    const x = Math.cos(angle) * distance + 'px';
+    const y = Math.sin(angle) * distance + 'px';
+    
+    star.style.setProperty('--x', x);
+    star.style.setProperty('--y', y);
+    star.style.zIndex = '98';
+    
+    document.body.appendChild(star);
+    
+    // Cleanup
+    setTimeout(() => {
+        star.remove();
+    }, 2000);
+}
+
+// Emit a star every 150ms
+const interval = setInterval(createStar, 150);
+
+// Stop after 10 seconds
+setTimeout(() => clearInterval(interval), 10000);
+
+//////////////////////////////////// Circle Animation ////////////////////////////////////
+const circle = document.querySelector('.circle');
+// Wait 10 seconds, then switch to deceleration
+setTimeout(() => {
+    // Freeze current angle
+    const computedStyle = window.getComputedStyle(circle);
+    const matrix = new DOMMatrixReadOnly(computedStyle.transform);
+    const currentAngle = Math.round(Math.atan2(matrix.b, matrix.a) * (180 / Math.PI));
+    
+    // Remove fast spin
+    circle.style.animation = 'none';
+    circle.style.transform = `rotate(${currentAngle}deg)`; // Keep current angle
+    
+    // Trigger decelerating spin
+    requestAnimationFrame(() => {
+        circle.classList.add('decelerate');
+    });
+}, 10000);
+
+//////////////////////////////////// Butterfly animation ////////////////////////////////////
 const butterfly = document.querySelector('.butterfly');
 const path = document.getElementById('plantPath');
 const pathLength = path.getTotalLength();
@@ -57,7 +115,7 @@ function updateButterflyPosition() {
 window.addEventListener('scroll', updateButterflyPosition);
 window.addEventListener('load', updateButterflyPosition);
 
-// About me animation
+//////////////////////////////////// About me animation ////////////////////////////////////
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -74,7 +132,7 @@ document.querySelectorAll('.scroll-animate-up, .scroll-animate-right').forEach(e
     observer.observe(el);
 });
 
-// TYpe writer animation
+//////////////////////////////////// TYpe writer animation ////////////////////////////////////
 function typeSentence(target, sentence, speed, callback) {
     let i = 0;
     target.textContent = ''; // Limpia el texto
