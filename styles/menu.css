@@ -92,6 +92,7 @@
     display: flex;
     align-items: center;
     padding: 10px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .sidebar ul li a img {
@@ -124,6 +125,10 @@
     margin-right: 10px;
 }
 
+.sidebar ul li:last-child a {
+    border-bottom: none;
+}
+
 .contact-bar {
     display: none;
 }
@@ -133,19 +138,22 @@
     .sidebar ul li a span {
         display: inline;
     }
+
     .sidebar-bottom {
         display: none; /* Hide sidebar bottom on mobile */
     }
+
     .contact-bar {
         position: fixed;
         bottom: 0;
         width: 100%;
-        background: linear-gradient(180deg, #2f3b35 0%, #4a6156 50%, #3f5048 100%);
+        background: linear-gradient(180deg, #eeebe6 0%, #3f5048 25%, #2f3b35 100%);
         display: flex;
         justify-content: space-around;
         padding: 10px 0;
         z-index: 1000;
     }
+
     .contact-bar ul {
         list-style: none;
         display: flex;
@@ -154,10 +162,24 @@
         margin: 0;
         width: 100%;
     }
+
     .contact-bar li {
         flex: 1;
         text-align: center;
+        position: relative;
     }
+
+    /* Add vertical line on the right of each item except the last */
+    .contact-bar li:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        top: 10%;
+        right: 0;
+        height: 80%;
+        width: 1px;
+        background-color: rgba(255, 255, 255, 0.3);
+    }
+
     .contact-bar a {
         color: #fff;
         text-decoration: none;
@@ -166,11 +188,13 @@
         align-items: center;
         padding: 5px;
     }
+
     .contact-bar a img {
         width: 25px;
         height: 25px;
         margin: 0;
     }
+
     .contact-bar a span {
         display: none; /* Ensure no text is shown */
     }
