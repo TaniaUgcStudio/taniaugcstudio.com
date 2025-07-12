@@ -7,7 +7,7 @@ updateVH();
 window.addEventListener('resize', updateVH);
 
 //////////////////////////////////// UGC Loader ////////////////////////////////////
-/*document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
     const loader = document.querySelector('.ugc-loader');
     const fill = document.querySelector('.ugc-fill');
     const percentText = document.querySelector('.ugc-percent');
@@ -35,7 +35,7 @@ window.addEventListener('resize', updateVH);
             
         }
     }, 25); // 100 * 25ms = 2.5s total
-});*/
+});
 
 //////////////////////////////////// Profile Stars Animation ////////////////////////////////////
 function createStar() {
