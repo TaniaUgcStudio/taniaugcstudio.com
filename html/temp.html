@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>¿Cómo trabajo?</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(180deg, #fbe9f1 0%, #f1d1b1 20%, #e6e2db 60%, #eeebe6 100%);
+      font-family: Georgia, serif;
+      overflow-x: hidden;
+    }
+
+    h1.title {
+      text-align: center;
+      font-size: 38px;
+      margin: 50px 0 10px;
+      color: #18182f;
+    }
+
+    .flow-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      position: relative;
+      padding: 60px 20px;
+      flex-direction: row;
+    }
+
+    .circle-block {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .circle {
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: linear-gradient(180deg, #eeebe6 0%, #e6e2db 20%, #f1d1b1 60%, #fbe9f1 100%);
+      border: 10px solid #ebde2969;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      padding: 20px;
+      z-index: 2;
+      position: relative;
+      opacity: 0;
+      animation: flyIn 1.4s ease-out forwards, borderGlow 2s ease-out 1;
+    }
+
+    .circle-block:nth-child(1) .circle { animation-delay: 0s, 0s; }
+    .circle-block:nth-child(2) .circle { animation-delay: 0.5s, 0.5s; }
+    .circle-block:nth-child(3) .circle { animation-delay: 1s, 1s; }
+
+    .circle img {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 0 5px #aaa);
+    }
+
+    .circle h3 {
+      margin: 0;
+      font-size: 22px;
+      color: #18182f;
+    }
+
+    .description {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #444;
+    }
+
+    @keyframes flyIn {
+      0% {
+        opacity: 0;
+        transform: translateY(60px) scale(0.85);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes borderGlow {
+      0% {
+        box-shadow: 0 0 0 transparent;
+        border-color: #ebde2969;
+      }
+      50% {
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
+        border-color: gold;
+      }
+      100% {
+        box-shadow: 0 0 0 transparent;
+        border-color: #ebde2969;
+      }
+    }
+
+    @media (max-width: 768px) {
+      h1.title {
+        font-size: 28px;
+        margin-top: 50px;
+      }
+
+      .flow-container {
+        margin-top: -30px;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .circle {
+        width: 220px;
+        height: 220px;
+      }
+
+      .circle img {
+        width: 60px;
+        height: 60px;
+      }
+
+      .circle h3 {
+        font-size: 26px;
+      }
+
+      .description {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1 class="title">¿Cómo trabajo?</h1>
+
+  <div class="flow-container">
+    <!-- Bloque 1 -->
+    <div class="circle-block">
+      <div class="circle">
+        <img src="../icons/brain.png" alt="Brief"/>
+        <h3>Brief</h3>
+        <div class="description">Escucho tu idea y necesidades.</div>
+      </div>
+    </div>
+
+    <!-- Bloque 2 -->
+    <div class="circle-block">
+      <div class="circle">
+        <img src="../icons/multimedia.png" alt="Creación"/>
+        <h3>Creación</h3>
+        <div class="description">Grabo contenido 100% original.</div>
+      </div>
+    </div>
+
+    <!-- Bloque 3 -->
+    <div class="circle-block">
+      <div class="circle">
+        <img src="../icons/delivery.png" alt="Entrega"/>
+        <h3>Entrega</h3>
+        <div class="description">Recibes tus vídeos listos para publicar.</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

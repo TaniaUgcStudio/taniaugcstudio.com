@@ -7,7 +7,7 @@ updateVH();
 window.addEventListener('resize', updateVH);
 
 //////////////////////////////////// UGC Loader ////////////////////////////////////
-document.addEventListener("DOMContentLoaded", () => {
+/*document.addEventListener("DOMContentLoaded", () => {
     const loader = document.querySelector('.ugc-loader');
     const fill = document.querySelector('.ugc-fill');
     const percentText = document.querySelector('.ugc-percent');
@@ -35,9 +35,9 @@ document.addEventListener("DOMContentLoaded", () => {
             
         }
     }, 25); // 100 * 25ms = 2.5s total
-});
+});*/
 
-//////////////////////////////////// Stars Animation ////////////////////////////////////
+//////////////////////////////////// Profile Stars Animation ////////////////////////////////////
 function createStar() {
     const circleImg = document.querySelector('.circle-img');
     const rect = circleImg.getBoundingClientRect();
@@ -73,10 +73,10 @@ function createStar() {
 // Emit a star every 150ms
 const interval = setInterval(createStar, 150);
 
-// Stop after 10 seconds
-setTimeout(() => clearInterval(interval), 10000);
+// Stop after 5 seconds
+setTimeout(() => clearInterval(interval), 5000);
 
-//////////////////////////////////// Circle Animation ////////////////////////////////////
+//////////////////////////////////// Profile Circle Animation ////////////////////////////////////
 const circle = document.querySelector('.circle');
 // Wait 10 seconds, then switch to deceleration
 setTimeout(() => {
@@ -93,7 +93,7 @@ setTimeout(() => {
     requestAnimationFrame(() => {
         circle.classList.add('decelerate');
     });
-}, 10000);
+}, 5000);
 
 //////////////////////////////////// Butterfly animation ////////////////////////////////////
 const butterfly = document.querySelector('.butterfly');
@@ -103,7 +103,7 @@ const pathLength = path.getTotalLength();
 function updateButterflyPosition() {
     const scrollTop = window.scrollY;
     const maxScroll = document.body.scrollHeight - window.innerHeight;
-    const scrollRatio = scrollTop / maxScroll / 3;
+    const scrollRatio = scrollTop / maxScroll / 2.9;
     const pointAtLength = scrollRatio * pathLength;
     
     const point = path.getPointAtLength(pointAtLength);

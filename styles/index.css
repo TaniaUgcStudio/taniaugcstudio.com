@@ -17,39 +17,6 @@ html, body {
     height: calc(var(--vh, 1vh) * 100);
 }
 
-/***************************** BUTTERFLY ANIMATION *****************************/
-.butterfly-container {
-    position: fixed;
-    top: 80px;
-    left: 15px;
-    width: 60px;
-    height: 100vh;
-    pointer-events: none;
-    z-index: 900;
-}
-
-.butterfly {
-    position: absolute;
-    width: 40px;
-    height: auto;
-    transform-origin: center center;
-}
-
-.plant-track {
-    position: fixed;
-    top: 50px;
-    left: 15px;
-    width: 60px;
-    height: 100%;
-    z-index: 10;
-    pointer-events: none;
-}
-
-.plant-track svg {
-    width: 100%;
-    height: 100%;
-}
-
 /***************************** UGC LOADER *****************************/
 .ugc-loader {
     position: fixed;
@@ -59,7 +26,7 @@ html, body {
     height: 100vh;
     background: #fefefe;
     /*background-image: url("https://www.transparenttextures.com/patterns/tileable-wood-colored.png");*/
-    background-image: url("../icons/ugc5.png");
+    background-image: url("../images/ugc.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -108,6 +75,39 @@ html, body {
     font-size: 1.2rem;
     font-weight: bold;
     color: #555;
+}
+
+/***************************** BUTTERFLY ANIMATION *****************************/
+.butterfly-container {
+    position: fixed;
+    top: 80px;
+    left: 15px;
+    width: 60px;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 900;
+}
+
+.butterfly {
+    position: absolute;
+    width: 40px;
+    height: auto;
+    transform-origin: center center;
+}
+
+.plant-track {
+    position: fixed;
+    top: 50px;
+    left: 15px;
+    width: 60px;
+    height: 100%;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.plant-track svg {
+    width: 100%;
+    height: 100%;
 }
 
 /***************************** INTRO CONTENT - INAGE & CIRCLE *****************************/
@@ -245,7 +245,7 @@ html, body {
     max-width: 550%;
     height: auto;
     border-radius: 0;
-    
+    margin-top: -300px;
 }
 
 /* Last sentence */
@@ -463,9 +463,125 @@ html, body {
     }
 }
 
+/***************************** WORKS CONTENT *****************************/
+.work-section {
+    min-height: calc(var(--vh, 1vh) * 100);
+    padding: 100px 20px;
+    text-align: center;
+    background: #edeae5;
+    background-image: url("https://www.transparenttextures.com/patterns/connected.png");
+    position: relative;
+    overflow: hidden;
+}
+
+.work-text h2 {
+    font-size: 2em;
+    margin-bottom: 1em;
+}
+
+.flow-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    position: relative;
+    padding: 60px 20px;
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.work-block {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.work {
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #eeebe6 0%, #e6e2db 20%, #f1d1b1 60%, #fbe9f1 100%);
+    border: 5px solid #3f5048;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    padding: 20px;
+    z-index: 2;
+    position: relative;
+    opacity: 0;
+    transform: translateY(60px) scale(0.85);
+}
+
+.scroll-animate-visible .work {
+    animation: flyIn 1.4s ease-out forwards, borderGlow 2s ease-out 1;
+}
+
+.work-block:nth-child(1) .work { animation-delay: 0s, 0s; }
+.work-block:nth-child(2) .work { animation-delay: 0.5s, 0.5s; }
+.work-block:nth-child(3) .work { animation-delay: 1s, 1s; }
+
+.work img {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 0 5px #aaa);
+}
+
+.work h3 {
+    margin: 0;
+    font-size: 22px;
+    color: #18182f;
+}
+
+.description {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #444;
+}
+
+@keyframes flyIn {
+    0% {
+        opacity: 0;
+        transform: translateY(60px) scale(0.85);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes borderGlow {
+    0% {
+        box-shadow: 0 0 0 transparent;
+        border-color: #8c7c6d;
+    }
+    50% {
+        box-shadow: 0 0 0 transparent;
+        border-color: #8c7c6d;
+    }
+    100% {
+        box-shadow: 0 0 0 transparent;
+        border-color: #3f5048;
+    }
+}
+
+/***************************** FOOTER *****************************/
+.site-footer {
+    text-align: center;
+    margin-top: 200px;
+    margin-bottom: 10px;
+    font-size: 0.9em;
+    background-color: transparent;
+}
+
 /***************************** MOBILE STYLES *****************************/
 @media (max-width: 600px) {
-   
+    
     
     /**************************************************************************/
     .sobre-mi-container {
@@ -503,6 +619,7 @@ html, body {
         height: auto;
         object-fit: contain;
         animation: slideInRight 1.2s ease forwards;
+        margin-top: -200px;
     }
     
     .cta-full {
@@ -527,7 +644,7 @@ html, body {
     
     /**************************************************************************/
     .content-section {
-        padding: 80px 20px;
+        padding: 100px 20px;
     }
     
     .content-section h2 {
@@ -553,6 +670,40 @@ html, body {
     .stamp {
         width: 200px;
         height: 200px;
-        top: 85%;
+        top: 80%;
+    }
+    
+    /**************************************************************************/
+    .work-section {
+        padding: 50px 20px;
+    }
+    
+    .flow-container {
+        margin-top: -30px;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .work {
+        width: 220px;
+        height: 220px;
+    }
+    
+    .work img {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .work h3 {
+        font-size: 26px;
+    }
+    
+    .description {
+        font-size: 16px;
+    }
+
+    .site-footer {
+        margin-top: 0px;
+        margin-bottom: 10px;
     }
 }

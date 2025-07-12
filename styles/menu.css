@@ -128,20 +128,6 @@
     display: none;
 }
 
-/***************************** FOOTER *****************************/
-.site-footer {
-    text-align: center;
-    padding: 30px 10px;
-    font-size: 0.9em;
-    color: #555;
-    background-color: transparent; /* keeps it blended with your body gradient */
-    font-family: Georgia, serif;
-}
-
-.site-footer {
-    border-top: 1px solid #ddd;
-}
-
 /***************************** MOBILE STYLES *****************************/
 @media (max-width: 600px) {
     .sidebar ul li a span {
