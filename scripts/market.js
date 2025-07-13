@@ -1,133 +1,116 @@
-// Three.js Globe Setup
+
+const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('globe-canvas') });
+const renderer = new THREE.WebGLRenderer({ alpha: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-const geometry = new THREE.SphereGeometry(5, 64, 64);
-const texture = new THREE.TextureLoader().load('https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg');
-const material = new THREE.MeshBasicMaterial({ map: texture });
-const earth = new THREE.Mesh(geometry, material);
-scene.add(earth);
+const controls = new THREE.OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.1;
+controls.rotateSpeed = 0.6;
+controls.zoomSpeed = 0.5;
+controls.enablePan = false;
 
-// Debris Animation
-const debrisCount = 50;
-const debrisArray = [];
-for (let i = 0; i < debrisCount; i++) {
-    const size = Math.random() * 3 + 1;
-    const debris = document.createElement('div');
-    debris.className = 'debris';
-    debris.style.width = `${size}px`;
-    debris.style.height = `${size}px`;
-    debris.style.left = `${Math.random() * window.innerWidth}px`;
-    debris.style.top = `${Math.random() * window.innerHeight}px`;
-    document.body.appendChild(debris);
-    debrisArray.push({
-        element: debris,
-        vx: (Math.random() - 0.5) * 2,
-        vy: (Math.random() - 0.5) * 2
-    });
-}
+const textureLoader = new THREE.TextureLoader();
+const mapTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg');
+const bumpTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_bump_2048.jpg');
 
-function animateDebris() {
-    debrisArray.forEach(debris => {
-        let x = parseFloat(debris.element.style.left);
-        let y = parseFloat(debris.element.style.top);
-        x += debris.vx;
-        y += debris.vy;
-        if (x < 0 || x > window.innerWidth) debris.vx *= -1;
-        if (y < 0 || y > window.innerHeight) debris.vy *= -1;
-        debris.element.style.left = `${x}px`;
-        debris.element.style.top = `${y}px`;
-    });
-}
+const radius = 15;
+const geometry = new THREE.SphereGeometry(radius, isMobile ? 32 : 64, isMobile ? 32 : 64);
+const material = new THREE.MeshPhongMaterial({
+    map: mapTexture,
+    bumpMap: bumpTexture,
+    bumpScale: 0.1,
+    specular: 0x333333,
+    shininess: 10
+});
+const globe = new THREE.Mesh(geometry, material);
+scene.add(globe);
 
-// Camera position helper
-function latLonToCameraPosition(lat, lon, radius, distance = 10) {
+scene.add(new THREE.AmbientLight(0xffffff));
+const directionalLight = new THREE.DirectionalLight(0x888888, 0.3);
+directionalLight.position.set(10, 10, 10);
+scene.add(directionalLight);
+
+const pointsData = [
+    { lat: 40.416775, lon: -3.703790 },
+    { lat: 41.385064, lon: 2.173404 },
+    ...Array(30).fill().map(() => ({
+        lat: 36 + Math.random() * 8,
+        lon: -9 + Math.random() * 7
+    })),
+    { lat: 52.520008, lon: 13.404954 },
+    { lat: 48.137154, lon: 11.576124 },
+    { lat: 50.110924, lon: 8.682127 },
+    { lat: 53.551085, lon: 9.993682 },
+    { lat: 50.937531, lon: 6.960279 },
+    { lat: 48.856614, lon: 2.352222 },
+    { lat: 43.296482, lon: 5.369780 },
+    { lat: 45.764043, lon: 4.835659 },
+    { lat: 43.610769, lon: 1.444209 },
+    { lat: 47.218371, lon: -1.553621 }
+];
+
+function latLonToVector3(lat, lon, radius) {
     const phi = (90 - lat) * Math.PI / 180;
     const theta = (lon + 180) * Math.PI / 180;
-    const x = distance * Math.sin(phi) * Math.cos(theta);
-    const y = distance * Math.cos(phi);
-    const z = distance * Math.sin(phi) * Math.sin(theta);
-    return new THREE.Vector3(x, y, z);
+    return new THREE.Vector3(
+        -radius * Math.sin(phi) * Math.cos(theta),
+        radius * Math.cos(phi),
+        radius * Math.sin(phi) * Math.sin(theta)
+    );
 }
 
-// Globe Animation
-let time = 0;
-const zoomDuration = 5;
-const initialPosition = latLonToCameraPosition(40.7128, -74.0060, 5, 15); // New York
-const targetPosition = latLonToCameraPosition(40.4168, -3.7038, 5, 8); // Madrid
-const targetLookAt = new THREE.Vector3(
-    5 * Math.sin((90 - 40.4168) * Math.PI / 180) * Math.cos((-3.7038 + 180) * Math.PI / 180),
-    5 * Math.cos((90 - 40.4168) * Math.PI / 180),
-    5 * Math.sin((90 - 40.4168) * Math.PI / 180) * Math.sin((-3.7038 + 180) * Math.PI / 180)
-);
+const starPoints = [];
+pointsData.forEach(point => {
+    const position = latLonToVector3(point.lat, point.lon, radius + 0.15);
+    const star = document.createElement('div');
+    star.className = 'star-point';
+    document.body.appendChild(star);
+    starPoints.push({ element: star, position });
+});
 
-function animateGlobe() {
-    time += 0.016;
-    if (time <= zoomDuration) {
-        if (time < zoomDuration / 2) {
-            earth.rotation.y += 0.01;
-        } else {
-            earth.rotation.y += 0.01 * (1 - (time - zoomDuration / 2) / (zoomDuration / 2));
-        }
-        
-        const t = time / zoomDuration;
-        const ease = 1 - Math.pow(1 - t, 3);
-        camera.position.lerpVectors(initialPosition, targetPosition, ease);
-        camera.fov = 75 - (75 - 30) * ease;
-        camera.updateProjectionMatrix();
-        camera.lookAt(targetLookAt);
-        renderer.render(scene, camera);
-        animateDebris();
-        requestAnimationFrame(animateGlobe);
-    } else {
-        document.getElementById('globe-canvas').style.display = 'none';
-        document.getElementById('map').style.display = 'block';
-        document.querySelector('.text-overlay').classList.add('hidden');
-        initMapbox();
-    }
-}
-animateGlobe();
-
-// Mapbox Setup
-function initMapbox() {
-    mapboxgl.accessToken = 'pk.eyJ1Ijoic2FkZXFhbCIsImEiOiJjbDA0ZHBpZDgwYjl5M2Rud2wweDVhaWVtIn0.PSwxdzBQL8ZCh0kYT4UA9g';
-    
-    const map = new mapboxgl.Map({
-        container: 'map',
-        style: 'mapbox://styles/sadeqal/cl04dpzyq000v15o3nlcnpn9d',
-        center: [-3.7038, 40.4168],
-        zoom: 12,
-        pitch: 80,
-        bearing: 0
+let frameCount = 0;
+function updateStarPositions() {
+    starPoints.forEach(star => {
+        const vector = star.position.clone();
+        vector.project(camera);
+        const x = (vector.x + 1) * window.innerWidth / 2;
+        const y = -(vector.y - 1) * window.innerHeight / 2;
+        star.element.style.left = `${x - 10}px`;
+        star.element.style.top = `${y - 10}px`;
     });
-    
-    map.on('load', () => {
-        // Generate markers within Madrid bounding box
-        for (let i = 0; i < 50; i++) {
-            const lng = -3.75 + Math.random() * 0.1;
-            const lat = 40.38 + Math.random() * 0.1;
-            
-            new mapboxgl.Marker()
-            .setLngLat([lng, lat])
-            .addTo(map);
-        }
-        
-        map.triggerRepaint(); // Ensure all renders properly
-    });
-    
-    // Continue debris animation
-    function continueAnimation() {
-        animateDebris();
-        requestAnimationFrame(continueAnimation);
-    }
-    continueAnimation();
 }
 
-// Handle window resize
+const spainPosition = latLonToVector3(40.416775, -3.703790, radius + 20);
+camera.position.copy(spainPosition);
+camera.lookAt(0, 0, 0);
+
+function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+    if (++frameCount % 2 === 0) updateStarPositions();
+}
+animate();
+
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    updateStarPositions();
 });
+
+const starContainer = document.getElementById("stars");
+const numStars = 150;
+for (let i = 0; i < numStars; i++) {
+    const star = document.createElement("div");
+    star.className = "star";
+    star.style.top = `${Math.random() * 100}%`;
+    star.style.left = `${Math.random() * 100}%`;
+    star.style.animationDuration = `${2 + Math.random() * 3}s`;
+    star.style.opacity = Math.random() * 0.6 + 0.4;
+    starContainer.appendChild(star);
+}
