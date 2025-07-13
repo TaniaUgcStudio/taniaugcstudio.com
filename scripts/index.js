@@ -7,7 +7,7 @@ updateVH();
 window.addEventListener('resize', updateVH);
 
 //////////////////////////////////// UGC Loader ////////////////////////////////////
-/*document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
     const loader = document.querySelector('.ugc-loader');
     const fill = document.querySelector('.ugc-fill');
     const percentText = document.querySelector('.ugc-percent');
@@ -35,7 +35,7 @@ window.addEventListener('resize', updateVH);
             
         }
     }, 25); // 100 * 25ms = 2.5s total
-});*/
+});
 
 //////////////////////////////////// Butterfly animation ////////////////////////////////////
 const butterfly = document.querySelector('.butterfly');
@@ -233,6 +233,35 @@ function startContentTypewriterEffect() {
 
 //////////////////////////////////// Initialize Animations ////////////////////////////////////
 document.addEventListener("DOMContentLoaded", () => {
-    startIntroTypewriterEffect();  // Start hero typewriter
-    startContentTypewriterEffect(); // Start content typewriter
+    const loader = document.querySelector('.ugc-loader');
+    const fill = document.querySelector('.ugc-fill');
+    const percentText = document.querySelector('.ugc-percent');
+    const body = document.querySelector('body');
+
+    // Hide all other content initially
+    const content = Array.from(body.children).filter(el => !el.classList.contains('ugc-loader'));
+    content.forEach(el => el.style.display = 'none');
+
+    let percent = 0;
+
+    const interval = setInterval(() => {
+        percent++;
+        fill.style.height = percent + '%';
+        percentText.textContent = percent + '%';
+
+        if (percent >= 100) {
+            clearInterval(interval);
+            loader.style.opacity = 0;
+
+            setTimeout(() => {
+                loader.remove(); // Remove loader
+                content.forEach(el => el.style.display = ''); // Show page content
+
+                // ✅ Start animations *after* loader is gone and content is visible
+                startIntroTypewriterEffect();  
+                startContentTypewriterEffect(); 
+
+            }, 800); // Wait for loader fade out
+        }
+    }, 25);
 });
