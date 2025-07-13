@@ -2,6 +2,7 @@
 html, body {
     margin: 0;
     height: 100vh;
+    color: #15025c;
     background-color: #d7cbbd;
     background-image: url("https://www.transparenttextures.com/patterns/light-wool.png");
     font-family: Georgia, serif, Arial, sans-serif;
@@ -10,8 +11,129 @@ html, body {
 }
 
 /***************************** CONTACT CONTENT *****************************/
+h1 {
+    text-align: center;
+    margin-top: 60px;
+}
 
+p {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    line-height: 1.7;
+}
+
+.contact-form {
+    background-color: #8c7c6d44;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 800px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin: 0 auto;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #9aa690bb;
+    font-family: Georgia, serif, Arial, sans-serif;
+    font-size: 1.2rem;
+}
+
+textarea {
+    resize: vertical;
+}
+
+button {
+    background-color: #9aa690;
+    color: #15025c;
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: Georgia, serif, Arial, sans-serif;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #64c579;
+}
+
+#thank-you-message {
+    display: none; /* show it when needed */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    padding: 20px;
+    background-color: #e6ffe6;
+    border-radius: 8px;
+    color: #333;
+    z-index: 999;
+    max-width: 450px;
+}
+
+#birthday-icons {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.birthday-icon {
+    position: absolute;
+    font-size: 2em;
+    animation: float 5s ease-in-out infinite;
+    opacity: 0.8;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(100vh) translateX(0);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translateY(50vh) translateX(calc(10px * var(--direction)));
+        opacity: 0.5;
+    }
+    100% {
+        transform: translateY(0) translateX(calc(20px * var(--direction)));
+        opacity: 0;
+    }
+}
 
 /***************************** MOBILE STYLES *****************************/
 @media (max-width: 768px) {
+    p {
+        max-width: 85%;
+        margin: 0 auto 20px;
+        line-height: 1.2;
+    }
+    
+    .contact-form {
+        max-width: 85%;
+    }
+    
+    #thank-you-message {
+        width: 85%;
+        min-width: 85%;
+        max-width: 85%;
+    }
 }
