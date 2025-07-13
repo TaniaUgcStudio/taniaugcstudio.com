@@ -634,7 +634,7 @@ html, body {
         flex: 1 1 60%;
         text-align: left;
         font-size: 1.15em;
-        line-height: 1.8;
+        line-height: 1.85;
         z-index: 910;
         position: relative;
         padding-right: 5px; /* Reduced padding to give more space */
