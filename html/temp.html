@@ -3,29 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Globe with Interactive Points</title>
+    <title>3D Globe with Star Points</title>
     <style>
-        body { margin: 0; overflow: hidden; font-family: Georgia, serif, Arial, sans-serif; }
-        canvas { display: block; }
-        #info { 
-            position: absolute; 
-            top: 10px; 
-            left: 10px; 
-            color: white; 
-            background: rgba(0, 0, 0, 0.7); 
-            padding: 10px; 
-            border-radius: 5px; 
-            max-width: 300px; 
+        html, body {
+            margin: 0;
+            font-family: Georgia, serif, Arial, sans-serif;
+            background-image: url("../images/cosmos.jpg");
+
+            color: #15025c;
+            overflow-x: hidden;
+            position: relative;
         }
-        #popup { 
-            position: absolute; 
-            background: rgba(0, 0, 0, 0.8); 
-            color: white; 
-            padding: 8px; 
-            border-radius: 5px; 
-            display: none; 
-            pointer-events: none; 
-        }
+        canvas { display: block; background-color: transparent; }
         .text-overlay { 
             position: absolute; 
             bottom: 20px; 
@@ -39,23 +28,25 @@
             max-width: 600px; 
             font-size: 16px; 
         }
-        .text-overlay strong { 
-            color: #FFFDD0; 
+        .text-overlay strong { color: #FFFDD0; }
+        .star-point {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: url("../icons/star.gif") no-repeat center;
+            background-size: contain;
+            pointer-events: none;
         }
         /***************************** MOBILE STYLES *****************************/
         @media (max-width: 600px) {
-            .text-overlay { 
-              width: 85%;
-            }
-          }
+            .text-overlay { width: 85%; }
+        }
     </style>
 </head>
 <body>
-    <div id="info">- ¡Haz clic o toca los puntos brillantes para ver información sobre la empresa!<br>- Arrastra para rotar el globo.</div>
-    <div id="popup"></div>
     <!-- Market Content -->
     <div class="text-overlay">
-        Más de <strong>300 creadores y marcas</strong> ya confían en mí cada día para recibir contenidos únicos y hechos a medida.  
+        Más de <strong>300 marcas</strong> ya confían en mí cada día para recibir contenidos únicos y hechos a medida.  
         <br><br>
         ¿Quieres llevar tus redes al siguiente nivel?  
         <strong>Escríbeme hoy</strong> y recibe el contenido especial que tu proyecto merece ✨
@@ -66,7 +57,7 @@
         // Set up scene, camera, and renderer
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer();
+        const renderer = new THREE.WebGLRenderer({ alpha: true }); // Enable alpha for background transparency
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
@@ -88,16 +79,16 @@
             map: mapTexture,
             bumpMap: bumpTexture,
             bumpScale: 0.1,
-            specular: 0x555555,
-            shininess: 30
+            specular: 0x333333, // Darker specular for less glare
+            shininess: 10 // Reduced shininess
         });
         const globe = new THREE.Mesh(geometry, material);
         scene.add(globe);
 
-        // Add lighting
-        const ambientLight = new THREE.AmbientLight(0x404040);
+        // Add lighting (darker to preserve background)
+        const ambientLight = new THREE.AmbientLight(0xffffff); // Darker ambient light
         scene.add(ambientLight);
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        const directionalLight = new THREE.DirectionalLight(0x888888, 0.3); // Dimmer directional light
         directionalLight.position.set(10, 10, 10);
         scene.add(directionalLight);
 
@@ -114,7 +105,6 @@
             { lat: 37.392529, lon: -5.975137, name: "Productora de Vídeo, Seville" },
             { lat: 39.466667, lon: -0.375000, name: "Marca de Ropa, Valencia" },
             { lat: 43.257795, lon: -2.923739, name: "Galería de Arte, Bilbao" },
-            // Add 30 more random points in Spain
             ...Array(30).fill().map((_, i) => ({
                 lat: 36 + Math.random() * 8,
                 lon: -9 + Math.random() * 7,
@@ -134,7 +124,7 @@
             { lat: 47.218371, lon: -1.553621, name: "Productora de Vídeo, Nantes" }
         ];
 
-        // Convert lat/lon to 3D coordinates
+        // Convert lat/lon to 3D coordinates and screen position
         function latLonToVector3(lat, lon, radius) {
             const phi = (90 - lat) * Math.PI / 180;
             const theta = (lon + 180) * Math.PI / 180;
@@ -145,56 +135,27 @@
             );
         }
 
-        // Create glowing points and parent them to the globe
-        const points = [];
+        // Create star points using HTML elements
+        const starPoints = [];
         pointsData.forEach(point => {
-            const pointGeometry = new THREE.SphereGeometry(0.08, 16, 16);
-            const pointMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFDD0 });
-            const pointMesh = new THREE.Mesh(pointGeometry, pointMaterial);
             const position = latLonToVector3(point.lat, point.lon, radius + 0.15);
-            pointMesh.position.copy(position);
-            pointMesh.userData = { name: point.name };
-            globe.add(pointMesh);
-            points.push(pointMesh);
+            const star = document.createElement('div');
+            star.className = 'star-point';
+            document.body.appendChild(star);
+            starPoints.push({ element: star, position });
         });
 
-        // Set up raycaster for clicking
-        const raycaster = new THREE.Raycaster();
-        const mouse = new THREE.Vector2();
-        let selectedPoint = null;
-        const popup = document.getElementById('popup');
-
-        // Handle mouse clicks
-        function handleInteraction(event, clientX, clientY) {
-            event.preventDefault();
-            mouse.x = (clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(clientY / window.innerHeight) * 2 + 1;
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects(points);
-            if (intersects.length > 0) {
-                const point = intersects[0].object;
-                popup.innerText = point.userData.name;
-                popup.style.display = 'block';
-                popup.style.left = `${clientX + 10}px`;
-                popup.style.top = `${clientY - 10}px`;
-                selectedPoint = point;
-                document.getElementById('info').innerText = `Selected: ${point.userData.name}`;
-            } else {
-                popup.style.display = 'none';
-                document.getElementById('info').innerText = 'Click or tap on glowing points to see company info! Drag to rotate the globe.';
-                selectedPoint = null;
-            }
+        // Update star point positions
+        function updateStarPositions() {
+            starPoints.forEach(star => {
+                const vector = star.position.clone();
+                vector.project(camera);
+                const x = (vector.x + 1) * window.innerWidth / 2;
+                const y = -(vector.y - 1) * window.innerHeight / 2;
+                star.element.style.left = `${x - 10}px`; // Center the 20px star
+                star.element.style.top = `${y - 10}px`;  // Center the 20px star
+            });
         }
-
-        window.addEventListener('click', (event) => {
-            handleInteraction(event, event.clientX, event.clientY);
-        });
-
-        // Handle touch events for mobile
-        window.addEventListener('touchstart', (event) => {
-            const touch = event.touches[0];
-            handleInteraction(event, touch.clientX, touch.clientY);
-        });
 
         // Position camera to focus on Spain (centered on Madrid)
         const spainPosition = latLonToVector3(40.416775, -3.703790, radius + 20);
@@ -202,27 +163,11 @@
         camera.lookAt(0, 0, 0);
 
         // Animation loop
-        let time = 0;
         function animate() {
             requestAnimationFrame(animate);
-
-            // Animate points (slow subtle glow)
-            time += 0.02;
-            points.forEach(point => {
-                const scale = 1 + 0.2 * Math.sin(time + point.position.x);
-                point.scale.set(scale, scale, scale);
-            });
-
-            // Highlight selected point
-            if (selectedPoint) {
-                selectedPoint.material.color.set(0xff0000);
-                selectedPoint.scale.set(1.3, 1.3, 1.3);
-            } else {
-                points.forEach(point => point.material.color.set(0xFFFDD0));
-            }
-
             controls.update();
             renderer.render(scene, camera);
+            updateStarPositions(); // Update star positions with camera movement
         }
         animate();
 
@@ -231,6 +176,7 @@
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
+            updateStarPositions();
         });
     </script>
 </body>
