@@ -155,7 +155,7 @@ html, body {
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 0.5s ease, transform 0.5s ease;
-    line-height: 1.8; /* more space between lines within each item */
+    line-height: 1.5; /* more space between lines within each item */
 }
 
 .teaser-list li span.visible {
@@ -233,6 +233,52 @@ html, body {
 
 .circle.decelerate {
     animation: decelerate 5s ease-out forwards;
+}
+
+.stats-circles {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin: 40px auto 20px;
+    max-width: 600px;
+    flex-wrap: wrap;
+}
+
+.stat-circle {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #9aa690, #fae3d9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    animation: popIn 0.8s ease-out forwards;
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+.circle-count {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #15025c;
+}
+
+.circle-label {
+    margin-top: 6px;
+    font-size: 0.95rem;
+    color: #333;
+    text-align: center;
+    line-height: 1.2;
+    font-weight: bold;
+}
+
+@keyframes popIn {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 /***************************** ABOUT ME CONTENT *****************************/

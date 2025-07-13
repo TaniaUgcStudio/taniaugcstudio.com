@@ -61,14 +61,14 @@ window.addEventListener('load', updateButterflyPosition);
 function createStar() {
     const circleImg = document.querySelector('.circle-img');
     const rect = circleImg.getBoundingClientRect();
-
+    
     const star = document.createElement('div');
     star.classList.add('star');
     
     // Calculate center of the image
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
-
+    
     star.style.left = `${centerX}px`;
     star.style.top = `${centerY}px`;
     
@@ -96,7 +96,7 @@ const interval = setInterval(createStar, 150);
 // Stop after 5 seconds
 setTimeout(() => clearInterval(interval), 5000);
 
-//////////////////////////////////// Profile Circle Animation ////////////////////////////////////
+//////////////////////////////////// Profile Circles Animation ////////////////////////////////////
 const circle = document.querySelector('.circle');
 // Wait a few seconds, then switch to deceleration
 setTimeout(() => {
@@ -114,6 +114,30 @@ setTimeout(() => {
         circle.classList.add('decelerate');
     });
 }, 5000);
+
+function animateStatsCounters() {
+    const counters = document.querySelectorAll('.circle-count');
+    
+    counters.forEach(counter => {
+        const target = +counter.getAttribute('data-target');
+        let count = 0;
+        const speed = 2;
+        
+        function updateCount() {
+            const increment = Math.ceil(target / 80);
+            count += increment;
+            
+            if (count < target) {
+                counter.textContent = count;
+                requestAnimationFrame(updateCount);
+            } else {
+                counter.textContent = target;
+            }
+        }
+        
+        updateCount();
+    });
+}
 
 //////////////////////////////////// About Me Animation ////////////////////////////////////
 const observer = new IntersectionObserver((entries) => {
@@ -155,7 +179,7 @@ function typeSentence(target, sentence, speed, callback) {
 
 function startIntroTypewriterEffect() {
     const heroSection = document.querySelector('.hero');
-    if (!heroSection) return; // Safeguard against null
+    if (!heroSection) return;
 
     const items = document.querySelectorAll('.teaser-list li span[data-text]');
     let index = 0;
@@ -170,30 +194,37 @@ function startIntroTypewriterEffect() {
         }
     }
 
-    // Check if hero is in viewport on load
+    function triggerIntroSequence() {
+        heroSection.classList.add('visible');
+
+        // ✅ Start counter animation once
+        animateStatsCounters();
+
+        // ⏳ Then start typewriter effect after a short delay
+        setTimeout(() => {
+            typeNext();
+        }, 1000); // You can adjust delay if needed
+    }
+
+    // Intersection Observer for scroll-triggered animation
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                heroSection.classList.add('visible');
-                setTimeout(() => {
-                    typeNext();
-                }, 500); // 500ms delay for effect
-                observer.unobserve(heroSection); // Stop observing after triggering
+                triggerIntroSequence();
+                observer.unobserve(heroSection);
             }
         });
     }, { threshold: 0.1 });
 
-    // Initial check on load
+    // Initial check in case hero is already visible on load
     const rect = heroSection.getBoundingClientRect();
     const isVisible = (
         rect.top >= 0 &&
         rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
     );
+
     if (isVisible) {
-        heroSection.classList.add('visible');
-        setTimeout(() => {
-            typeNext();
-        }, 500); // 500ms delay on load
+        triggerIntroSequence();
         observer.unobserve(heroSection);
     } else {
         observer.observe(heroSection);
@@ -237,21 +268,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const fill = document.querySelector('.ugc-fill');
     const percentText = document.querySelector('.ugc-percent');
     const body = document.body;
-
+    
     const content = Array.from(body.children).filter(el => !el.classList.contains('ugc-loader'));
     content.forEach(el => el.style.display = 'none');
-
+    
     let percent = 0;
-
+    
     const interval = setInterval(() => {
         percent++;
         fill.style.height = `${percent}%`;
         percentText.textContent = `${percent}%`;
-
+        
         if (percent >= 100) {
             clearInterval(interval);
             loader.style.opacity = 0;
-
+            
             setTimeout(() => {
                 loader.remove();                          // Remove loader
                 content.forEach(el => el.style.display = ''); // Show all hidden content
