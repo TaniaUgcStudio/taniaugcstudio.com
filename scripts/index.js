@@ -180,10 +180,10 @@ function typeSentence(target, sentence, speed, callback) {
 function startIntroTypewriterEffect() {
     const heroSection = document.querySelector('.hero');
     if (!heroSection) return;
-
+    
     const items = document.querySelectorAll('.teaser-list li span[data-text]');
     let index = 0;
-
+    
     function typeNext() {
         if (index < items.length) {
             const text = items[index].getAttribute('data-text');
@@ -193,19 +193,19 @@ function startIntroTypewriterEffect() {
             });
         }
     }
-
+    
     function triggerIntroSequence() {
         heroSection.classList.add('visible');
-
+        
         // ✅ Start counter animation once
         animateStatsCounters();
-
+        
         // ⏳ Then start typewriter effect after a short delay
         setTimeout(() => {
             typeNext();
         }, 1000); // You can adjust delay if needed
     }
-
+    
     // Intersection Observer for scroll-triggered animation
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -215,14 +215,14 @@ function startIntroTypewriterEffect() {
             }
         });
     }, { threshold: 0.1 });
-
+    
     // Initial check in case hero is already visible on load
     const rect = heroSection.getBoundingClientRect();
     const isVisible = (
         rect.top >= 0 &&
         rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
     );
-
+    
     if (isVisible) {
         triggerIntroSequence();
         observer.unobserve(heroSection);

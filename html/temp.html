@@ -1,177 +1,237 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>¿Cómo trabajo?</title>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(180deg, #fbe9f1 0%, #f1d1b1 20%, #e6e2db 60%, #eeebe6 100%);
-      font-family: Georgia, serif;
-      overflow-x: hidden;
-    }
-
-    h1.title {
-      text-align: center;
-      font-size: 38px;
-      margin: 50px 0 10px;
-      color: #18182f;
-    }
-
-    .flow-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 40px;
-      flex-wrap: wrap;
-      position: relative;
-      padding: 60px 20px;
-      flex-direction: row;
-    }
-
-    .circle-block {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .circle {
-      width: 320px;
-      height: 320px;
-      border-radius: 50%;
-      background: linear-gradient(180deg, #eeebe6 0%, #e6e2db 20%, #f1d1b1 60%, #fbe9f1 100%);
-      border: 10px solid #ebde2969;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 0 40px rgba(0, 0, 0, 0.15);
-      text-align: center;
-      padding: 20px;
-      z-index: 2;
-      position: relative;
-      opacity: 0;
-      animation: flyIn 1.4s ease-out forwards, borderGlow 2s ease-out 1;
-    }
-
-    .circle-block:nth-child(1) .circle { animation-delay: 0s, 0s; }
-    .circle-block:nth-child(2) .circle { animation-delay: 0.5s, 0.5s; }
-    .circle-block:nth-child(3) .circle { animation-delay: 1s, 1s; }
-
-    .circle img {
-      width: 120px;
-      height: 120px;
-      margin-bottom: 12px;
-      filter: drop-shadow(0 0 5px #aaa);
-    }
-
-    .circle h3 {
-      margin: 0;
-      font-size: 22px;
-      color: #18182f;
-    }
-
-    .description {
-      margin-top: 8px;
-      font-size: 14px;
-      color: #444;
-    }
-
-    @keyframes flyIn {
-      0% {
-        opacity: 0;
-        transform: translateY(60px) scale(0.85);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    @keyframes borderGlow {
-      0% {
-        box-shadow: 0 0 0 transparent;
-        border-color: #ebde2969;
-      }
-      50% {
-        box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
-        border-color: gold;
-      }
-      100% {
-        box-shadow: 0 0 0 transparent;
-        border-color: #ebde2969;
-      }
-    }
-
-    @media (max-width: 768px) {
-      h1.title {
-        font-size: 28px;
-        margin-top: 50px;
-      }
-
-      .flow-container {
-        margin-top: -30px;
-        flex-direction: column;
-        gap: 20px;
-      }
-
-      .circle {
-        width: 220px;
-        height: 220px;
-      }
-
-      .circle img {
-        width: 60px;
-        height: 60px;
-      }
-
-      .circle h3 {
-        font-size: 26px;
-      }
-
-      .description {
-        font-size: 16px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Globe with Interactive Points</title>
+    <style>
+        body { margin: 0; overflow: hidden; font-family: Georgia, serif, Arial, sans-serif; }
+        canvas { display: block; }
+        #info { 
+            position: absolute; 
+            top: 10px; 
+            left: 10px; 
+            color: white; 
+            background: rgba(0, 0, 0, 0.7); 
+            padding: 10px; 
+            border-radius: 5px; 
+            max-width: 300px; 
+        }
+        #popup { 
+            position: absolute; 
+            background: rgba(0, 0, 0, 0.8); 
+            color: white; 
+            padding: 8px; 
+            border-radius: 5px; 
+            display: none; 
+            pointer-events: none; 
+        }
+        .text-overlay { 
+            position: absolute; 
+            bottom: 20px; 
+            left: 50%; 
+            transform: translateX(-50%); 
+            color: white; 
+            background: rgba(0, 0, 0, 0.7); 
+            padding: 15px; 
+            border-radius: 10px; 
+            text-align: center; 
+            max-width: 600px; 
+            font-size: 16px; 
+        }
+        .text-overlay strong { 
+            color: #FFFDD0; 
+        }
+        /***************************** MOBILE STYLES *****************************/
+        @media (max-width: 600px) {
+            .text-overlay { 
+              width: 85%;
+            }
+          }
+    </style>
 </head>
 <body>
-  <h1 class="title">¿Cómo trabajo?</h1>
-
-  <div class="flow-container">
-    <!-- Bloque 1 -->
-    <div class="circle-block">
-      <div class="circle">
-        <img src="../icons/brain.png" alt="Brief"/>
-        <h3>Brief</h3>
-        <div class="description">Escucho tu idea y necesidades.</div>
-      </div>
+    <div id="info">- ¡Haz clic o toca los puntos brillantes para ver información sobre la empresa!<br>- Arrastra para rotar el globo.</div>
+    <div id="popup"></div>
+    <!-- Market Content -->
+    <div class="text-overlay">
+        Más de <strong>300 creadores y marcas</strong> ya confían en mí cada día para recibir contenidos únicos y hechos a medida.  
+        <br><br>
+        ¿Quieres llevar tus redes al siguiente nivel?  
+        <strong>Escríbeme hoy</strong> y recibe el contenido especial que tu proyecto merece ✨
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script>
+        // Set up scene, camera, and renderer
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
 
-    <!-- Bloque 2 -->
-    <div class="circle-block">
-      <div class="circle">
-        <img src="../icons/multimedia.png" alt="Creación"/>
-        <h3>Creación</h3>
-        <div class="description">Grabo contenido 100% original.</div>
-      </div>
-    </div>
+        // Add orbit controls
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.autoRotate = false;
 
-    <!-- Bloque 3 -->
-    <div class="circle-block">
-      <div class="circle">
-        <img src="../icons/delivery.png" alt="Entrega"/>
-        <h3>Entrega</h3>
-        <div class="description">Recibes tus vídeos listos para publicar.</div>
-      </div>
-    </div>
-  </div>
+        // Load textures
+        const textureLoader = new THREE.TextureLoader();
+        const mapTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg');
+        const bumpTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_bump_2048.jpg');
+
+        // Create globe with world map texture
+        const radius = 15;
+        const geometry = new THREE.SphereGeometry(radius, 64, 64);
+        const material = new THREE.MeshPhongMaterial({
+            map: mapTexture,
+            bumpMap: bumpTexture,
+            bumpScale: 0.1,
+            specular: 0x555555,
+            shininess: 30
+        });
+        const globe = new THREE.Mesh(geometry, material);
+        scene.add(globe);
+
+        // Add lighting
+        const ambientLight = new THREE.AmbientLight(0x404040);
+        scene.add(ambientLight);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        directionalLight.position.set(10, 10, 10);
+        scene.add(directionalLight);
+
+        // Define points (40 in Spain, 5 in Germany, 5 in France)
+        const pointsData = [
+            // Spain (40 points)
+            { lat: 40.416775, lon: -3.703790, name: "Compañía de Moda, Madrid" },
+            { lat: 41.385064, lon: 2.173404, name: "Compañía de Joyas, Barcelona" },
+            { lat: 37.389092, lon: -5.984459, name: "Estudio de Diseño, Seville" },
+            { lat: 39.469907, lon: -0.376288, name: "Agencia de Publicidad, Valencia" },
+            { lat: 43.263013, lon: -2.934985, name: "Marca de Arte, Bilbao" },
+            { lat: 40.463667, lon: -3.749220, name: "Estudio de Fotografía, Madrid" },
+            { lat: 41.403638, lon: 2.174355, name: "Tienda de Accesorios, Barcelona" },
+            { lat: 37.392529, lon: -5.975137, name: "Productora de Vídeo, Seville" },
+            { lat: 39.466667, lon: -0.375000, name: "Marca de Ropa, Valencia" },
+            { lat: 43.257795, lon: -2.923739, name: "Galería de Arte, Bilbao" },
+            // Add 30 more random points in Spain
+            ...Array(30).fill().map((_, i) => ({
+                lat: 36 + Math.random() * 8,
+                lon: -9 + Math.random() * 7,
+                name: `Creador de Contenido ${i + 1}, Spain`
+            })),
+            // Germany (5 points)
+            { lat: 52.520008, lon: 13.404954, name: "Compañía de Tecnología, Berlin" },
+            { lat: 48.137154, lon: 11.576124, name: "Estudio de Diseño, Munich" },
+            { lat: 50.110924, lon: 8.682127, name: "Agencia de Marketing, Frankfurt" },
+            { lat: 53.551085, lon: 9.993682, name: "Marca de Moda, Hamburg" },
+            { lat: 50.937531, lon: 6.960279, name: "Productora de Eventos, Cologne" },
+            // France (5 points)
+            { lat: 48.856614, lon: 2.352222, name: "Compañía de Moda, Paris" },
+            { lat: 43.296482, lon: 5.369780, name: "Estudio de Arte, Marseille" },
+            { lat: 45.764043, lon: 4.835659, name: "Marca de Joyas, Lyon" },
+            { lat: 43.610769, lon: 1.444209, name: "Agencia Creativa, Toulouse" },
+            { lat: 47.218371, lon: -1.553621, name: "Productora de Vídeo, Nantes" }
+        ];
+
+        // Convert lat/lon to 3D coordinates
+        function latLonToVector3(lat, lon, radius) {
+            const phi = (90 - lat) * Math.PI / 180;
+            const theta = (lon + 180) * Math.PI / 180;
+            return new THREE.Vector3(
+                -radius * Math.sin(phi) * Math.cos(theta),
+                radius * Math.cos(phi),
+                radius * Math.sin(phi) * Math.sin(theta)
+            );
+        }
+
+        // Create glowing points and parent them to the globe
+        const points = [];
+        pointsData.forEach(point => {
+            const pointGeometry = new THREE.SphereGeometry(0.08, 16, 16);
+            const pointMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFDD0 });
+            const pointMesh = new THREE.Mesh(pointGeometry, pointMaterial);
+            const position = latLonToVector3(point.lat, point.lon, radius + 0.15);
+            pointMesh.position.copy(position);
+            pointMesh.userData = { name: point.name };
+            globe.add(pointMesh);
+            points.push(pointMesh);
+        });
+
+        // Set up raycaster for clicking
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        let selectedPoint = null;
+        const popup = document.getElementById('popup');
+
+        // Handle mouse clicks
+        function handleInteraction(event, clientX, clientY) {
+            event.preventDefault();
+            mouse.x = (clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(points);
+            if (intersects.length > 0) {
+                const point = intersects[0].object;
+                popup.innerText = point.userData.name;
+                popup.style.display = 'block';
+                popup.style.left = `${clientX + 10}px`;
+                popup.style.top = `${clientY - 10}px`;
+                selectedPoint = point;
+                document.getElementById('info').innerText = `Selected: ${point.userData.name}`;
+            } else {
+                popup.style.display = 'none';
+                document.getElementById('info').innerText = 'Click or tap on glowing points to see company info! Drag to rotate the globe.';
+                selectedPoint = null;
+            }
+        }
+
+        window.addEventListener('click', (event) => {
+            handleInteraction(event, event.clientX, event.clientY);
+        });
+
+        // Handle touch events for mobile
+        window.addEventListener('touchstart', (event) => {
+            const touch = event.touches[0];
+            handleInteraction(event, touch.clientX, touch.clientY);
+        });
+
+        // Position camera to focus on Spain (centered on Madrid)
+        const spainPosition = latLonToVector3(40.416775, -3.703790, radius + 5);
+        camera.position.copy(spainPosition);
+        camera.lookAt(0, 0, 0);
+
+        // Animation loop
+        let time = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Animate points (slow subtle glow)
+            time += 0.02;
+            points.forEach(point => {
+                const scale = 1 + 0.2 * Math.sin(time + point.position.x);
+                point.scale.set(scale, scale, scale);
+            });
+
+            // Highlight selected point
+            if (selectedPoint) {
+                selectedPoint.material.color.set(0xff0000);
+                selectedPoint.scale.set(1.3, 1.3, 1.3);
+            } else {
+                points.forEach(point => point.material.color.set(0xFFFDD0));
+            }
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
 </body>
 </html>
