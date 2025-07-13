@@ -272,7 +272,7 @@ html, body {
 .sobre-mi-text p:nth-child(2) { color: #d7cbbd; }
 .sobre-mi-text p:nth-child(3) { color: #d7cbbd; }
 .sobre-mi-text p:nth-child(4) { color: #d7cbbd; }
-.sobre-mi-text p:nth-child(5) { color: #d7cbbd; font-weight: bold; }
+.sobre-mi-text p:nth-child(5) { color: #edeae5; font-weight: bold; }
 
 .sobre-mi-image {
     flex: 1 1 35%;
@@ -633,7 +633,7 @@ html, body {
     .sobre-mi-text {
         flex: 1 1 60%;
         text-align: left;
-        font-size: 1.2em;
+        font-size: 1.15em;
         line-height: 1.8;
         z-index: 910;
         position: relative;
@@ -642,6 +642,10 @@ html, body {
     
     .sobre-mi-text p:nth-child(2) {
         margin-right: -50px;
+    }
+
+    .sobre-mi-text p:nth-child(4) {
+        margin-right: 5px;
     }
     
     .sobre-mi-image {
