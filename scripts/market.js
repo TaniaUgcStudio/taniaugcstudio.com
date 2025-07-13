@@ -84,7 +84,7 @@ function updateStarPositions() {
     });
 }
 
-const spainPosition = latLonToVector3(40.416775, -3.703790, radius + 20);
+const spainPosition = latLonToVector3(40.416775, -3.703790, radius + 30);
 camera.position.copy(spainPosition);
 camera.lookAt(0, 0, 0);
 
