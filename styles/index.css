@@ -121,8 +121,47 @@ html, body {
 .hero .intro-hook {
     font-size: 1.5rem;
     font-weight: 500;
-    color: #333;
     margin-top: 10px;
+}
+
+.hero .intro-teaser {
+    font-size: 1.4rem;
+    font-weight: 500;
+    margin-top: 10px;
+    color: #3f5048;
+    text-align: left;
+}
+
+.teaser-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+.teaser-list li {
+    margin: 25px 0;
+    display: flex;
+    align-items: flex-start;
+}
+
+.teaser-icon {
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+.teaser-list li span {
+    display: inline-block;
+    white-space: normal;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    line-height: 1.8; /* more space between lines within each item */
+}
+
+.teaser-list li span.visible {
+    opacity: 1; /* Reveal when typed */
+    transform: translateY(0); /* Move into place */
 }
 
 .profile-circle {
@@ -316,7 +355,6 @@ html, body {
 
 .content-section h2 {
     font-size: 2rem;
-    color: #3f5048;
     margin-bottom: 30px;
     opacity: 0;
     transform: translateY(20px);
@@ -359,7 +397,7 @@ html, body {
 }
 
 .content-item ul li {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     color: #252525;
     margin-bottom: 8px;
     display: flex;
@@ -649,6 +687,7 @@ html, body {
     
     .content-section h2 {
         font-size: 2rem;
+        margin-bottom: 60px;
     }
     
     .content-item {
@@ -660,7 +699,8 @@ html, body {
     }
     
     .content-item ul li {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
+        line-height: 1.5;
     }
     
     .content-item ul li::before {

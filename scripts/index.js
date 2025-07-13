@@ -7,7 +7,7 @@ updateVH();
 window.addEventListener('resize', updateVH);
 
 //////////////////////////////////// UGC Loader ////////////////////////////////////
-document.addEventListener("DOMContentLoaded", () => {
+/*document.addEventListener("DOMContentLoaded", () => {
     const loader = document.querySelector('.ugc-loader');
     const fill = document.querySelector('.ugc-fill');
     const percentText = document.querySelector('.ugc-percent');
@@ -35,7 +35,27 @@ document.addEventListener("DOMContentLoaded", () => {
             
         }
     }, 25); // 100 * 25ms = 2.5s total
-});
+});*/
+
+//////////////////////////////////// Butterfly animation ////////////////////////////////////
+const butterfly = document.querySelector('.butterfly');
+const path = document.getElementById('plantPath');
+const pathLength = path.getTotalLength();
+
+function updateButterflyPosition() {
+    const scrollTop = window.scrollY;
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+    const scrollRatio = scrollTop / maxScroll / 2.9;
+    const pointAtLength = scrollRatio * pathLength;
+    
+    const point = path.getPointAtLength(pointAtLength);
+    const pointNext = path.getPointAtLength(pointAtLength + 1);
+    
+    butterfly.style.transform = `translate(${point.x - 25}px, ${point.y - 25}px) rotate(0)`;
+}
+
+window.addEventListener('scroll', updateButterflyPosition);
+window.addEventListener('load', updateButterflyPosition);
 
 //////////////////////////////////// Profile Stars Animation ////////////////////////////////////
 function createStar() {
@@ -78,7 +98,7 @@ setTimeout(() => clearInterval(interval), 5000);
 
 //////////////////////////////////// Profile Circle Animation ////////////////////////////////////
 const circle = document.querySelector('.circle');
-// Wait 10 seconds, then switch to deceleration
+// Wait a few seconds, then switch to deceleration
 setTimeout(() => {
     // Freeze current angle
     const computedStyle = window.getComputedStyle(circle);
@@ -95,27 +115,7 @@ setTimeout(() => {
     });
 }, 5000);
 
-//////////////////////////////////// Butterfly animation ////////////////////////////////////
-const butterfly = document.querySelector('.butterfly');
-const path = document.getElementById('plantPath');
-const pathLength = path.getTotalLength();
-
-function updateButterflyPosition() {
-    const scrollTop = window.scrollY;
-    const maxScroll = document.body.scrollHeight - window.innerHeight;
-    const scrollRatio = scrollTop / maxScroll / 2.9;
-    const pointAtLength = scrollRatio * pathLength;
-    
-    const point = path.getPointAtLength(pointAtLength);
-    const pointNext = path.getPointAtLength(pointAtLength + 1);
-    
-    butterfly.style.transform = `translate(${point.x - 25}px, ${point.y - 25}px) rotate(0)`;
-}
-
-window.addEventListener('scroll', updateButterflyPosition);
-window.addEventListener('load', updateButterflyPosition);
-
-//////////////////////////////////// About me animation ////////////////////////////////////
+//////////////////////////////////// About Me Animation ////////////////////////////////////
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -132,30 +132,77 @@ document.querySelectorAll('.scroll-animate-up, .scroll-animate-right').forEach(e
     observer.observe(el);
 });
 
-//////////////////////////////////// TYpe writer animation ////////////////////////////////////
+//////////////////////////////////// Typewriter Animation Functions ////////////////////////////////////
 function typeSentence(target, sentence, speed, callback) {
     let i = 0;
-    target.textContent = ''; // Limpia el texto
-    target.style.opacity = 1;
+    target.textContent = ''; // Clean the text
+    target.style.opacity = 1; // Ensure opacity is set during typing
     
     function type() {
         if (i < sentence.length) {
             target.textContent += sentence.charAt(i);
             i++;
             setTimeout(type, speed);
-        } else if (callback) {
-            callback();
+        } else {
+            target.classList.add('visible'); // Add visible class after typing
+            if (callback) callback();
         }
     }
     
-    // Asegura altura desde el principio
     target.style.minHeight = '1em';
     type();
 }
 
-// Initialize typewriter effect for content items
-function startTypewriterEffect() {
+function startIntroTypewriterEffect() {
+    const heroSection = document.querySelector('.hero');
+    if (!heroSection) return; // Safeguard against null
+
+    const items = document.querySelectorAll('.teaser-list li span[data-text]');
+    let index = 0;
+
+    function typeNext() {
+        if (index < items.length) {
+            const text = items[index].getAttribute('data-text');
+            typeSentence(items[index], text, 16, () => {
+                index++;
+                typeNext();
+            });
+        }
+    }
+
+    // Check if hero is in viewport on load
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                heroSection.classList.add('visible');
+                setTimeout(() => {
+                    typeNext();
+                }, 500); // 500ms delay for effect
+                observer.unobserve(heroSection); // Stop observing after triggering
+            }
+        });
+    }, { threshold: 0.1 });
+
+    // Initial check on load
+    const rect = heroSection.getBoundingClientRect();
+    const isVisible = (
+        rect.top >= 0 &&
+        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+    );
+    if (isVisible) {
+        heroSection.classList.add('visible');
+        setTimeout(() => {
+            typeNext();
+        }, 500); // 500ms delay on load
+        observer.unobserve(heroSection);
+    } else {
+        observer.observe(heroSection);
+    }
+}
+
+function startContentTypewriterEffect() {
     const contentSection = document.querySelector('.content-section');
+    if (!contentSection) return; // Safeguard against null
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -171,9 +218,8 @@ function startTypewriterEffect() {
                             typeNext();
                         });
                     } else {
-                        // Activate the stamp animation
                         const stamp = document.querySelector('.stamp');
-                        stamp.classList.add('animate');
+                        if (stamp) stamp.classList.add('animate');
                     }
                 }
                 
@@ -182,24 +228,11 @@ function startTypewriterEffect() {
             }
         });
     }, { threshold: 0.1 });
-    
     observer.observe(contentSection);
 }
 
-// Start the animation when the DOM reaches here
+//////////////////////////////////// Initialize Animations ////////////////////////////////////
 document.addEventListener("DOMContentLoaded", () => {
-    const contentSection = document.querySelector('.content-section');
-    
-    const observer = new IntersectionObserver((entries, observerInstance) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                startTypewriterEffect();
-                observerInstance.unobserve(contentSection); // Solo se ejecuta una vez
-            }
-        });
-    }, {
-        threshold: 0.2
-    });
-    
-    observer.observe(contentSection);
+    startIntroTypewriterEffect();  // Start hero typewriter
+    startContentTypewriterEffect(); // Start content typewriter
 });
