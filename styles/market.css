@@ -1,11 +1,10 @@
 /***************************** BACKGROUND *****************************/
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-
 html, body {
     margin: 0;
     height: 100vh;
     background: radial-gradient(circle at 30% 30%, #f3e9dc, #d5c2aa, #a68b73);
     background-blend-mode: screen;
+    font-family: Georgia, serif, Arial, sans-serif;
     overflow: hidden;
     position: relative;
 }

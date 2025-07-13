@@ -1,0 +1,17 @@
+/***************************** BACKGROUND *****************************/
+html, body {
+    margin: 0;
+    height: 100vh;
+    background-color: #d7cbbd;
+    background-image: url("https://www.transparenttextures.com/patterns/light-wool.png");
+    font-family: Georgia, serif, Arial, sans-serif;
+    overflow: hidden;
+    position: relative;
+}
+
+/***************************** CONTACT CONTENT *****************************/
+
+
+/***************************** MOBILE STYLES *****************************/
+@media (max-width: 768px) {
+}
