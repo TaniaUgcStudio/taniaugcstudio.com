@@ -18,7 +18,7 @@ const mapTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/
 const bumpTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_bump_2048.jpg');
 
 const radius = 15;
-const geometry = new THREE.SphereGeometry(radius, 64, 64);
+const geometry = new THREE.SphereGeometry(radius, isMobile ? 48 : 64, isMobile ? 48 : 64);
 const material = new THREE.MeshPhongMaterial({
     map: mapTexture,
     bumpMap: bumpTexture,
