@@ -5,14 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Globe with Star Points</title>
     <style>
-        html, body {
-            margin: 0;
-            font-family: Georgia, serif, Arial, sans-serif;
-            background-image: url("../images/cosmos.png");            
-            color: #15025c;
-            overflow-x: hidden;
-            position: relative;
-        }
+        body {
+      margin: 0;
+      height: 100vh;
+      background: radial-gradient(circle at 30% 30%, #f3e9dc, #d5c2aa, #a68b73);
+      background-blend-mode: screen;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Sparkling Stars */
+    .stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite ease-in-out;
+      opacity: 0.8;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.3); }
+    }
+
+    /* Optional noise texture */
+    .noise {
+      pointer-events: none;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: url('https://www.transparenttextures.com/patterns/noise.png');
+      opacity: 0.03;
+      z-index: 2;
+    }
 
         .text-overlay { 
             position: absolute; 
@@ -32,6 +68,8 @@
             display: block; 
             background-color: transparent; 
             margin-top: 50px;
+            position: relative;
+            z-index: 5;
         }
 
         .text-overlay strong { color: #FFFDD0; }
@@ -96,6 +134,8 @@
     </style>
 </head>
 <body>
+    <div class="stars" id="stars"></div>
+  <div class="noise"></div>
     <!-- Market Content -->
     <div class="text-overlay">
         Más de <strong>300 marcas</strong> ya confían en mí cada día para recibir contenidos únicos y hechos a medida.  
@@ -231,5 +271,21 @@
             updateStarPositions();
         });
     </script>
+
+    <script>
+    // Generate random stars
+    const starContainer = document.getElementById("stars");
+    const numStars = 150;
+
+    for (let i = 0; i < numStars; i++) {
+      const star = document.createElement("div");
+      star.className = "star";
+      star.style.top = `${Math.random() * 100}%`;
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.animationDuration = `${2 + Math.random() * 3}s`;
+      star.style.opacity = Math.random() * 0.6 + 0.4;
+      starContainer.appendChild(star);
+    }
+  </script>
 </body>
 </html>
