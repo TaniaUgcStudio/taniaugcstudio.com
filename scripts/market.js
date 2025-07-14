@@ -1,25 +1,25 @@
+
 const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: !isMobile });
-renderer.setPixelRatio(isMobile ? Math.min(window.devicePixelRatio, 1.5) : window.devicePixelRatio);
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-controls.dampingFactor = isMobile ? 0.2 : 0.1;
+controls.dampingFactor = 0.1;
 controls.rotateSpeed = 0.6;
-controls.zoomSpeed = isMobile ? 0.8 : 0.5;
+controls.zoomSpeed = 0.5;
 controls.enablePan = false;
 
 const textureLoader = new THREE.TextureLoader();
-const textureResolution = isMobile ? '1024' : '2048';
-const mapTexture = textureLoader.load(`https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_${textureResolution}.jpg`);
-const bumpTexture = textureLoader.load(`https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_bump_${textureResolution}.jpg`);
+const mapTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg');
+const bumpTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_bump_2048.jpg');
 
 const radius = 15;
-const geometry = new THREE.SphereGeometry(radius, isMobile ? 32 : 64, isMobile ? 32 : 64);
+const sphereDetail = window.innerWidth < 768 ? 32 : 64;
+const geometry = new THREE.SphereGeometry(radius, sphereDetail, sphereDetail);
 const material = new THREE.MeshPhongMaterial({
     map: mapTexture,
     bumpMap: bumpTexture,
@@ -96,6 +96,7 @@ const pointsData = [
     { lat: 33.448377, lon: -112.074037 }, // USA: Phoenix
     { lat: 39.952584, lon: -75.165222 }, // USA: Philadelphia
     { lat: 29.424122, lon: -98.493628 }, // USA: San Antonio
+
     // Non-European countries
     { lat: -15.794229, lon: -47.882166 }, // Brazil: Brasília (capital)
     { lat: 45.421530, lon: -75.697193 }, // Canada: Ottawa (capital)
@@ -121,22 +122,26 @@ function latLonToVector3(lat, lon, radius) {
     );
 }
 
-const starGeometry = new THREE.BufferGeometry();
-const starPositions = new Float32Array(pointsData.length * 3);
-pointsData.forEach((point, i) => {
+const starPoints = [];
+pointsData.forEach(point => {
     const position = latLonToVector3(point.lat, point.lon, radius + 0.15);
-    starPositions[i * 3] = position.x;
-    starPositions[i * 3 + 1] = position.y;
-    starPositions[i * 3 + 2] = position.z;
+    const star = document.createElement('div');
+    star.className = 'star-point';
+    document.body.appendChild(star);
+    starPoints.push({ element: star, position });
 });
-starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
-const starMaterial = new THREE.PointsMaterial({
-    color: 0xffffff,
-    size: isMobile ? 0.2 : 0.3,
-    sizeAttenuation: true,
-});
-const starPoints = new THREE.Points(starGeometry, starMaterial);
-scene.add(starPoints);
+
+let frameCount = 0;
+function updateStarPositions() {
+    starPoints.forEach(star => {
+        const vector = star.position.clone();
+        vector.project(camera);
+        const x = (vector.x + 1) * window.innerWidth / 2;
+        const y = -(vector.y - 1) * window.innerHeight / 2;
+        star.element.style.left = `${x - 10}px`;
+        star.element.style.top = `${y - 10}px`;
+    });
+}
 
 const spainPosition = latLonToVector3(40.416775, -3.703790, radius + 27);
 camera.position.copy(spainPosition);
@@ -146,17 +151,21 @@ function animate() {
     requestAnimationFrame(animate);
     controls.update();
     renderer.render(scene, camera);
+    if (++frameCount % 2 === 0) updateStarPositions();
 }
 animate();
 
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
+    const pixelRatio = isMobile ? Math.min(window.devicePixelRatio, 1.5) : window.devicePixelRatio;
+    renderer.setPixelRatio(pixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
+    updateStarPositions();
 });
 
 const starContainer = document.getElementById("stars");
-const numStars = isMobile ? 50 : 150;
+const numStars = 150;
 for (let i = 0; i < numStars; i++) {
     const star = document.createElement("div");
     star.className = "star";
@@ -166,3 +175,4 @@ for (let i = 0; i < numStars; i++) {
     star.style.opacity = Math.random() * 0.6 + 0.4;
     starContainer.appendChild(star);
 }
+
