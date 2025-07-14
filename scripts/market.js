@@ -1,23 +1,73 @@
-const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
-const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+// Add lighting with Earth-appropriate tones
+const ambientLight = new THREE.AmbientLight(0x87ceeb, 0.8);
+scene.add(ambientLight);
+
+const directionalLight = new THREE.DirectionalLight(0xb0e0e6, 1.0);
+directionalLight.position.set(0, 10, 10);
+scene.add(directionalLight);
+
+// Add OrbitControls with increased zoom range
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-controls.dampingFactor = 0.1;
-controls.rotateSpeed = 0.6;
-controls.zoomSpeed = 0.5;
+controls.dampingFactor = 0.05;
+controls.rotateSpeed = 0.5;
+controls.enableZoom = true;
 controls.enablePan = false;
-controls.minDistance = 0.5;
-controls.maxDistance = 500;
+controls.minDistance = 0.5; // Allow closer zoom
+controls.maxDistance = 500; // Allow farther zoom
 
-scene.add(new THREE.AmbientLight(0x87ceeb, 0.8));
-const directionalLight = new THREE.DirectionalLight(0xb0e0e6, 1.0);
-directionalLight.position.set(10, 10, 10);
-scene.add(directionalLight);
+// Function to convert lat/lon to 3D position on sphere
+function latLonToVector3(lat, lon, radius) {
+    const phi = (90 - lat) * Math.PI / 180; // Latitude to radians
+    const theta = (lon + 180) * Math.PI / 180; // Longitude to radians
+    const x = -radius * Math.sin(phi) * Math.cos(theta);
+    const y = radius * Math.cos(phi);
+    const z = radius * Math.sin(phi) * Math.sin(theta);
+    return new THREE.Vector3(x, y, z);
+}
+
+// Create star texture with larger, brighter appearance
+function createStarTexture() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 128; // Increased for better quality
+    canvas.height = 128;
+    const ctx = canvas.getContext('2d');
+    
+    // Draw star shape
+    ctx.beginPath();
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const radius = 20; // Larger star
+    const points = 8;
+    for (let i = 0; i < points * 2; i++) {
+        const r = (i % 2 === 0) ? radius : radius / 2;
+        const angle = (i * Math.PI) / points;
+        ctx.lineTo(
+            centerX + r * Math.cos(angle),
+            centerY + r * Math.sin(angle)
+        );
+    }
+    ctx.closePath();
+    
+    // Apply brighter radial gradient
+    const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius * 1.5);
+    gradient.addColorStop(0, 'rgba(255, 247, 178, 1)'); // Brighter yellow
+    gradient.addColorStop(0.7, 'rgba(255, 255, 255, 0)');
+    ctx.fillStyle = gradient;
+    ctx.fill();
+    
+    // Enhanced drop-shadow
+    ctx.shadowColor = '#f7f2e1';
+    ctx.shadowBlur = 10;
+    
+    return new THREE.CanvasTexture(canvas);
+}
 
 const pointsData = [
     // Spain: Major city centers
@@ -26,7 +76,7 @@ const pointsData = [
     { lat: 39.469907, lon: -0.376288 }, // Valencia
     { lat: 37.389092, lon: -5.984459 }, // Seville
     { lat: 43.263013, lon: -2.934985 }, // Bilbao
-
+    
     // European capitals (excluding Russia)
     { lat: 41.902783, lon: 12.496366 }, // Italy: Rome
     { lat: 48.856614, lon: 2.352222 },  // France: Paris
@@ -80,7 +130,7 @@ const pointsData = [
     { lat: 33.448377, lon: -112.074037 }, // USA: Phoenix
     { lat: 39.952584, lon: -75.165222 }, // USA: Philadelphia
     { lat: 29.424122, lon: -98.493628 }, // USA: San Antonio
-
+    
     // Non-European countries
     { lat: -15.794229, lon: -47.882166 }, // Brazil: Brasília (capital)
     { lat: 45.421530, lon: -75.697193 }, // Canada: Ottawa (capital)
@@ -106,6 +156,7 @@ function latLonToVector3(lat, lon, radius) {
     );
 }
 
+// Load Earth GLTF model
 const loader = new THREE.GLTFLoader();
 let earthModel;
 loader.load(
@@ -115,36 +166,64 @@ loader.load(
         earthModel.scale.set(1, 1, 1);
         earthModel.position.set(0, 0, 0);
         scene.add(earthModel);
-
+        
+        // Debug: Log model structure and bounding box
+        console.log('Earth model loaded:', earthModel);
         const box = new THREE.Box3().setFromObject(earthModel);
-        const estimatedRadius = (box.max.x - box.min.x) / 2;
-
-        const starPoints = [];
-        pointsData.forEach(point => {
-            const position = latLonToVector3(point.lat, point.lon, estimatedRadius + 0.15);
-            const star = document.createElement('div');
-            star.className = 'star-point';
-            document.body.appendChild(star);
-            starPoints.push({ element: star, position });
+        console.log('Model bounding box:', box.min, box.max);
+        console.log('Model size:', {
+            x: box.max.x - box.min.x,
+            y: box.max.y - box.min.y,
+            z: box.max.z - box.min.z
         });
-
-        let frameCount = 0;
-        function updateStarPositions() {
-            starPoints.forEach(star => {
-                const vector = star.position.clone();
-                vector.project(camera);
-                const x = (vector.x + 1) * window.innerWidth / 2;
-                const y = -(vector.y - 1) * window.innerHeight / 2;
-                star.element.style.left = `${x - 10}px`;
-                star.element.style.top = `${y - 10}px`;
+        const estimatedRadius = (box.max.x - box.min.x) / 2;
+        console.log('Estimated Earth radius:', estimatedRadius);
+        
+        // Apply fallback material if textures fail
+        earthModel.traverse((child) => {
+            if (child.isMesh && (!child.material.map || child.material.map.image.currentSrc === '')) {
+                child.material = new THREE.MeshStandardMaterial({ color: 0x87cefa, metalness: 0.7, roughness: 0.3 });
+            }
+        });
+        
+        // Add stars at city locations
+        const starTexture = createStarTexture();
+        const starMaterial = new THREE.SpriteMaterial({
+            map: starTexture,
+            transparent: true,
+            depthTest: false
+        });
+        
+        // Use estimated radius or adjust manually
+        const earthRadius = estimatedRadius || 1; // Fallback to 1 if radius estimation fails
+        cities.forEach(city => {
+            const position = latLonToVector3(city.lat, city.lon, earthRadius * 1.01);
+            const star = new THREE.Sprite(starMaterial);
+            star.position.copy(position);
+            star.scale.set(0.1, 0.1, 0.1); // Larger stars
+            star.userData = { name: city.name }; // For debugging
+            earthModel.add(star);
+            console.log(`Star added for ${city.name} at position:`, position);
+        });
+        
+        // Animation for pulsating stars
+        function animateStars() {
+            const time = Date.now() * 0.001;
+            earthModel.traverse((child) => {
+                if (child.isSprite) {
+                    const scale = 0.1 + 0.05 * Math.sin(time * 1.5);
+                    child.scale.set(scale, scale, scale);
+                    child.material.opacity = 0.7 + 0.3 * Math.sin(time * 1.5);
+                }
             });
         }
-
+        
+        // Update animate function
         function animate() {
             requestAnimationFrame(animate);
+            animateStars();
             controls.update();
             renderer.render(scene, camera);
-            if (++frameCount % 2 === 0) updateStarPositions();
         }
         animate();
     },
