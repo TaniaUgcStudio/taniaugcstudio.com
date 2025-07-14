@@ -3,45 +3,34 @@ html, body {
     margin: 0;
     height: 100vh;
     background: radial-gradient(circle at 30% 30%, #f3e9dc, #d5c2aa, #a68b73);
-    background-blend-mode: screen;
     font-family: Georgia, serif, Arial, sans-serif;
     overflow: hidden;
     position: relative;
+    touch-action: manipulation; /* Improve mobile touch handling */
 }
 
 /***************************** MARKET CONTENT *****************************/
-.stars {
+.star-background {
     position: absolute;
     width: 100%;
     height: 100%;
     background: transparent;
-    pointer-events: none;
     z-index: 1;
 }
 
 .star {
     position: absolute;
-    width: 2px;
-    height: 2px;
-    background: white;
+    width: 4px;
+    height: 4px;
+    background: #3f5048;
     border-radius: 50%;
-    animation: twinkle 3s infinite ease-in-out;
+    animation: twinkle 2s infinite;
     opacity: 0.8;
 }
 
 @keyframes twinkle {
-    0%, 100% { opacity: 0.3; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.3); }
-}
-
-.noise {
-    pointer-events: none;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-image: url('https://www.transparenttextures.com/patterns/noise.png');
-    opacity: 0.03;
-    z-index: 2;
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 0.3; }
 }
 
 .text-overlay {
@@ -66,15 +55,13 @@ canvas {
     z-index: 5;
 }
 
-.text-overlay strong { color: #FFFDD0; }
-
 .star-point {
     position: absolute;
     width: 20px;
     height: 20px;
     pointer-events: none;
     background: conic-gradient(from 45deg, #f7f2e1 25%, #f7f2e1 75%, #f7f2e1);
-    clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%);
+    clip-path: polygon(50% 0%, 70% 30%, 100% 30%, 70% 70%, 50% 100%, 30% 70%, 0% 30%, 30% 30%); /* Sharper 4-point star */
     animation: pulseStar 1.5s infinite ease-in-out;
     filter: drop-shadow(0 0 6px #f7f2e1);
     z-index: 10;
