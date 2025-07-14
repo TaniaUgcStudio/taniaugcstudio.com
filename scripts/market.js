@@ -1,7 +1,6 @@
-
 const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
 const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -12,25 +11,11 @@ controls.dampingFactor = 0.1;
 controls.rotateSpeed = 0.6;
 controls.zoomSpeed = 0.5;
 controls.enablePan = false;
+controls.minDistance = 0.5;
+controls.maxDistance = 500;
 
-const textureLoader = new THREE.TextureLoader();
-const mapTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg');
-const bumpTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_bump_2048.jpg');
-
-const radius = 15;
-const geometry = new THREE.SphereGeometry(radius, isMobile ? 48 : 64, isMobile ? 48 : 64);
-const material = new THREE.MeshPhongMaterial({
-    map: mapTexture,
-    bumpMap: bumpTexture,
-    bumpScale: 0.1,
-    specular: 0x333333,
-    shininess: 10
-});
-const globe = new THREE.Mesh(geometry, material);
-scene.add(globe);
-
-scene.add(new THREE.AmbientLight(0xffffff));
-const directionalLight = new THREE.DirectionalLight(0x888888, 0.3);
+scene.add(new THREE.AmbientLight(0x87ceeb, 0.8));
+const directionalLight = new THREE.DirectionalLight(0xb0e0e6, 1.0);
 directionalLight.position.set(10, 10, 10);
 scene.add(directionalLight);
 
@@ -95,7 +80,7 @@ const pointsData = [
     { lat: 33.448377, lon: -112.074037 }, // USA: Phoenix
     { lat: 39.952584, lon: -75.165222 }, // USA: Philadelphia
     { lat: 29.424122, lon: -98.493628 }, // USA: San Antonio
-    
+
     // Non-European countries
     { lat: -15.794229, lon: -47.882166 }, // Brazil: Brasília (capital)
     { lat: 45.421530, lon: -75.697193 }, // Canada: Ottawa (capital)
@@ -121,38 +106,60 @@ function latLonToVector3(lat, lon, radius) {
     );
 }
 
-const starPoints = [];
-pointsData.forEach(point => {
-    const position = latLonToVector3(point.lat, point.lon, radius + 0.15);
-    const star = document.createElement('div');
-    star.className = 'star-point';
-    document.body.appendChild(star);
-    starPoints.push({ element: star, position });
-});
+const loader = new THREE.GLTFLoader();
+let earthModel;
+loader.load(
+    '3dmodels/earth/scene.gltf',
+    (gltf) => {
+        earthModel = gltf.scene;
+        earthModel.scale.set(1, 1, 1);
+        earthModel.position.set(0, 0, 0);
+        scene.add(earthModel);
 
-let frameCount = 0;
-function updateStarPositions() {
-    starPoints.forEach(star => {
-        const vector = star.position.clone();
-        vector.project(camera);
-        const x = (vector.x + 1) * window.innerWidth / 2;
-        const y = -(vector.y - 1) * window.innerHeight / 2;
-        star.element.style.left = `${x - 10}px`;
-        star.element.style.top = `${y - 10}px`;
-    });
-}
+        const box = new THREE.Box3().setFromObject(earthModel);
+        const estimatedRadius = (box.max.x - box.min.x) / 2;
 
-const spainPosition = latLonToVector3(40.416775, -3.703790, radius + 27);
+        const starPoints = [];
+        pointsData.forEach(point => {
+            const position = latLonToVector3(point.lat, point.lon, estimatedRadius + 0.15);
+            const star = document.createElement('div');
+            star.className = 'star-point';
+            document.body.appendChild(star);
+            starPoints.push({ element: star, position });
+        });
+
+        let frameCount = 0;
+        function updateStarPositions() {
+            starPoints.forEach(star => {
+                const vector = star.position.clone();
+                vector.project(camera);
+                const x = (vector.x + 1) * window.innerWidth / 2;
+                const y = -(vector.y - 1) * window.innerHeight / 2;
+                star.element.style.left = `${x - 10}px`;
+                star.element.style.top = `${y - 10}px`;
+            });
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+            if (++frameCount % 2 === 0) updateStarPositions();
+        }
+        animate();
+    },
+    (xhr) => {
+        console.log(`Loading: ${(xhr.loaded / xhr.total * 100).toFixed(2)}%`);
+    },
+    (error) => {
+        console.error('Failed to load Earth GLTF model:', error);
+        alert('Error loading Earth model. Ensure 3dmodels/earth/scene.gltf is correct. Check console.');
+    }
+);
+
+const spainPosition = latLonToVector3(40.416775, -3.703790, 27);
 camera.position.copy(spainPosition);
 camera.lookAt(0, 0, 0);
-
-function animate() {
-    requestAnimationFrame(animate);
-    controls.update();
-    renderer.render(scene, camera);
-    if (++frameCount % 2 === 0) updateStarPositions();
-}
-animate();
 
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
