@@ -18,8 +18,7 @@ const mapTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/
 const bumpTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_bump_2048.jpg');
 
 const radius = 15;
-const sphereDetail = window.innerWidth < 768 ? 32 : 64;
-const geometry = new THREE.SphereGeometry(radius, sphereDetail, sphereDetail);
+const geometry = new THREE.SphereGeometry(radius, isMobile ? 48 : 64, isMobile ? 48 : 64);
 const material = new THREE.MeshPhongMaterial({
     map: mapTexture,
     bumpMap: bumpTexture,
@@ -96,7 +95,7 @@ const pointsData = [
     { lat: 33.448377, lon: -112.074037 }, // USA: Phoenix
     { lat: 39.952584, lon: -75.165222 }, // USA: Philadelphia
     { lat: 29.424122, lon: -98.493628 }, // USA: San Antonio
-
+    
     // Non-European countries
     { lat: -15.794229, lon: -47.882166 }, // Brazil: Brasília (capital)
     { lat: 45.421530, lon: -75.697193 }, // Canada: Ottawa (capital)
@@ -158,8 +157,6 @@ animate();
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    const pixelRatio = isMobile ? Math.min(window.devicePixelRatio, 1.5) : window.devicePixelRatio;
-    renderer.setPixelRatio(pixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     updateStarPositions();
 });
@@ -175,4 +172,3 @@ for (let i = 0; i < numStars; i++) {
     star.style.opacity = Math.random() * 0.6 + 0.4;
     starContainer.appendChild(star);
 }
-

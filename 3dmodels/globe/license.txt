@@ -1,0 +1,11 @@
+Model Information:
+* title:	Globe (Earth) - for 3D printing
+* source:	https://sketchfab.com/3d-models/globe-earth-for-3d-printing-97500fadf3ff4b0db169fee3dbc65779
+* author:	T-FLEX CAD ST (Free) (https://sketchfab.com/tflexcad)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Globe (Earth) - for 3D printing" (https://sketchfab.com/3d-models/globe-earth-for-3d-printing-97500fadf3ff4b0db169fee3dbc65779) by T-FLEX CAD ST (Free) (https://sketchfab.com/tflexcad) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
