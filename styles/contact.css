@@ -2,7 +2,7 @@
 html, body {
     margin: 0;
     height: 100vh;
-    color: #15025c;
+    color: #3f5048;
     background-color: #d7cbbd;
     background-image: url("https://www.transparenttextures.com/patterns/light-wool.png");
     font-family: Georgia, serif, Arial, sans-serif;
@@ -46,7 +46,7 @@ input, textarea {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    background-color: #9aa690bb;
+    background-color: #d7cbbd;
     font-family: Georgia, serif, Arial, sans-serif;
     font-size: 1.2rem;
 }
@@ -56,8 +56,8 @@ textarea {
 }
 
 button {
-    background-color: #9aa690;
-    color: #15025c;
+    background-color: #d7cbbd;
+    color: #3f5048;
     padding: 10px 20px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -65,6 +65,7 @@ button {
     font-family: Georgia, serif, Arial, sans-serif;
     font-size: 1.2rem;
     font-weight: bold;
+    width: 100%;
 }
 
 button:hover {
@@ -121,6 +122,10 @@ button:hover {
 
 /***************************** MOBILE STYLES *****************************/
 @media (max-width: 768px) {
+    h1 {
+        margin-top: 40px;
+    }
+
     p {
         max-width: 85%;
         margin: 0 auto 20px;

@@ -1,24 +1,25 @@
-
 const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: !isMobile });
+renderer.setPixelRatio(isMobile ? Math.min(window.devicePixelRatio, 1.5) : window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 const controls = new THREE.OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
-controls.dampingFactor = 0.1;
+controls.dampingFactor = isMobile ? 0.2 : 0.1;
 controls.rotateSpeed = 0.6;
-controls.zoomSpeed = 0.5;
+controls.zoomSpeed = isMobile ? 0.8 : 0.5;
 controls.enablePan = false;
 
 const textureLoader = new THREE.TextureLoader();
-const mapTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg');
-const bumpTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_bump_2048.jpg');
+const textureResolution = isMobile ? '1024' : '2048';
+const mapTexture = textureLoader.load(`https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_${textureResolution}.jpg`);
+const bumpTexture = textureLoader.load(`https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_bump_${textureResolution}.jpg`);
 
 const radius = 15;
-const geometry = new THREE.SphereGeometry(radius, isMobile ? 48 : 64, isMobile ? 48 : 64);
+const geometry = new THREE.SphereGeometry(radius, isMobile ? 32 : 64, isMobile ? 32 : 64);
 const material = new THREE.MeshPhongMaterial({
     map: mapTexture,
     bumpMap: bumpTexture,
@@ -120,26 +121,22 @@ function latLonToVector3(lat, lon, radius) {
     );
 }
 
-const starPoints = [];
-pointsData.forEach(point => {
+const starGeometry = new THREE.BufferGeometry();
+const starPositions = new Float32Array(pointsData.length * 3);
+pointsData.forEach((point, i) => {
     const position = latLonToVector3(point.lat, point.lon, radius + 0.15);
-    const star = document.createElement('div');
-    star.className = 'star-point';
-    document.body.appendChild(star);
-    starPoints.push({ element: star, position });
+    starPositions[i * 3] = position.x;
+    starPositions[i * 3 + 1] = position.y;
+    starPositions[i * 3 + 2] = position.z;
 });
-
-let frameCount = 0;
-function updateStarPositions() {
-    starPoints.forEach(star => {
-        const vector = star.position.clone();
-        vector.project(camera);
-        const x = (vector.x + 1) * window.innerWidth / 2;
-        const y = -(vector.y - 1) * window.innerHeight / 2;
-        star.element.style.left = `${x - 10}px`;
-        star.element.style.top = `${y - 10}px`;
-    });
-}
+starGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+const starMaterial = new THREE.PointsMaterial({
+    color: 0xffffff,
+    size: isMobile ? 0.2 : 0.3,
+    sizeAttenuation: true,
+});
+const starPoints = new THREE.Points(starGeometry, starMaterial);
+scene.add(starPoints);
 
 const spainPosition = latLonToVector3(40.416775, -3.703790, radius + 27);
 camera.position.copy(spainPosition);
@@ -149,7 +146,6 @@ function animate() {
     requestAnimationFrame(animate);
     controls.update();
     renderer.render(scene, camera);
-    if (++frameCount % 2 === 0) updateStarPositions();
 }
 animate();
 
@@ -157,11 +153,10 @@ window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    updateStarPositions();
 });
 
 const starContainer = document.getElementById("stars");
-const numStars = 150;
+const numStars = isMobile ? 50 : 150;
 for (let i = 0; i < numStars; i++) {
     const star = document.createElement("div");
     star.className = "star";
