@@ -48,6 +48,8 @@ html, body {
     z-index: 6;
 }
 
+.text-overlay strong { color: #FFFDD0; }
+
 canvas {
     display: block;
     background-color: transparent;

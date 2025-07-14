@@ -18,7 +18,7 @@ controls.dampingFactor = 0.05;
 controls.rotateSpeed = 0.5;
 controls.enableZoom = true;
 controls.enablePan = false;
-controls.minDistance = 0.25;
+controls.minDistance = 0.3;
 controls.maxDistance = 3;
 
 // Create star texture with 4-point star
