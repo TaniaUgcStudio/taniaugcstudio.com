@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 //////////////////////////////////// Butterfly animation ////////////////////////////////////
-const butterfly = document.querySelector('.butterfly');
+/*const butterfly = document.querySelector('.butterfly');
 const path = document.getElementById('plantPath');
 const pathLength = path.getTotalLength();
 
@@ -55,7 +55,7 @@ function updateButterflyPosition() {
 }
 
 window.addEventListener('scroll', updateButterflyPosition);
-window.addEventListener('load', updateButterflyPosition);
+window.addEventListener('load', updateButterflyPosition);*/
 
 //////////////////////////////////// Profile Stars Animation ////////////////////////////////////
 function createStar() {

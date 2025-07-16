@@ -224,7 +224,7 @@ function latLonToVector3(lat, lon, radius) {
 }
 
 // Add background stars
-const starContainer = document.getElementById("stars");
+/*const starContainer = document.getElementById("stars");
 const numStars = 150;
 for (let i = 0; i < numStars; i++) {
     const star = document.createElement("div");
@@ -234,7 +234,7 @@ for (let i = 0; i < numStars; i++) {
     star.style.animationDuration = `${2 + Math.random() * 3}s`;
     star.style.opacity = Math.random() * 0.6 + 0.4;
     starContainer.appendChild(star);
-}
+}*/
 
 window.addEventListener('resize', () => {
     camera.aspect = window.innerWidth / window.innerHeight;
