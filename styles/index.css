@@ -1,13 +1,32 @@
-/***************************** BACKGROUND *****************************/
+/***************************** BACKGROUND && FONTS *****************************/
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/montserrat/Montserrat-Bold.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura';
+    src: url('../fonts/futura-pt/futura-light.ttf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
 html, body {
     margin: 0;
-    font-family: Georgia, serif, Arial, sans-serif;
+    font-family: 'Futura', 'Helvetica', 'Arial', sans-serif;
     color: #15025c;
     overflow-x: hidden;
     position: relative;
     transition: background 0.5s ease;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+/***************************** 100% HEIGHT *****************************/
 /* Global CSS */
 :root {
     --vh: 100%; /* fallback */
@@ -263,7 +282,7 @@ html, body {
 .circle-count {
     font-size: 2rem;
     font-weight: bold;
-    color: #15025c;
+    color: #252525;
 }
 
 .circle-label {
@@ -553,7 +572,6 @@ html, body {
     padding: 10px 20px;
     text-align: center;
     background: linear-gradient(180deg, #fbe9f1 0%, #f1d1b1 20%, #e6e2db 60%, #eeebe6 100%);
-    color: #15025c;
     position: relative;
     overflow: hidden;
 }
@@ -940,7 +958,7 @@ button:hover {
 /***************************** FOOTER *****************************/
 .site-footer {
     text-align: center;
-    color: #15025c;
+    color: #252525;
     margin-top: 200px;
     margin-bottom: 10px;
     font-size: 0.9em;
