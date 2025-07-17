@@ -16,7 +16,7 @@
 html, body {
     margin: 0;
     font-family: 'Futura', 'Helvetica', 'Arial', sans-serif;
-    color: #15025c;
+    color: #252425;
     overflow-x: hidden;
     position: relative;
     transition: background 0.5s ease;
@@ -1018,7 +1018,8 @@ button:hover {
         right: 0;
         bottom: -40px;
         text-align: center;
-        margin: 10px 0 0 0;
+        margin: 0 0 0 0;
+        margin-top: 15px;
         padding: 0 10px;
         font-size: 1.05em;
         line-height: 1.5em;
@@ -1062,7 +1063,7 @@ button:hover {
     .stamp {
         width: 250px;
         height: 250px;
-        top: 83%;
+        top: 85%;
     }
 
     /**************************************************************************/

@@ -1,4 +1,18 @@
 /***************************** BACKGROUND *****************************/
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/montserrat/Montserrat-Bold.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura';
+    src: url('../fonts/futura-pt/futura-light.ttf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
 html, body {
     margin: 0;
     height: 100vh;

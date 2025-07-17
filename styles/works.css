@@ -1,9 +1,23 @@
 /***************************** BACKGROUND *****************************/
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/montserrat/Montserrat-Bold.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura';
+    src: url('../fonts/futura-pt/futura-light.ttf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
 html, body {
     margin: 0;
     font-family: Georgia, serif, Arial, sans-serif;
     background: linear-gradient(180deg, #fbe9f1 0%, #f1d1b1 20%, #e6e2db 60%, #eeebe6 100%);
-    color: #15025c;
+    color: #252425;
     overflow-x: hidden;
     position: relative;
 }
