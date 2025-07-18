@@ -2,16 +2,17 @@ document.getElementById('contactForm').addEventListener('submit', function(event
     event.preventDefault(); // Prevent default form submission
     const form = event.target;
     const name = document.getElementById('name').value;
-    
+
     // Hide page elements
     document.getElementById('page-title').style.display = 'none';
     document.getElementById('page-description').style.display = 'none';
     document.getElementById('contact-form').style.display = 'none';
-    
+
     // Show thank-you message
     document.getElementById('user-name').textContent = name;
-    document.getElementById('thank-you-message').style.display = 'block';
-    
+    const thankYou = document.getElementById('thank-you-message');
+    thankYou.style.display = 'block';
+
     // Create floating birthday icons
     const iconsContainer = document.getElementById('birthday-icons');
     iconsContainer.style.display = 'block';
@@ -27,7 +28,16 @@ document.getElementById('contactForm').addEventListener('submit', function(event
         // Remove icon after animation
         setTimeout(() => iconElement.remove(), 5000);
     });
-    
+
+    // Restore form view after 6 seconds
+    setTimeout(() => {
+        thankYou.style.display = 'none';
+        iconsContainer.style.display = 'none';
+        document.getElementById('page-title').style.display = '';
+        document.getElementById('page-description').style.display = '';
+        document.getElementById('contact-form').style.display = '';
+    }, 6000);
+
     // Submit form to Formspree in the background
     fetch(form.action, {
         method: form.method,

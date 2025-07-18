@@ -505,6 +505,12 @@ h1, h2, h3, h4, h5, h6 {
     animation: stampMove 1s ease forwards;
 }
 
+.stamp.animated-once {
+    transform: translate(-50%, -50%) scale(1) rotate(-10deg);
+    opacity: 1;
+    animation: none !important;
+}
+
 .content-section.visible .stamp {
     animation: stampMove 1s ease 4s forwards;
 }
@@ -882,7 +888,7 @@ input, textarea {
     border-radius: 4px;
     box-sizing: border-box;
     background-color: #d7cbbd;
-    font-family: Georgia, serif, Arial, sans-serif;
+    font-family: 'Futura', 'Helvetica', 'Arial', sans-serif;
     font-size: 1.2rem;
 }
 
@@ -891,13 +897,13 @@ textarea {
 }
 
 button {
-    background-color: #d7cbbd;
+    background-color: #b5a088;
     color: #3f5048;
     padding: 10px 20px;
     border: 1px solid #ccc;
     border-radius: 4px;
     cursor: pointer;
-    font-family: Georgia, serif, Arial, sans-serif;
+    font-family: 'Futura', 'Helvetica', 'Arial', sans-serif;
     font-size: 1.2rem;
     font-weight: bold;
     width: 100%;
@@ -1016,10 +1022,8 @@ button:hover {
         position: absolute; /* Break out of .sobre-mi-text */
         left: 0;
         right: 0;
-        bottom: -40px;
+        bottom: -30px;
         text-align: center;
-        margin: 0 0 0 0;
-        margin-top: 15px;
         padding: 0 10px;
         font-size: 1em;
         line-height: 1.5em;
