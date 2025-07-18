@@ -17,10 +17,14 @@ html, body {
     margin: 0;
     height: 100vh;
     background: radial-gradient(circle at 30% 30%, #f3e9dc, #d5c2aa, #a68b73);
-    font-family: Georgia, serif, Arial, sans-serif;
+    font-family: 'Futura', 'Helvetica', 'Arial', sans-serif;
     overflow: hidden;
     position: relative;
     touch-action: manipulation; /* Improve mobile touch handling */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
 }
 
 /***************************** MARKET CONTENT *****************************/
