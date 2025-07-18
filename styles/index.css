@@ -1022,7 +1022,7 @@ button:hover {
         position: absolute; /* Break out of .sobre-mi-text */
         left: 0;
         right: 0;
-        bottom: -0px;
+        bottom: -50px;
         text-align: center;
         padding: 0 10px;
         font-size: 1em;
