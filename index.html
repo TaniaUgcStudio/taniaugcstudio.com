@@ -448,7 +448,7 @@
 
         // Update watching count in real-time
         onValue(activeUsersRef, (snapshot) => {
-            const count = snapshot.numChildren();
+            const count = snapshot.size; // Use snapshot.size instead of numChildren
             console.log('Active users count:', count);
             updateCounterDisplay('active-users', count || 0);
         }, (error) => {
