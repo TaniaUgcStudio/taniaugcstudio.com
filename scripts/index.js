@@ -298,34 +298,51 @@ window.addEventListener('load', () => {
 });
 
 //////////////////////////////////// Page Analytics ////////////////////////////////////
-// 👀 Watching (simple session simulation)
-let sessionKey = `session_${Date.now()}`;
-if (!sessionStorage.getItem(sessionKey)) {
-    sessionStorage.setItem(sessionKey, 'active');
-    const activeUsersSpan = document.getElementById('active-users');
-    if (activeUsersSpan) {
-        activeUsersSpan.textContent = '1'; // Always 1 for this session
-    }
-}
+// Initialize Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyD5s2tmowrrXjgtQ190P14xqpogE7GAVVo",
+    authDomain: "taniaugcstudio-9394.firebaseapp.com",
+    projectId: "taniaugcstudio-9394",
+    storageBucket: "taniaugcstudio-9394.firebasestorage.app",
+    messagingSenderId: "250831091181",
+    appId: "1:250831091181:web:909576a057696101d623e4",
+    databaseURL: "https://taniaugcstudio-9394-default-rtdb.europe-west1.firebasedatabase.app"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
 
-// Clean up on page unload
-window.addEventListener('unload', () => {
-    sessionStorage.removeItem(sessionKey);
+// Visited counter
+const visitsRef = db.ref('visits');
+visitsRef.transaction((current) => {
+    return (current || 0) + 1; // Increment visits
+}, (error, committed, snapshot) => {
+    if (error) {
+        console.error('Error updating visits:', error);
+        document.getElementById('total-visits').textContent = 'N/A';
+    } else if (committed) {
+        document.getElementById('total-visits').textContent = snapshot.val() || 0;
+    }
 });
 
-// 👣 Visited - Fetch from GoatCounter API
-fetch('https://taniaugcstudio.goatcounter.com/counter.json')
-  .then(response => response.json())
-  .then(data => {
-      const totalVisitsSpan = document.getElementById('total-visits');
-      if (totalVisitsSpan) {
-          totalVisitsSpan.textContent = data.count || 0;
-      }
-  })
-  .catch(error => {
-      console.error('Error fetching GoatCounter data:', error);
-      const totalVisitsSpan = document.getElementById('total-visits');
-      if (totalVisitsSpan) {
-          totalVisitsSpan.textContent = 'N/A';
-      }
-  });
+// Watching counter
+const activeUsersRef = db.ref('activeUsers');
+const sessionKey = `session_${Date.now()}_${Math.random()}`; // Unique per tab
+activeUsersRef.child(sessionKey).set({ active: true }); // Add user
+activeUsersRef.child(sessionKey).onDisconnect().remove(); // Remove on disconnect
+
+// Update watching count in real-time
+activeUsersRef.on('value', (snapshot) => {
+    const count = snapshot.numChildren();
+    const activeUsersSpan = document.getElementById('active-users');
+    if (activeUsersSpan) {
+        activeUsersSpan.textContent = count || 0;
+    } else {
+        console.error('Element with ID "active-users" not found');
+    }
+}, (error) => {
+    console.error('Error fetching active users:', error);
+    document.getElementById('active-users').textContent = 'N/A';
+});
+
+// Debug: Log Firebase initialization
+console.log('Firebase initialized:', firebase.app().name);
