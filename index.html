@@ -427,16 +427,17 @@
             // Visited counter
             const visitsRef = ref(db, 'visits');
             runTransaction(visitsRef, (current) => {
-                console.log('Transaction current value:', current);
-                return (current || 0) + 1; // Increment visits
-            }, (error, committed, snapshot) => {
-                if (error) {
-                    console.error('Error updating visits:', error);
-                    updateCounterDisplay('total-visits', 'N/A');
-                } else if (committed) {
-                    console.log('Visits committed:', snapshot.val());
-                    updateCounterDisplay('total-visits', snapshot.val() || 0);
+                return (current || 0) + 1;
+            })
+            .then((result) => {
+                if (result.committed) {
+                    console.log('Visits committed:', result.snapshot.val());
+                    updateCounterDisplay('total-visits', result.snapshot.val() || 0);
                 }
+            })
+            .catch((error) => {
+                console.error('Error updating visits:', error);
+                updateCounterDisplay('total-visits', 'N/A');
             });
 
             // Watching counter
