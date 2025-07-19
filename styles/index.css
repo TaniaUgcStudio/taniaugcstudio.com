@@ -998,9 +998,11 @@ button:hover {
 }
 
 .counters {
-    margin: 10px 0;
-    font-size: 14px;
+    margin: 0; /* 10px 0 */
+    font-size: 0; /* 14px */
     color: #252525;
+    visibility: hidden;
+    height: 0;
 }
 
 .counters span {
