@@ -1000,7 +1000,11 @@ button:hover {
 .counters {
     margin: 10px 0;
     font-size: 14px;
-    color: #333; /* Adjust to match your site's color scheme */
+    color: #333;
+}
+
+.counters span {
+    margin-right: 10px;
 }
 
 /***************************** MOBILE STYLES *****************************/

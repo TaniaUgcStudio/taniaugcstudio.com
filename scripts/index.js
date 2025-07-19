@@ -298,22 +298,40 @@ window.addEventListener('load', () => {
 });
 
 //////////////////////////////////// Page Analytics ////////////////////////////////////
-// Visited counter: Increment on page load
-let visitedCount = localStorage.getItem('visitedCount') || 0;
-visitedCount = parseInt(visitedCount) + 1;
-localStorage.setItem('visitedCount', visitedCount);
-document.getElementById('visited-count').textContent = `Visited: ${visitedCount}`;
+// Fetch total visits from Counter.dev API
+// Fetch total visits from Counter.dev API
+fetch('https://api.counter.dev/v1/928ed05d-2e8e-4a73-9a8a-ee55d6f2893a/up') // Using your data-id
+.then(response => response.json())
+.then(data => {
+    document.getElementById('total-visits').textContent = data.value || 0;
+})
+.catch(() => {
+    document.getElementById('total-visits').textContent = 'N/A';
+});
 
-// Watching counter: Increment when page is active
+// Approximate Watching count (client-side)
 let watchingCount = localStorage.getItem('watchingCount') || 0;
-watchingCount = parseInt(watchingCount) + 1;
-localStorage.setItem('watchingCount', watchingCount);
-document.getElementById('watching-count').textContent = `Watching: ${watchingCount}`;
+let sessionKey = `session_${Date.now()}`;
+if (!sessionStorage.getItem(sessionKey)) {
+    watchingCount = parseInt(watchingCount) + 1;
+    localStorage.setItem('watchingCount', watchingCount);
+    sessionStorage.setItem(sessionKey, 'active');
+}
+document.getElementById('active-users').textContent = watchingCount;
 
-// Reset watching count when user leaves the page
+// Decrement watching count on page unload
 window.addEventListener('unload', () => {
     let currentWatching = parseInt(localStorage.getItem('watchingCount')) || 0;
-    if (currentWatching > 0) {
+    if (currentWatching > 0 && sessionStorage.getItem(sessionKey)) {
         localStorage.setItem('watchingCount', currentWatching - 1);
+        sessionStorage.removeItem(sessionKey);
     }
 });
+
+// Periodic cleanup to prevent negative counts
+setInterval(() => {
+    let currentWatching = parseInt(localStorage.getItem('watchingCount')) || 0;
+    if (currentWatching < 0) {
+        localStorage.setItem('watchingCount', 0);
+    }
+}, 300000); // Every 5 minutes
