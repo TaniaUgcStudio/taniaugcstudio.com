@@ -299,49 +299,59 @@ window.addEventListener('load', () => {
 
 //////////////////////////////////// Page Analytics ////////////////////////////////////
 // Initialize Watching count
-let watchingCount = localStorage.getItem('watchingCount') || 0;
 let sessionKey = `session_${Date.now()}`;
 if (!sessionStorage.getItem(sessionKey)) {
-    watchingCount = parseInt(watchingCount) + 1;
-    localStorage.setItem('watchingCount', watchingCount);
     sessionStorage.setItem(sessionKey, 'active');
-}
-const activeUsersSpan = document.getElementById('active-users');
-if (activeUsersSpan) {
-    activeUsersSpan.textContent = watchingCount > 0 ? watchingCount : 1; // Ensure at least 1 when you're on the page
-} else {
-    console.error('Element with ID "active-users" not found');
+    const activeUsersSpan = document.getElementById('active-users');
+    if (activeUsersSpan) {
+        activeUsersSpan.textContent = '1'; // Always 1 for current session
+    } else {
+        console.error('Element with ID "active-users" not found');
+    }
 }
 
-// Decrement Watching count on page unload
+// Reset Watching count on page unload
 window.addEventListener('unload', () => {
-    let currentWatching = parseInt(localStorage.getItem('watchingCount')) || 0;
-    if (currentWatching > 0 && sessionStorage.getItem(sessionKey)) {
-        localStorage.setItem('watchingCount', currentWatching - 1);
-        sessionStorage.removeItem(sessionKey);
-    }
+    sessionStorage.removeItem(sessionKey);
 });
 
 // Fetch total visits from Counter.dev API
-fetch('https://api.counter.dev/v1/928ed05d-2e8e-4a73-9a8a-ee55d6f2893a/up', {
-    method: 'GET',
-    headers: { 'Accept': 'application/json' }
-})
-.then(response => {
-    if (!response.ok) throw new Error('API request failed');
-    return response.json();
-})
+const apiBase = 'https://api.counter.dev/v1/928ed05d-2e8e-4a73-9a8a-ee55d6f2893a';
+function tryFetch(endpoint) {
+    return fetch(`${apiBase}/${endpoint}`, {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error(`API request failed: ${response.status}`);
+        return response.json();
+    });
+}
+
+tryFetch('up')
 .then(data => {
-    console.log('Counter.dev response:', data); // Debug response
+    console.log('Counter.dev /up response:', data); // Debug response
     const totalVisitsSpan = document.getElementById('total-visits');
     if (totalVisitsSpan) {
-        totalVisitsSpan.textContent = data.value || 0;
+        totalVisitsSpan.textContent = data.value || data.count || 0; // Handle different response formats
     } else {
         console.error('Element with ID "total-visits" not found');
     }
 })
 .catch(error => {
-    console.error('Error fetching Counter.dev data:', error);
-    const totalVisitsSpan = document.getElementById('total-visits');
-    if (totalVisitsSpan) totalVisitsSpan.textContent = 'N/A';
+    console.error('Error fetching /up:', error);
+    // Try fallback endpoint
+    tryFetch('total')
+    .then(data => {
+        console.log('Counter.dev /total response:', data);
+        const totalVisitsSpan = document.getElementById('total-visits');
+        if (totalVisitsSpan) {
+            totalVisitsSpan.textContent = data.value || data.count || 0;
+        }
+    })
+    .catch(fallbackError => {
+        console.error('Error fetching /total:', fallbackError);
+        const totalVisitsSpan = document.getElementById('total-visits');
+        if (totalVisitsSpan) totalVisitsSpan.textContent = 'N/A';
+    });
 });
