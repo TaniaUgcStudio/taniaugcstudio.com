@@ -43,15 +43,15 @@ const path = document.getElementById('plantPath');
 const pathLength = path.getTotalLength();
 
 function updateButterflyPosition() {
-    const scrollTop = window.scrollY;
-    const maxScroll = document.body.scrollHeight - window.innerHeight;
-    const scrollRatio = scrollTop / maxScroll / 2.9;
-    const pointAtLength = scrollRatio * pathLength;
-    
-    const point = path.getPointAtLength(pointAtLength);
-    const pointNext = path.getPointAtLength(pointAtLength + 1);
-    
-    butterfly.style.transform = `translate(${point.x - 25}px, ${point.y - 25}px) rotate(0)`;
+const scrollTop = window.scrollY;
+const maxScroll = document.body.scrollHeight - window.innerHeight;
+const scrollRatio = scrollTop / maxScroll / 2.9;
+const pointAtLength = scrollRatio * pathLength;
+
+const point = path.getPointAtLength(pointAtLength);
+const pointNext = path.getPointAtLength(pointAtLength + 1);
+
+butterfly.style.transform = `translate(${point.x - 25}px, ${point.y - 25}px) rotate(0)`;
 }
 
 window.addEventListener('scroll', updateButterflyPosition);
@@ -297,3 +297,23 @@ window.addEventListener('load', () => {
     startContentTypewriterEffect(); // Will wait for scroll intersection
 });
 
+//////////////////////////////////// Page Analytics ////////////////////////////////////
+// Visited counter: Increment on page load
+let visitedCount = localStorage.getItem('visitedCount') || 0;
+visitedCount = parseInt(visitedCount) + 1;
+localStorage.setItem('visitedCount', visitedCount);
+document.getElementById('visited-count').textContent = `Visited: ${visitedCount}`;
+
+// Watching counter: Increment when page is active
+let watchingCount = localStorage.getItem('watchingCount') || 0;
+watchingCount = parseInt(watchingCount) + 1;
+localStorage.setItem('watchingCount', watchingCount);
+document.getElementById('watching-count').textContent = `Watching: ${watchingCount}`;
+
+// Reset watching count when user leaves the page
+window.addEventListener('unload', () => {
+    let currentWatching = parseInt(localStorage.getItem('watchingCount')) || 0;
+    if (currentWatching > 0) {
+        localStorage.setItem('watchingCount', currentWatching - 1);
+    }
+});

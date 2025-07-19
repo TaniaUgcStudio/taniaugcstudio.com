@@ -997,6 +997,12 @@ button:hover {
     opacity: 0.8;
 }
 
+.counters {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #333; /* Adjust to match your site's color scheme */
+}
+
 /***************************** MOBILE STYLES *****************************/
 @media (max-width: 600px) {
     
@@ -1024,7 +1030,7 @@ button:hover {
     .sobre-mi-text p:nth-child(2) {
         margin-right: -50px;
     }
-
+    
     .sobre-mi-text p:nth-child(4) {
         margin-right: 5px;
     }
@@ -1095,14 +1101,14 @@ button:hover {
         height: 250px;
         top: 85%;
     }
-
+    
     /**************************************************************************/
     .video-banner {
         font-size: 1em;
         padding: 10px 5px;
         margin-bottom: 3px;
     }
-
+    
     .video-frame {
         width: 50px;
         height: 100px;
@@ -1155,7 +1161,7 @@ button:hover {
     .description {
         font-size: 16px;
     }
-
+    
     /**************************************************************************/
     .contact-form {
         max-width: 85%;
@@ -1168,7 +1174,7 @@ button:hover {
         min-width: 85%;
         max-width: 85%;
     }
-
+    
     .site-footer {
         margin-top: 150px;
         margin-bottom: 10px;
