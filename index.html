@@ -386,7 +386,7 @@
     <script type="module">
         // Import Firebase functions
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
-        import { getDatabase, ref, set, onValue, onDisconnect, increment, runTransaction } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js';
+        import { getDatabase, ref, set, onValue, onDisconnect, runTransaction } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js';
 
         // Initialize Firebase
         const firebaseConfig = {
@@ -406,9 +406,19 @@
             console.log('Firebase initialized successfully:', app.name);
         } catch (error) {
             console.error('Firebase initialization failed:', error);
-            document.getElementById('total-visits').textContent = 'N/A';
-            document.getElementById('active-users').textContent = 'N/A';
+            updateCounterDisplay('total-visits', 'N/A');
+            updateCounterDisplay('active-users', 'N/A');
             throw error; // Stop execution on failure
+        }
+
+        // Helper function to update counter display
+        function updateCounterDisplay(elementId, value) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = value;
+            } else {
+                console.error(`Element with ID "${elementId}" not found`);
+            }
         }
 
         // Visited counter
@@ -419,16 +429,16 @@
         }, (error, committed, snapshot) => {
             if (error) {
                 console.error('Error updating visits:', error);
-                document.getElementById('total-visits').textContent = 'N/A';
+                updateCounterDisplay('total-visits', 'N/A');
             } else if (committed) {
                 console.log('Visits committed:', snapshot.val());
-                document.getElementById('total-visits').textContent = snapshot.val() || 0;
+                updateCounterDisplay('total-visits', snapshot.val() || 0);
             }
         });
 
         // Watching counter
         const activeUsersRef = ref(db, 'activeUsers');
-        const sessionKey = `session_${Date.now()}_${Math.random()}`; // Unique per tab
+        const sessionKey = `session_${Date.now()}_${Math.random().toString().replace('.', '_')}`; // Replace . with _
         set(ref(db, `activeUsers/${sessionKey}`), { active: true })
             .then(() => console.log('Active user set:', sessionKey))
             .catch((error) => console.error('Error setting active user:', error));
@@ -440,15 +450,10 @@
         onValue(activeUsersRef, (snapshot) => {
             const count = snapshot.numChildren();
             console.log('Active users count:', count);
-            const activeUsersSpan = document.getElementById('active-users');
-            if (activeUsersSpan) {
-                activeUsersSpan.textContent = count || 0;
-            } else {
-                console.error('Element with ID "active-users" not found');
-            }
+            updateCounterDisplay('active-users', count || 0);
         }, (error) => {
             console.error('Error fetching active users:', error);
-            document.getElementById('active-users').textContent = 'N/A';
+            updateCounterDisplay('active-users', 'N/A');
         });
     </script>
 </body>
