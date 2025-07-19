@@ -298,18 +298,7 @@ window.addEventListener('load', () => {
 });
 
 //////////////////////////////////// Page Analytics ////////////////////////////////////
-// Fetch total visits from Counter.dev API
-// Fetch total visits from Counter.dev API
-fetch('https://api.counter.dev/v1/928ed05d-2e8e-4a73-9a8a-ee55d6f2893a/up') // Using your data-id
-.then(response => response.json())
-.then(data => {
-    document.getElementById('total-visits').textContent = data.value || 0;
-})
-.catch(() => {
-    document.getElementById('total-visits').textContent = 'N/A';
-});
-
-// Approximate Watching count (client-side)
+// Initialize Watching count
 let watchingCount = localStorage.getItem('watchingCount') || 0;
 let sessionKey = `session_${Date.now()}`;
 if (!sessionStorage.getItem(sessionKey)) {
@@ -317,9 +306,14 @@ if (!sessionStorage.getItem(sessionKey)) {
     localStorage.setItem('watchingCount', watchingCount);
     sessionStorage.setItem(sessionKey, 'active');
 }
-document.getElementById('active-users').textContent = watchingCount;
+const activeUsersSpan = document.getElementById('active-users');
+if (activeUsersSpan) {
+    activeUsersSpan.textContent = watchingCount > 0 ? watchingCount : 1; // Ensure at least 1 when you're on the page
+} else {
+    console.error('Element with ID "active-users" not found');
+}
 
-// Decrement watching count on page unload
+// Decrement Watching count on page unload
 window.addEventListener('unload', () => {
     let currentWatching = parseInt(localStorage.getItem('watchingCount')) || 0;
     if (currentWatching > 0 && sessionStorage.getItem(sessionKey)) {
@@ -328,10 +322,26 @@ window.addEventListener('unload', () => {
     }
 });
 
-// Periodic cleanup to prevent negative counts
-setInterval(() => {
-    let currentWatching = parseInt(localStorage.getItem('watchingCount')) || 0;
-    if (currentWatching < 0) {
-        localStorage.setItem('watchingCount', 0);
+// Fetch total visits from Counter.dev API
+fetch('https://api.counter.dev/v1/928ed05d-2e8e-4a73-9a8a-ee55d6f2893a/up', {
+    method: 'GET',
+    headers: { 'Accept': 'application/json' }
+})
+.then(response => {
+    if (!response.ok) throw new Error('API request failed');
+    return response.json();
+})
+.then(data => {
+    console.log('Counter.dev response:', data); // Debug response
+    const totalVisitsSpan = document.getElementById('total-visits');
+    if (totalVisitsSpan) {
+        totalVisitsSpan.textContent = data.value || 0;
+    } else {
+        console.error('Element with ID "total-visits" not found');
     }
-}, 300000); // Every 5 minutes
+})
+.catch(error => {
+    console.error('Error fetching Counter.dev data:', error);
+    const totalVisitsSpan = document.getElementById('total-visits');
+    if (totalVisitsSpan) totalVisitsSpan.textContent = 'N/A';
+});
