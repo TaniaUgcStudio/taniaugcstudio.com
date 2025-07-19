@@ -308,18 +308,29 @@ const firebaseConfig = {
     appId: "1:250831091181:web:909576a057696101d623e4",
     databaseURL: "https://taniaugcstudio-9394-default-rtdb.europe-west1.firebasedatabase.app"
 };
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+
+try {
+    const app = firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    console.log('Firebase initialized successfully:', app.name);
+} catch (error) {
+    console.error('Firebase initialization failed:', error);
+    document.getElementById('total-visits').textContent = 'N/A';
+    document.getElementById('active-users').textContent = 'N/A';
+    return;
+}
 
 // Visited counter
 const visitsRef = db.ref('visits');
 visitsRef.transaction((current) => {
+    console.log('Transaction current value:', current);
     return (current || 0) + 1; // Increment visits
 }, (error, committed, snapshot) => {
     if (error) {
         console.error('Error updating visits:', error);
         document.getElementById('total-visits').textContent = 'N/A';
     } else if (committed) {
+        console.log('Visits committed:', snapshot.val());
         document.getElementById('total-visits').textContent = snapshot.val() || 0;
     }
 });
@@ -327,12 +338,18 @@ visitsRef.transaction((current) => {
 // Watching counter
 const activeUsersRef = db.ref('activeUsers');
 const sessionKey = `session_${Date.now()}_${Math.random()}`; // Unique per tab
-activeUsersRef.child(sessionKey).set({ active: true }); // Add user
-activeUsersRef.child(sessionKey).onDisconnect().remove(); // Remove on disconnect
+activeUsersRef.child(sessionKey).set({ active: true }, (error) => {
+    if (error) console.error('Error setting active user:', error);
+    else console.log('Active user set:', sessionKey);
+});
+activeUsersRef.child(sessionKey).onDisconnect().remove((error) => {
+    if (error) console.error('Error setting onDisconnect:', error);
+});
 
 // Update watching count in real-time
 activeUsersRef.on('value', (snapshot) => {
     const count = snapshot.numChildren();
+    console.log('Active users count:', count);
     const activeUsersSpan = document.getElementById('active-users');
     if (activeUsersSpan) {
         activeUsersSpan.textContent = count || 0;
@@ -343,6 +360,3 @@ activeUsersRef.on('value', (snapshot) => {
     console.error('Error fetching active users:', error);
     document.getElementById('active-users').textContent = 'N/A';
 });
-
-// Debug: Log Firebase initialization
-console.log('Firebase initialized:', firebase.app().name);
