@@ -428,9 +428,7 @@
         try {
             app = initializeApp(firebaseConfig);
             db = getDatabase(app);
-            console.log('Firebase initialized successfully:', app.name);
         } catch (error) {
-            console.error('Firebase initialization failed:', error);
             updateCounterDisplay('total-visits', 'N/A');
             updateCounterDisplay('active-users', 'N/A');
             throw error; // Stop execution on failure
@@ -441,9 +439,6 @@
             const element = document.getElementById(elementId);
             if (element) {
                 element.textContent = value;
-                console.log(`Updated ${elementId} to: ${value}`); // Debug UI update
-            } else {
-                console.error(`Element with ID "${elementId}" not found`);
             }
         }
         
@@ -469,10 +464,8 @@
             const activeUsersRef = ref(db, 'activeUsers');
             const sessionKey = `session_${Date.now()}_${Math.random().toString().replace('.', '_')}`; // Replace . with _
             set(ref(db, `activeUsers/${sessionKey}`), { active: true })
-            .then(() => console.log('Active user set:', sessionKey))
             .catch((error) => console.error('Error setting active user:', error));
             onDisconnect(ref(db, `activeUsers/${sessionKey}`)).remove()
-            .then(() => console.log('onDisconnect set for:', sessionKey))
             .catch((error) => console.error('Error setting onDisconnect:', error));
             
             // Update watching count in real-time
