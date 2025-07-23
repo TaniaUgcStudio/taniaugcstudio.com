@@ -95,6 +95,65 @@ h1, h2, h3, h4, h5, h6 {
     color: #555;
 }
 
+/***************************** COOKIES *****************************/
+#cookie-banner {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #eeebe6;
+    padding: 1.5rem;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    z-index: 9997;
+    width: 85%;
+    max-width: 600px;
+    font-size: 0.9rem;
+    box-shadow: 0 0 12px rgba(0,0,0,0.15);
+}
+
+.cookie-banner-content p {
+    margin: 0 0 1rem;
+    font-size: 0.95rem;
+}
+
+.cookie-banner-content a {
+    color: #3f5048;
+    text-decoration: underline;
+}
+
+.cookie-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.cookie-buttons button {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: inherit;
+    font-size: 0.9rem;
+    transition: background 0.3s ease;
+}
+
+.cookie-buttons button:first-child {
+    background-color: #8fc563;
+    color: white;
+}
+
+.cookie-buttons button:last-child {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.cookie-buttons button:hover {
+    opacity: 0.9;
+}
+
 /***************************** BUTTERFLY ANIMATION *****************************/
 .butterfly-container {
     position: fixed;
@@ -1012,6 +1071,20 @@ button:hover {
 /***************************** MOBILE STYLES *****************************/
 @media (max-width: 600px) {
     
+    #cookie-banner {
+        font-size: 0.9rem;
+        padding: 1.2rem;
+        bottom: 20px;
+    }
+    
+    .cookie-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .cookie-buttons button {
+        width: 100%;
+    }
     
     /**************************************************************************/
     .sobre-mi-container {

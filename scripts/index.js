@@ -31,11 +31,27 @@ document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
                 loader.remove(); // ✅ esto quita el div del DOM
                 content.forEach(el => el.style.display = ''); // muestra el resto
+                
+                // Mostrar banner de cookies si no se ha aceptado o rechazado antes
+                if (!localStorage.getItem('cookieConsent')) {
+                    document.getElementById('cookie-banner').style.display = 'block';
+                }
             }, 800);
             
         }
     }, 25); // 100 * 25ms = 2.5s total
 });
+
+//////////////////////////////////// Cookies ////////////////////////////////////
+function acceptCookies() {
+    localStorage.setItem('cookieConsent', 'accepted');
+    document.getElementById('cookie-banner').style.display = 'none';
+}
+
+function rejectCookies() {
+    localStorage.setItem('cookieConsent', 'rejected');
+    document.getElementById('cookie-banner').style.display = 'none';
+}
 
 //////////////////////////////////// Butterfly animation ////////////////////////////////////
 /*const butterfly = document.querySelector('.butterfly');

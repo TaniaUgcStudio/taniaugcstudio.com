@@ -9,6 +9,7 @@
     <!-- Firebase Analytics SDKs -->
     <script type="module" src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js"></script>
     <script type="module" src="https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
     <!-- UGC Loader Intro -->
@@ -18,6 +19,23 @@
             <div class="ugc-fill"></div>
         </div>
         <div class="ugc-percent">0%</div>
+    </div>
+    
+    <!-- Cookie Banner -->
+    <div id="cookie-banner">
+        <div class="cookie-banner-content">
+            <p>
+                <i class="fas fa-user-shield" style="color:#333; margin-right: 6px;"></i><strong>Política de Privacidad</strong><br><br>
+                Al completar este formulario, aceptas que los datos personales que proporciones (como nombre, correo electrónico, empresa, redes sociales, y cualquier otro dato que compartas voluntariamente) sean tratados de forma confidencial con la finalidad de gestionar tu solicitud de colaboración.<br><br>
+                Tus datos no serán cedidos a terceros ni utilizados para otros fines distintos a los relacionados con la comunicación profesional y la propuesta de servicios UGC. Solo serán conservados durante el tiempo necesario para gestionar la colaboración o mientras exista una relación comercial activa.<br><br>
+                Puedes ejercer tus derechos de acceso, rectificación, cancelación u oposición escribiendo a <a href="mailto:taniaugcstudio@gmail.com">taniaugcstudio@gmail.com</a>.<br><br>
+                Se protege tu privacidad conforme al Reglamento (UE) 2016/679 (RGPD).
+            </p>
+            <div class="cookie-buttons">
+                <button onclick="acceptCookies()">Aceptar</button>
+                <button onclick="rejectCookies()">Rechazar</button>
+            </div>
+        </div>
     </div>
     
     <!-- Menu toggle button -->
@@ -358,7 +376,7 @@
             <p>Hola <span id="user-name"></span>,<br><br>Muchas gracias por tu mensaje.<br>Lo leeré lo antes posible y estaré en contacto contigo.<br><br>Un saludo,<br>Tania</p>
         </div>
         <div id="birthday-icons"></div>
-
+        
         <!-- Footer -->
         <footer class="site-footer">
             <div class="social-icons">
@@ -388,23 +406,24 @@
     <script src="scripts/index.js"></script>
     <script src="scripts/works.js"></script>
     <script src="scripts/contact.js"></script>
-
+    
+    <!-- Analytics -->
     <script type="module">
         // Import Firebase functions
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
         import { getDatabase, ref, set, onValue, onDisconnect, runTransaction } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js';
-
+        
         // Initialize Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyD5s2tmowrrXjgtQ190P14xqpogE7GAVVo",
-            authDomain: "taniaugcstudio-9394.firebaseapp.com",
-            projectId: "taniaugcstudio-9394",
-            storageBucket: "taniaugcstudio-9394.firebasestorage.app",
-            messagingSenderId: "250831091181",
-            appId: "1:250831091181:web:909576a057696101d623e4",
-            databaseURL: "https://taniaugcstudio-9394-default-rtdb.europe-west1.firebasedatabase.app"
+        export const firebaseConfig = {
+            apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+            authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+            databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+            projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+            storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+            messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+            appId: import.meta.env.VITE_FIREBASE_APP_ID
         };
-
+        
         let app, db;
         try {
             app = initializeApp(firebaseConfig);
@@ -416,7 +435,7 @@
             updateCounterDisplay('active-users', 'N/A');
             throw error; // Stop execution on failure
         }
-
+        
         // Helper function to update counter display
         function updateCounterDisplay(elementId, value) {
             const element = document.getElementById(elementId);
@@ -427,7 +446,7 @@
                 console.error(`Element with ID "${elementId}" not found`);
             }
         }
-
+        
         // Wait for DOM to be fully loaded
         window.onload = function() {
             // Visited counter
@@ -445,17 +464,17 @@
                 console.error('Error updating visits:', error);
                 updateCounterDisplay('total-visits', 'N/A');
             });
-
+            
             // Watching counter
             const activeUsersRef = ref(db, 'activeUsers');
             const sessionKey = `session_${Date.now()}_${Math.random().toString().replace('.', '_')}`; // Replace . with _
             set(ref(db, `activeUsers/${sessionKey}`), { active: true })
-                .then(() => console.log('Active user set:', sessionKey))
-                .catch((error) => console.error('Error setting active user:', error));
+            .then(() => console.log('Active user set:', sessionKey))
+            .catch((error) => console.error('Error setting active user:', error));
             onDisconnect(ref(db, `activeUsers/${sessionKey}`)).remove()
-                .then(() => console.log('onDisconnect set for:', sessionKey))
-                .catch((error) => console.error('Error setting onDisconnect:', error));
-
+            .then(() => console.log('onDisconnect set for:', sessionKey))
+            .catch((error) => console.error('Error setting onDisconnect:', error));
+            
             // Update watching count in real-time
             onValue(activeUsersRef, (snapshot) => {
                 const count = snapshot.size; // Use snapshot.size
