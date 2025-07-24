@@ -1033,9 +1033,20 @@ button:hover {
     text-align: center;
     color: #252525;
     margin-top: 200px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     font-size: 0.9em;
-    background-color: transparent;
+
+    /* Fancy background with gradient and transparency */
+    background: linear-gradient(135deg, #f6e8dccc, #d5c1b3cc);
+    border-radius: 16px;
+    padding: 1.5rem;
+
+    /* Glassmorphism touch */
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+
+    /* Elegant shadow */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
 .social-icons {
