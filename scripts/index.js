@@ -278,6 +278,23 @@ function startContentTypewriterEffect() {
     observer.observe(contentSection);
 }
 
+//////////////////////////////////// TikTok Shop Section Animation ////////////////////////////////////
+document.addEventListener("DOMContentLoaded", () => {
+    const gifSection = document.querySelector("#tiktok-section img");
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // cambia el src al GIF real
+                gifSection.src = gifSection.dataset.gif;
+                observer.unobserve(entry.target); // deja de observar (solo una vez)
+            }
+        });
+    }, { threshold: 0.5 }); // 50% visible
+
+    observer.observe(gifSection);
+});
+
 //////////////////////////////////// Initialize Animations ////////////////////////////////////
 document.addEventListener("DOMContentLoaded", () => {
     const loader = document.querySelector('.ugc-loader');

@@ -906,6 +906,53 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
+/***************************** TIKTOK CONTENT *****************************/
+.tiktok-section {
+    min-height: calc(var(--vh, 1vh) * 100);
+    padding: 10px 20px;
+    text-align: center;
+    background-image: url("../images/tiktokBkgnd.jpg");
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+
+}
+
+.tiktok-section.scroll-animate-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tiktok-card {
+    overflow: hidden;
+    text-align: center;
+    padding: 30px;
+    animation: glowBorder 3s ease-in-out infinite alternate;
+}
+
+.tiktok-image img {
+    width: 220px;
+    min-width: 80%;
+    max-width: 100%;
+    margin: 0 auto 20px auto;
+    display: block;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.tiktok-card h2 {
+    font-size: 2rem;
+    margin-bottom: 16px;
+    color: #d7cbbd;
+}
+
+.tiktok-text p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #d7cbbd;
+}
+
 /***************************** CONTACT CONTENT *****************************/
 .contact-section {
     min-height: calc(var(--vh, 1vh) * 100);
@@ -1251,7 +1298,13 @@ button:hover {
     .description {
         font-size: 16px;
     }
-    
+
+    /**************************************************************************/
+
+    .tiktok-image img {
+        content: url("../images/tiktokMobile.gif");
+    }
+
     /**************************************************************************/
     .contact-form {
         max-width: 85%;
