@@ -278,6 +278,46 @@ function startContentTypewriterEffect() {
     observer.observe(contentSection);
 }
 
+//////////////////////////////////// Popup ////////////////////////////////////
+document.addEventListener("DOMContentLoaded", () => {
+    const popup = document.getElementById("promo-popup");
+    const closeBtn = popup.querySelector(".close-btn");
+    const contactBtn = popup.querySelector(".contact-btn");
+
+    // Mostrar popup cuando el usuario llega a la sección de videos
+    const videosSection = document.getElementById("work-section");
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                popup.classList.remove("hidden");
+                setTimeout(() => popup.classList.add("show"), 100);
+                observer.unobserve(videosSection); // se muestra solo una vez
+            }
+        });
+    }, { threshold: 0.5 });
+
+    if (videosSection) {
+        observer.observe(videosSection);
+    }
+
+    // Cerrar con botón rojo
+    closeBtn.addEventListener("click", () => {
+        popup.classList.remove("show");
+        setTimeout(() => popup.classList.add("hidden"), 400);
+    });
+
+    // Contactar → cierra popup y redirige
+    contactBtn.addEventListener("click", () => {
+        popup.classList.remove("show");
+        setTimeout(() => {
+            popup.classList.add("hidden");
+            window.location.href = contactBtn.href;
+        }, 400);
+        return false; // evita abrir antes de cerrar
+    });
+});
+
 //////////////////////////////////// TikTok Shop Section Animation ////////////////////////////////////
 document.addEventListener("DOMContentLoaded", () => {
     const gifSection = document.querySelector("#tiktok-section img");
