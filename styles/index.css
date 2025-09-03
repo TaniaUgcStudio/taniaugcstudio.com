@@ -802,7 +802,7 @@ h1, h2, h3, h4, h5, h6 {
 .video-section { position: relative; } /* you already have this */
 #promo-trigger {
   position: absolute;
-  top: 50%;           /* <— halfway down the section */
+  top: 99%;           /* <— halfway down the section */
   left: 0;
   width: 100%;
   height: 1px;        /* tiny line is enough */
@@ -821,7 +821,7 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 8px 24px rgba(0,0,0,0.25);
   padding: 60px 20px 20px;
   text-align: center;
-  z-index: 100000;
+  z-index: 10000;
   transition: opacity 0.4s ease, transform 0.6s ease;
   /* ✅ Borders only on 3 sides */
   border: 3px solid #fff;
