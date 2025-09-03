@@ -1396,6 +1396,10 @@ button:hover {
         right: 20px;
         z-index: 1100;
     }
+
+    .promo-popup .close-btn {
+        top: 400px;  
+    }
     
     /**************************************************************************/
     .work-section {
