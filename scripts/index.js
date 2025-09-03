@@ -168,8 +168,8 @@ const observer = new IntersectionObserver((entries) => {
     threshold: 0.3
 });
 
-document.querySelectorAll('.scroll-animate-up, .scroll-animate-right').forEach(el => {
-    observer.observe(el);
+document.querySelectorAll('.scroll-animate-up:not(.work-block), .scroll-animate-right:not(.work-block)').forEach(el => {
+  observer.observe(el);
 });
 
 //////////////////////////////////// Typewriter Animation Functions ////////////////////////////////////
@@ -278,7 +278,7 @@ function startContentTypewriterEffect() {
     observer.observe(contentSection);
 }
 
-//////////////////////////////////// Popup ////////////////////////////////////
+//////////////////////////////////// Promo Popup ////////////////////////////////////
 function initPromoPopupOnce() {
   const popup = document.getElementById("promo-popup");
   if (!popup) return;
@@ -337,6 +337,22 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { threshold: 0.5 });
 
   observer.observe(gifSection);
+});
+
+//////////////////////////////////// Work Animation ////////////////////////////////////
+// One-time animation for Work section blocks
+const workOnceObserver = new IntersectionObserver((entries, obs) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('scroll-animate-visible'); // triggers the .work animations inside
+      obs.unobserve(entry.target); // 👈 make it run only once
+    }
+  });
+}, { threshold: 0.3 });
+
+// Observe only the Work blocks
+document.querySelectorAll('.work-section .work-block').forEach(el => {
+  workOnceObserver.observe(el);
 });
 
 //////////////////////////////////// Initialize Animations ////////////////////////////////////

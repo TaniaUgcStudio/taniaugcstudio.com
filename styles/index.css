@@ -790,7 +790,7 @@ h1, h2, h3, h4, h5, h6 {
     display: block;
 }
 
-.close-btn {
+.popup .close-btn {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -830,10 +830,11 @@ h1, h2, h3, h4, h5, h6 {
   outline-offset: -2px;
 }
 
-.close-btn {
+.promo-popup .close-btn {
   position: absolute;
-  margin-top: 350px;
-  margin-right: -30px;
+  top: 380px;           /* vertical position */
+  left: 50%;            /* move to middle */
+  transform: translateX(-50%); /* center horizontally */
   background: transparent;
   border: none;
   cursor: pointer;
@@ -845,7 +846,7 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
 }
 
-.close-btn img {
+.promo-popup .close-btn img {
   width: 100%;
   height: auto;
   display: block;
@@ -1389,7 +1390,7 @@ button:hover {
         align-items: center;
     }
     
-    .close-btn {
+    .popup .close-btn {
         font-size: 3rem;
         top: 20px;
         right: 20px;
