@@ -799,65 +799,78 @@ h1, h2, h3, h4, h5, h6 {
     cursor: pointer;
 }
 
-/***************************** POPUP CONTENT *****************************/
-.promo-popup {
+.video-section { position: relative; } /* you already have this */
+#promo-trigger {
+  position: absolute;
+  top: 50%;           /* <— halfway down the section */
+  left: 0;
+  width: 100%;
+  height: 1px;        /* tiny line is enough */
+  pointer-events: none;
+}
+
+/***************************** PROMO-POPUP CONTENT *****************************/
+.promo-popup { 
   position: fixed;
   top: 50%;
   left: 50%;
   width: 320px;
-  transform: translate(-50%, -50%) scale(0.8);
+  transform: translate(-50%, -50%) scale(0.9);
   background: #9aa690;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  padding: 60px 20px 20px;
   text-align: center;
-  z-index: 9999;
+  z-index: 100000;
+  transition: opacity 0.4s ease, transform 0.6s ease;
+  /* ✅ Borders only on 3 sides */
+  border: 3px solid #fff;
+  border-top: none;       /* remove top border */
+  outline: 2px solid #3f5048;
+  outline-offset: -2px;
 }
 
 .close-btn {
   position: absolute;
-  top: 270px;
-  right: 10px;
-  background: red;
-  color: white;
+  margin-top: 350px;
+  margin-right: -30px;
+  background: transparent;
   border: none;
-  border-radius: 50%;
+  cursor: pointer;
+  padding: 0;
   width: 30px;
   height: 30px;
-  font-size: 20px; /* slightly bigger for balance */
-  font-weight: bold;
-  cursor: pointer;
-  
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  line-height: 1;       /* ✅ prevents text from stretching */
-  aspect-ratio: 1 / 1;  /* ✅ enforces perfect circle */
-  
-  transition: background 0.2s;
 }
 
-.close-btn:hover {
-  background: darkred;
+.close-btn img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
+/* ✅ Floating circular image (half outside the box) */
 .popup-image {
   position: absolute;
-  top: -50%;
+  top: -150px;     /* pushes half out of box */
   left: 50%;
   transform: translateX(-50%);
-  width: 350px;
-  height: 350px;
+  width: 360px;
+  height: 360px;
   border-radius: 50%;
   overflow: hidden;
+  /* ✨ Fancy double border */
+  border: 3px solid #3f5048;
+  outline: 2px solid #3f5048;
+  background: #fff; /* backdrop to make it pop */
   /* 🌈 Fade downward */
   -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-size: 100% 100%;
   mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
-  mask-repeat: no-repeat;
-  mask-size: 100% 100%;
+  mask-repeat: no-repeat; mask-size: 100% 100%;
 }
 
 .popup-image img {
@@ -867,39 +880,49 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .popup-content h3 {
-    font-size: 1.2rem;
-    margin-top: 50px;
+  font-size: 1.2rem;
+  margin-top: 70px; /* push down to clear the circle */
 }
 
 .popup-content p {
-    font-size: 0.95rem;
-    margin: 15px 0;
-    line-height: 1.4;
+  font-size: 0.95rem;
+  margin: 15px 0;
+  line-height: 1.4;
 }
 
 .popup-content .highlight {
-    color: #e63946;
-    font-weight: bold;
+  color: #e63946;
+  font-weight: bold;
 }
 
 .contact-btn {
-    display: inline-block;
-    margin-top: 12px;
-    padding: 10px 18px;
-    background: #3f5048;
-    color: white;
-    font-weight: bold;
-    border-radius: 50px;
-    text-decoration: none;
-    transition: background 0.3s ease;
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 18px;
+  background: #3f5048;
+  color: white;
+  font-weight: bold;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: background 0.3s ease;
 }
 
 .contact-btn:hover {
-    background: #11d077;
+  background: #11d077;
 }
 
-.hidden {
-    display: none;
+/* Default hidden state */
+.promo-popup.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -120%); /* start above screen */
+}
+
+/* When showing */
+.promo-popup.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%); /* center of screen */
 }
 
 /***************************** WORKS CONTENT *****************************/

@@ -279,60 +279,64 @@ function startContentTypewriterEffect() {
 }
 
 //////////////////////////////////// Popup ////////////////////////////////////
-document.addEventListener("DOMContentLoaded", () => {
-    const popup = document.getElementById("promo-popup");
-    const closeBtn = popup.querySelector(".close-btn");
-    const contactBtn = popup.querySelector(".contact-btn");
+function initPromoPopupOnce() {
+  const popup = document.getElementById("promo-popup");
+  if (!popup) return;
 
-    // Mostrar popup cuando el usuario llega a la sección de videos
-    const videosSection = document.getElementById("work-section");
+  // fresh key so old tests don't block it
+  const STORAGE_KEY = "promoPopupShown_v3";
+  if (sessionStorage.getItem(STORAGE_KEY) === "1") return;
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                popup.classList.remove("hidden");
-                setTimeout(() => popup.classList.add("show"), 100);
-                observer.unobserve(videosSection); // se muestra solo una vez
-            }
-        });
-    }, { threshold: 0.5 });
+  const trigger = document.getElementById("promo-trigger");
+  if (!trigger) return;
 
-    if (videosSection) {
-        observer.observe(videosSection);
+  const show = () => {
+    popup.classList.remove("hidden");
+    popup.classList.add("show");
+    sessionStorage.setItem(STORAGE_KEY, "1");
+  };
+
+  // Observe the sentinel: it will intersect when you scroll past half the section
+  const io = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      show();
+      io.disconnect();
     }
+  }, { threshold: 0 });
 
-    // Cerrar con botón rojo
-    closeBtn.addEventListener("click", () => {
-        popup.classList.remove("show");
-        setTimeout(() => popup.classList.add("hidden"), 400);
-    });
+  io.observe(trigger);
 
-    // Contactar → cierra popup y redirige
-    contactBtn.addEventListener("click", () => {
-        popup.classList.remove("show");
-        setTimeout(() => {
-            popup.classList.add("hidden");
-            window.location.href = contactBtn.href;
-        }, 400);
-        return false; // evita abrir antes de cerrar
-    });
-});
+  // Close/CTA behavior
+  popup.querySelector(".close-btn")?.addEventListener("click", () => {
+    popup.classList.remove("show");
+    setTimeout(() => popup.classList.add("hidden"), 400);
+  });
+
+  popup.querySelector(".contact-btn")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    popup.classList.remove("show");
+    setTimeout(() => {
+      popup.classList.add("hidden");
+      window.location.href = e.currentTarget.href;
+    }, 400);
+  });
+}
 
 //////////////////////////////////// TikTok Shop Section Animation ////////////////////////////////////
 document.addEventListener("DOMContentLoaded", () => {
-    const gifSection = document.querySelector("#tiktok-section img");
+  const gifSection = document.querySelector(".tiktok-section img");
+  if (!gifSection) return;
 
-    const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                // cambia el src al GIF real
-                gifSection.src = gifSection.dataset.gif;
-                observer.unobserve(entry.target); // deja de observar (solo una vez)
-            }
-        });
-    }, { threshold: 0.5 }); // 50% visible
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        gifSection.src = gifSection.dataset.gif;
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
 
-    observer.observe(gifSection);
+  observer.observe(gifSection);
 });
 
 //////////////////////////////////// Initialize Animations ////////////////////////////////////
@@ -360,6 +364,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 loader.remove();                          // Remove loader
                 content.forEach(el => el.style.display = ''); // Show all hidden content
                 startIntroTypewriterEffect();             // Hero typewriter (immediate after loader)
+                initPromoPopupOnce();
             }, 800); // Allow fade out
         }
     }, 25); // 100 * 25ms = 2.5s
