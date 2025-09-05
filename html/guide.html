@@ -1,15 +1,50 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Guía UGC – Empieza tu carrera</title>
-  <meta name="description" content="Guía completa UGC (PDF). Aprende a trabajar con marcas, fijar precios, negociar con seguridad y construir un branding que convierta. Adelanto interactivo + testimonios." />
-
-  <!-- ===================== STYLES ===================== -->
+  <title>Guía UGC — limpio y claro</title>
+  <meta name="description" content="Guía UGC: precios, negociación, contratos y plantillas. Diseño limpio con un único foco: comprar." />
   <style>
-    /***************************** BACKGROUND && FONTS *****************************/
-@font-face {
+    /* ---- TOKENS (1 accent, mucho aire) ---- */
+    :root{
+      --bg1:#fbe9f1;
+      --bg2:#f1d1b1;
+      --bg3:#e6e2db;
+      --bg4:#eeebe6;
+      --ink:#252425;
+      --muted:#505050;
+      --accent:#1484cf;
+      --cta:#8c7c6d;
+      --cta-hover:#7aad54;
+      --card:#ffffff;
+      --ring: 0 0 0 3px #1484cf33;
+      --shadow-lg: 0 18px 50px #0000001a;
+      --shadow-md: 0 10px 28px #00000014;
+      --shadow-sm: 0 6px 16px #0000000d;
+    }
+
+    h1,h2,h3,h4,h5,h6{ font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+
+    /* ---- BASE ---- */
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{
+  color: var(--ink);
+      font-family: 'Futura', 'Helvetica Neue', Arial, sans-serif;
+      background:linear-gradient(180deg, var(--bg1), var(--bg2), var(--bg4));}
+    img{max-width:100%; display:block}
+    h1,h2,h3{line-height:1.2; margin:0 0 .4rem; font-weight:800}
+    h1{font-size:clamp(2rem, 3.5vw, 3rem)}
+    h2{font-size:clamp(1.4rem, 2.2vw, 1.8rem)}
+    p{margin:.25rem 0 .8rem 0; color:var(--muted)}
+    .container{width:min(960px, 92vw); margin-inline:auto}
+    .stack{display:grid; gap:16px}
+    .sp-1{padding-block:10px}
+    .sp-2{padding-block:28px}
+    .sp-3{padding-block:48px}
+
+    @font-face {
     font-family: 'Montserrat';
     src: url('../fonts/montserrat/Montserrat-Bold.otf') format('opentype');
     font-weight: 400;
@@ -36,767 +71,134 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Montserrat', sans-serif;
 }
 
-    /* ----------------------------------------------
-       CSS RESET (scoped, minimal)
-       ---------------------------------------------- */
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body { margin: 0; line-height: 1.5; -webkit-font-smoothing: antialiased; }
-    img, picture, video, canvas, svg { display: block; max-width: 100%; }
-    input, button, textarea, select { font: inherit; }
+    /* ---- HEADER / HERO ---- */
+    header.hero{padding-block:64px}
+    .hero-wrap{display:grid; grid-template-columns: 1.1fr .9fr; gap:36px; align-items:center}
+    @media (max-width:860px){.hero-wrap{grid-template-columns:1fr; gap:18px}}
 
-    /* ----------------------------------------------
-       THEME TOKENS
-       ---------------------------------------------- */
-    :root{
-      --bg1:#fbe9f1;
-      --bg2:#f1d1b1;
-      --bg3:#e6e2db;
-      --bg4:#eeebe6;
-      --ink:#252425;
-      --muted:#505050;
-      --accent:#1484cf;
-      --cta:#8c7c6d;
-      --cta-hover:#7aad54;
-      --card:#ffffff;
-      --ring: 0 0 0 3px #1484cf33;
-      --shadow-lg: 0 18px 50px #0000001a;
-      --shadow-md: 0 10px 28px #00000014;
-      --shadow-sm: 0 6px 16px #0000000d;
-    }
+    .cover{aspect-ratio:4/3; border-radius:var(--radius); overflow:hidden; background:var(--surface); box-shadow:var(--shadow)}
+    .lead{font-size:clamp(1.05rem,1.6vw,1.15rem)}
 
-    body{
-      color: var(--ink);
-      font-family: 'Futura', 'Helvetica Neue', Arial, sans-serif;
-      background:linear-gradient(180deg, var(--bg1), var(--bg2), var(--bg4));
-    }
+    /* ---- BUY CARD (único elemento fuerte) ---- */
+    .buy{position:sticky; top:12px; align-self:start; background:var(--surface); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px; border:1px solid #eee}
+    .price{font-weight:900; font-size:1.6rem}
+    .cta{display:flex; align-items:center; justify-content:center; gap:.6rem; border:none; background:var(--accent); color:#fff; font-weight:800; padding:14px 18px; border-radius:999px; cursor:pointer}
+    .cta:focus{outline:none; box-shadow:var(--ring)}
+    .row{display:flex; justify-content:space-between; align-items:center; gap:12px}
 
-    h1,h2,h3,h4,h5,h6{ font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    /* ---- SECTIONS ---- */
+    section{border-top:1px solid #eee}
+    .bullets{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px}
+    .bullets li{background:transparent; padding:10px 0; border-radius:12px; list-style:none}
+    .bullets li::before{content:'✔'; margin-right:.6rem; color:var(--accent); font-weight:900}
+    @media (max-width:720px){.bullets{grid-template-columns:1fr}}
 
-    a{ color: inherit; text-decoration: none; }
-    .btn{ display:inline-flex; align-items:center; justify-content:center; gap:.5rem; border-radius:999px; padding:14px 22px; font-weight:800; letter-spacing:.2px; cursor:pointer; border:0; }
-    .btn-primary{ background:var(--cta); color:#fff; box-shadow:0 8px 24px #8fc56342; transition:transform .15s ease, background .2s ease; }
-    .btn-primary:hover{ background:var(--cta-hover); transform:translateY(-2px); }
+    .kicker{font-weight:800; color:#111; letter-spacing:.2px; text-transform:uppercase; font-size:.78rem; opacity:.7}
 
-    .container{ width:min(1100px, 92vw); margin-inline:auto; }
+    /* ---- MINI GRID BENEFITS ---- */
+    .minicards{display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
+    .card{background:var(--surface); border:1px solid #eee; border-radius:16px; padding:16px}
+    @media (max-width:900px){.minicards{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:520px){.minicards{grid-template-columns:1fr}}
 
-    /* ----------------------------------------------
-       HERO
-       ---------------------------------------------- */
-    .hero{ position:relative; min-height: 92svh; display:grid; place-items:center; text-align:center; padding:72px 16px; overflow:hidden; }
-    .hero .inner{ width:min(980px, 96vw); margin-inline:auto; }
-    .hero h1{ font-size: clamp(2.2rem, 5vw, 3.6rem); margin:0 0 12px; }
-    .hero p.lead{ font-size: clamp(1.05rem, 2.4vw, 1.35rem); opacity:.9; min-height:2.2em; margin:0 auto; }
-    .hero .badges{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:18px 0 28px; }
-    .hero .badges span{ background:#ffffffb3; border:1px solid #00000010; padding:8px 12px; border-radius:999px; font-weight:700; }
+    /* ---- TESTIMONIOS ---- */
+    .testis{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+    .testi{background:var(--surface); border:1px solid #eee; border-radius:16px; padding:16px}
+    .stars{color:#f1b90b}
+    @media (max-width:900px){.testis{grid-template-columns:1fr 1fr}}
+    @media (max-width:520px){.testis{grid-template-columns:1fr}}
 
-    /* Ambient blobs */
-    .blob{ position:absolute; filter:blur(44px); opacity:.55; pointer-events:none; border-radius:50%; transform:translate(-50%,-50%); }
-    .blob.one{ width:380px; height:380px; left:10%; top:15%; background:radial-gradient(closest-side, var(--bg1), transparent); }
-    .blob.two{ width:460px; height:460px; right:-120px; top:0; background:radial-gradient(closest-side, var(--bg2), transparent); }
+    /* ---- FAQ ---- */
+    details{background:var(--surface); border:1px solid #eee; border-radius:16px; padding:14px 16px}
+    details+details{margin-top:10px}
+    summary{cursor:pointer; font-weight:800}
 
-    /* Geo-greeting strip */
-    .geo-strip{ margin:10px auto 20px; display:inline-block; padding:8px 14px; border-radius:999px; background:#9aa590; border:1px solid #00000012; box-shadow: var(--shadow-sm); font-weight:700; }
-
-    /* ----------------------------------------------
-       STICKY MINI-CTA
-       ---------------------------------------------- */
-    .sticky-cta{ position:sticky; bottom:12px; display:flex; align-items:center; justify-content:center; z-index:30; }
-    .sticky-cta .bar{ display:flex; gap:10px; align-items:center; background:#111; color:#fff; padding:10px 12px; border-radius:999px; box-shadow: var(--shadow-md); }
-    .sticky-cta .bar .price{ font-weight:900; }
-
-    /* ----------------------------------------------
-       CONTENT SECTIONS
-       ---------------------------------------------- */
-    section{ padding: 64px 0; }
-    .section-title{ text-align:center; margin:0 0 22px; }
-
-    /* TOC */
-    .toc .grid{ display:grid; grid-template-columns: repeat(3, minmax(220px,1fr)); gap:18px; }
-    .toc ul{ list-style:none; padding:18px; margin:0; background: linear-gradient(135deg, #fff, #fafafa); border:1px solid #00000010; border-radius:16px; box-shadow: var(--shadow-sm); }
-    .toc li{ margin:10px 0; line-height:1.5; }
-
-    /* Who it's for */
-    .pill-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:12px; }
-    .pill{ background:#fff; border:1px solid #00000010; padding:14px 16px; border-radius:14px; box-shadow: var(--shadow-sm); font-weight:700; }
-
-    /* Book preview */
-    .preview{ background-color: #d7cbbd;
-background-image: url("https://www.transparenttextures.com/patterns/arches.png");}
-    .book{ position:relative; perspective:1600px; width:min(980px, 94vw); height: 40vH; margin:0 auto 16px; }
-
-    /* Book base */
-    .book-shell{ position:relative; background:#5c4e3363; border-radius:16px; height: 45vH; box-shadow: var(--shadow-lg); padding:22px 16px; border:1px solid #00000012; }
-
-    /* Pages */
-    .page{ position:absolute; inset:16px; background:#fff; border-radius:12px; border:1px solid #00000010; padding:24px; min-height:340px; transform-origin:left center; transform:rotateY(0deg); transition: transform .55s ease, box-shadow .55s ease; box-shadow: 0 12px 24px #00000012; backface-visibility:hidden; display:flex; flex-direction:column; gap:12px; }
-    .page h3{ margin:0 0 8px; }
-    .page.current{ z-index:4; }
-    .page.next{ z-index:3; }
-    .page.prev{ z-index:2; transform: rotateY(-180deg); }
-
-    /* Page edge shading for realism */
-    .page::before{ content:""; position:absolute; inset:0; pointer-events:none; background: linear-gradient(90deg, #00000010, transparent 18%, transparent 82%, #0000000f); opacity:.5; border-radius: inherit; }
-
-    /* Navigation */
-    .nav {
-  position:absolute;
-  top:50%;
-  transform: translateY(-50%);
-  width:35px;
-  height:35px;
-  border:none;
-  border-radius:50%;
-  cursor:pointer;
-  background:#fff;
-  box-shadow: var(--shadow-md);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:0;
-  z-index:10; /* make sure above pages */
-  transition: transform .15s ease;
-}
-
-.nav img {
-  width:100%;
-  height:100%;
-  object-fit:contain;
-}
-
-.nav:hover {
-  transform: translateY(-50%) scale(1.08);
-}
-
-.nav.prev { left:8px; }
-.nav.next { right:8px; }
-
-
-    .page {
-  position:absolute;
-  inset:16px;
-  background:#fff;
-  border-radius:12px;
-  border:1px solid #00000010;
-  padding:24px;
-  min-height:340px;
-  transform-origin:left center;
-  transform:rotateY(0deg);
-  transition: transform .55s ease, box-shadow .55s ease, opacity .3s ease;
-  box-shadow: 0 12px 24px #00000012;
-  backface-visibility:hidden;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  
-  opacity:0;
-  pointer-events:none;
-}
-
-.page.current {
-  z-index:4;
-  opacity:1;
-  pointer-events:auto;
-}
-
-
-    /* Buy inline */
-    .buy-inline{ text-align:center; margin-top:22px; }
-    .price{ color:var(--accent); font-weight:900; font-size:1.35rem; }
-
-    /* Benefits */
-    .benefits .grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:18px; }
-    .card{ background:#fff; border:1px solid #00000010; border-radius:16px; overflow:hidden; box-shadow: var(--shadow-md); }
-    .card .pad{ padding:16px; }
-
-    /* Testimonials */
-    .testi-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:18px; }
-    .stars{ color:#f1b90b; font-size:1.1rem; margin-bottom:6px; }
-    /* Avatares de testimonios */
-.testi-grid figure img {
-  width: 80px;              /* tamaño pequeño */
-  height: 80px;
-  border-radius: 50%;       /* círculo */
-  object-fit: cover;        /* recortar bien */
-  display: block;
-  margin: 16px auto 8px;    /* centrado arriba del texto */
-  border: 3px solid #eee;   /* borde suave */
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-}
-
-
-    /* FAQ */
-    details{ background:#fff; border:1px solid #00000010; border-radius:14px; padding:14px 16px; box-shadow: var(--shadow-sm); }
-    details + details{ margin-top:10px; }
-    summary{ cursor:pointer; font-weight:800; }
-
-    /* CTA final */
-    .cta-final{ text-align:center; background: linear-gradient(180deg, var(--bg2), var(--bg3)); }
-
-    /* Typewriter targets */
-    .type-target{ opacity:0; }
-    .type-target.visible{ opacity:1; transition:opacity .2s ease; }
-
-    /* ---------- RESEÑAS FORM ---------- */
-    #reviewForm {
-    background: #fff;
-    border-radius: 16px;
-    padding: 28px;
-    max-width: 600px;
-    margin: 40px auto;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
-    }
-
-    #reviewForm:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 28px rgba(0,0,0,0.12);
-    }
-
-    #reviewForm h3 {
-    margin-bottom: 20px;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.6rem;
-    text-align: center;
-    color: #252425;
-    }
-
-    /* Campos en grid */
-    .pill-grid {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    }
-
-    #reviewForm input,
-    #reviewForm select,
-    #reviewForm textarea {
-    flex: 1;
-    padding: 12px 16px;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    font-size: 1rem;
-    font-family: inherit;
-    transition: border 0.3s ease, box-shadow 0.3s ease;
-    background: #fdfdfd;
-    }
-
-    #reviewForm input:focus,
-    #reviewForm select:focus,
-    #reviewForm textarea:focus {
-    outline: none;
-    border-color: #8fc563;
-    box-shadow: 0 0 0 3px rgba(143,197,99,0.2);
-    }
-
-    /* Placeholder estilizado */
-    #reviewForm input::placeholder,
-    #reviewForm textarea::placeholder {
-    color: #888;
-    font-size: 0.95rem;
-    }
-
-    /* Textarea más estilizado */
-    #reviewForm textarea {
-    resize: vertical;
-    line-height: 1.5;
-    width: 100%;
-    }
-
-    /* Botón */
-    #reviewForm .btn {
-    display: block;
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 30px;
-    font-weight: bold;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: transform 0.2s ease, background 0.3s ease;
-    }
-
-    #reviewForm .btn-primary {
-    background: #8c7c6d;
-    color: white;
-    }
-
-    #reviewForm .btn-primary:hover {
-    background: #7aad54;
-    transform: scale(1.03);
-    }
-
-    /* Accessibility: prefers-reduced-motion */
-    @media (prefers-reduced-motion: reduce){
-      .page{ transition:none; }
-      .nav{ transition:none; }
-      .type-target{ opacity:1 !important; }
-      .type-caret{ display:none !important; }
-    }
-
-    /* Responsive tweaks */
-    @media (max-width:1024px){
-      .toc .grid{ grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width:640px){
-      .toc .grid{ grid-template-columns: 1fr; }
-      .book{ width: 100%; }
-      .page{ min-height: 360px; }
-    }
+    /* ---- FOOTER ---- */
+    footer{padding-block:48px; text-align:center; color:var(--muted)}
   </style>
 </head>
-
 <body>
-  <!-- ===================== HERO ===================== -->
-  <header class="hero" id="top">
-    <div class="inner">
-<div class="geo-strip" id="geoStrip">
-  👋 Hola, parece que nos visitas desde <strong>tu ciudad</strong>.  
-  En un lugar con tantas oportunidades, dominar el UGC puede ser la clave para destacar y convencer a las marcas. 🚀
-</div>
-      <h1>Guía Completa de UGC (PDF)</h1>
-      <p class="lead type-target" >
-  Aprende a trabajar con marcas, fijar precios, <br>
-  negociar con seguridad y<br>construir un branding que convierta. <br>
-  100% texto. <br>Cero relleno.
-</p>
-
-      <div class="badges">
-        <span>CEO UGC Studio</span>
-        <span>+120 briefs analizados</span>
-        <span>Plantillas listas</span>
+  <header class="hero container">
+    <div class="hero-wrap">
+      <div class="stack">
+        <span class="kicker">Guía en PDF</span>
+        <h1>UGC Pro — claro, corto y cobrable</h1>
+        <p class="lead">Aprende a fijar precios, negociar como pro y proteger tu trabajo con contratos claros. Todo en un PDF directo al grano (sin relleno).</p>
+        <ul class="bullets" aria-label="Lo esencial que incluye">
+          <li>Tarifas, licencias y paquetes explicados fácil</li>
+          <li>Guiones de negociación y respuestas a objeciones</li>
+          <li>Modelo de contrato editable</li>
+          <li>Plantillas de propuestas, emails y checklist</li>
+        </ul>
       </div>
-      <a class="btn btn-primary" href="#preview">Ver adelanto</a>
+
+      <aside class="buy" aria-label="Comprar la guía">
+        <img class="cover" src="../images/guide.png" alt="Vista previa de la guía UGC" />
+        <div class="row" style="margin-top:14px">
+          <div>
+            <div class="price">5,99 €</div>
+            <small class="muted">PDF + actualizaciones menores</small>
+          </div>
+          <button class="cta" onclick="location.href='payment.html'">Comprar ahora</button>
+        </div>
+      </aside>
     </div>
-    <div class="blob one"></div>
-    <div class="blob two"></div>
   </header>
 
-  <!-- Sticky mini-CTA -->
-  <div class="sticky-cta" aria-hidden="false">
-    <div class="bar">
-      <span>PDF Completo</span>
-      <span class="price">7,90 €</span>
-      <a class="btn btn-primary" href="#buy">Quiero mi guía</a>
-    </div>
-  </div>
-
-  <!-- ===================== WHO IT'S FOR ===================== -->
-  <section class="container" aria-labelledby="paraQuien">
-    <h2 id="paraQuien" class="section-title">¿Para quién es?</h2>
-    <div class="pill-grid">
-      <div class="pill">Creadores que quieren cobrar mejor</div>
-      <div class="pill">Freelancers que negocian con marcas</div>
-      <div class="pill">Agencias que ofrecen UGC Ads</div>
-      <div class="pill">Principiantes con prisa por resultados</div>
+  <section class="container sp-3" aria-labelledby="inside">
+    <h2 id="inside">Qué vas a conseguir</h2>
+    <div class="minicards" style="margin-top:12px">
+      <div class="card"><strong>Precios sin miedo</strong><p>Cómo calcular tarifas, licencias por uso (duración/territorios) y buyouts.</p></div>
+      <div class="card"><strong>Negociación real</strong><p>Plantillas de mensajes y cierres. Objeciones comunes resueltas.</p></div>
+      <div class="card"><strong>Legal sencillo</strong><p>Contrato UGC editable y explicado paso a paso.</p></div>
+      <div class="card"><strong>Proceso claro</strong><p>Checklist de producción, entrega y límites de revisiones.</p></div>
     </div>
   </section>
 
-  <!-- ===================== TOC ===================== -->
-  <section class="toc" aria-labelledby="tocTitle">
-    <div class="container">
-      <h2 id="tocTitle" class="section-title">Lo que vas a encontrar</h2>
-      <div class="grid">
-        <ul>
-          <li>1. ¿Qué es UGC hoy? Mercado, tendencias y errores comunes</li>
-          <li>2. Mindset profesional: de “creador” a “proveedor”</li>
-          <li>3. Setup rápido: equipo mínimo, apps y flujo de trabajo</li>
-          <li>4. Portafolio que vende: qué incluir, cómo presentarlo</li>
-          <li>5. Prospecting: dónde y cómo encontrar marcas</li>
-          <li>6. Cold outreach: emails y DMs que obtienen respuesta</li>
-          <li>7. Briefs y discovery: preguntas clave para alinear objetivos</li>
-          <li>8. Propuestas: estructura, diferenciadores y garantías</li>
-        </ul>
-        <ul>
-          <li>9. Precios y paquetes: tarifas base, addons, licencias</li>
-          <li>10. Negociación: objeciones, anclajes y cierres</li>
-          <li>11. Legal esencial: contratos, cesiones y derechos</li>
-          <li>12. Branding personal: posicionamiento y mensajes</li>
-          <li>13. Guión y storyboard: scripts que convierten</li>
-          <li>14. Producción ágil: checklists, calidad y tiempos</li>
-          <li>15. Entrega y revisiones: límites y control de cambios</li>
-          <li>16. Retención: upsells, cross-sells y referidos</li>
-        </ul>
-        <ul>
-          <li>17. Métricas que importan: CTR, CAC, ROAS, UGC KPIs</li>
-          <li>18. Contenido multi-plataforma: TikTok, Reels, UGC ads</li>
-          <li>19. Sistemas: Notion, CRM, automatizaciones</li>
-          <li>20. Casos reales: de primer cliente a 4 cifras/mes</li>
-          <li>21. Plantillas: emails, propuestas, contratos, presets</li>
-          <li>22. Checklist final: antes de entregar y cobrar</li>
-          <li>23. FAQ: dudas frecuentes y buenas prácticas</li>
-          <li>24. Roadmap 30 días para tu primer pago</li>
-        </ul>
+  <section class="container sp-3" aria-labelledby="temario">
+    <h2 id="temario">Temario (resumen)</h2>
+    <div class="stack">
+      <ul class="bullets">
+        <li>Mindset y posicionamiento profesional</li>
+        <li>Portafolio que vende y outreach</li>
+        <li>Briefs, propuestas y cierre</li>
+        <li>Producción, entrega y retención</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="container sp-3" aria-labelledby="testimonios">
+    <h2 id="testimonios">Testimonios</h2>
+    <div class="testis" style="margin-top:12px">
+      <figure class="testi"><div class="stars">★★★★★</div><figcaption>“Cerré dos marcas la primera semana. La parte de licencias me dio seguridad.” — Ana</figcaption></figure>
+      <figure class="testi"><div class="stars">★★★★☆</div><figcaption>“Muy claro y accionable. Subí mis precios sin miedo.” — Marcos</figcaption></figure>
+      <figure class="testi"><div class="stars">★★★★★</div><figcaption>“El contrato y los guiones valen oro.” — Lucía</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="container sp-3" aria-labelledby="faq">
+    <h2 id="faq">Preguntas frecuentes</h2>
+    <details><summary>¿Es para principiantes?</summary><p>Sí. Empiezas por fundamentos y plantillas. Si ya vendes, te ayudará a subir ticket.</p></details>
+    <details><summary>¿Qué recibo exactamente?</summary><p>PDF de la guía + contrato editable + plantillas. Acceso a revisiones menores.</p></details>
+    <details><summary>¿Garantía?</summary><p>7 días de garantía: si no te aporta claridad accionable, te devolvemos el dinero.</p></details>
+  </section>
+
+  <section class="container sp-3" aria-labelledby="cta-final">
+    <div class="buy" style="position:static; max-width:560px; margin-inline:auto">
+      <h2 id="cta-final" style="margin-bottom:6px">Empieza hoy</h2>
+      <p>Convierte tu talento en un negocio serio.</p>
+      <div class="row">
+        <div>
+          <div class="price">19,99 €</div>
+          <small class="muted">Pago único — PDF</small>
+        </div>
+        <button class="cta" onclick="location.href='payment.html'">Comprar ahora</button>
       </div>
     </div>
   </section>
 
-  <!-- ===================== PREVIEW (REALISTIC BOOK FLIP) ===================== -->
-  <section id="preview" class="preview" aria-labelledby="previewTitle">
-    <div class="container">
-      <h2 id="previewTitle" class="section-title">Lee un adelanto (pase de página)</h2>
-      <div class="book">
-        <div class="book-shell">
-          <!-- Page 1 -->
-          <article class="page current" data-index="0">
-            <h3>Introducción</h3>
-            <p class="type-target" data-text="Esta guía condensa años trabajando con marcas: qué funciona, qué evitar y cómo cobrar sin miedo. Es directa, práctica y accionable."></p>
-            <p class="type-target" data-text="No necesitas equipo caro: necesitas criterio, proceso y comunicación profesional. Aquí te lo doy, paso a paso."></p>
-          </article>
-          <!-- Page 2 -->
-          <article class="page" data-index="1">
-            <h3>9. Precios y paquetes</h3>
-            <p class="type-target" data-text="Define una tarifa base por pieza (UGC orgánico vs. UGC Ads), añade licencias por uso (duración, territorios, plataformas) y considera buyouts con precio premium."></p>
-            <ul>
-              <li><span class="type-target" data-text="Paquete Starter: 2 piezas + 1 variación."></span></li>
-              <li><span class="type-target" data-text="Paquete Growth: 4 piezas + 4 hooks + 1 UGC Ad."></span></li>
-              <li><span class="type-target" data-text="Paquete Performance: 6 piezas + 6 hooks + 2 UGC Ads + report."></span></li>
-            </ul>
-          </article>
-          <!-- Page 3 -->
-          <article class="page" data-index="2">
-            <h3>11. Legal esencial</h3>
-            <p class="type-target" data-text="Usa contrato. Define propiedad intelectual, cesión de derechos, exclusividades, tiempos de uso y territorios. Evita cesiones universales perpetuas si no se pagan."></p>
-            <p class="type-target" data-text="Incluye: pagos por adelantado, política de cancelación, límites de revisiones y confidencialidad."></p>
-          </article>
-          <!-- Page 4 -->
-          <article class="page" data-index="3">
-            <h3>14. Producción ágil</h3>
-            <p class="type-target" data-text="Checklist antes de grabar: hook, CTA, 3 beneficios, prueba social, objeción principal y cierre. Iluminación frontal y audio limpio."></p>
-            <p class="type-target" data-text="Entrega con nombres claros, miniaturas y un documento con ideas de iteración para la marca."></p>
-          </article>
-
-          <button class="nav prev" aria-label="Página anterior" type="button">
-  <img src="../icons/left.png" alt="Anterior" />
-</button>
-<button class="nav next" aria-label="Página siguiente" type="button">
-  <img src="../icons/right.png" alt="Siguiente" />
-</button>
-
-        </div>
-      </div>
-  </section>
-
-  <!-- ===================== BENEFITS ===================== -->
-  <section class="benefits container" aria-labelledby="beneficios">
-    <h2 id="beneficios" class="section-title">Beneficios rápidos</h2>
-    <div class="grid">
-      <div class="card"><div class="pad">
-        <h4>Directo al grano</h4>
-        <p class="type-target" data-text="Cero relleno. Plantillas y ejemplos accionables desde la primera página."></p>
-      </div></div>
-      <div class="card"><div class="pad">
-        <h4>Habla legal sin miedo</h4>
-        <p class="type-target" data-text="Contratos y cesiones explicados fácil, con cláusulas que te protegen."></p>
-      </div></div>
-      <div class="card"><div class="pad">
-        <h4>Negocia con confianza</h4>
-        <p class="type-target" data-text="Scripts de objeciones, anclajes y cierres que funcionan."></p>
-      </div></div>
-      <div class="card"><div class="pad">
-        <h4>Portafolio que vende</h4>
-        <p class="type-target" data-text="Estructuras y ejemplos que elevan tu autoridad y conversión."></p>
-      </div></div>
-    </div>
-  </section>
-
-  <!-- ===================== TESTIMONIALS ===================== -->
-  <section class="preview" aria-labelledby="testimonios">
-    <div class="container">
-      <h2 id="testimonios" class="section-title">Testimonios</h2>
-      <div class="testi-grid" id="testiGrid">
-        <figure class="card">
-          <img src="../images/profile.png" alt="Perfil de Ana" />
-          <figcaption class="pad">
-            <div class="stars" aria-label="5 de 5">★★★★★</div>
-            <p>“Conseguí mi primer contrato en 3 semanas. La parte de precios/licencias me salvó.”</p>
-            <span>— Ana G.</span>
-          </figcaption>
-        </figure>
-        <figure class="card">
-          <img src="../images/profile.png" alt="Perfil de Marcos" />
-          <figcaption class="pad">
-            <div class="stars" aria-label="4 de 5">★★★★☆</div>
-            <p>“Plantillas claras. Cerré 2 marcas de cosmética con su guión de outreach.”</p>
-            <span>— Marcos V.</span>
-          </figcaption>
-        </figure>
-        <figure class="card">
-          <img src="../images/profile.png" alt="Perfil de Lucía" />
-          <figcaption class="pad">
-            <div class="stars" aria-label="5 de 5">★★★★★</div>
-            <p>“Por este precio, es un regalo. La sección legal vale oro.”</p>
-            <span>— Lucía P.</span>
-          </figcaption>
-        </figure>
-        <figure class="card">
-          <img src="../images/profile.png" alt="Perfil de David" />
-          <figcaption class="pad">
-            <div class="stars" aria-label="5 de 5">★★★★★</div>
-            <p>“La estructura de paquetes subió mi ticket medio un 30%.”</p>
-            <span>— David R.</span>
-          </figcaption>
-        </figure>
-      </div>
-
-      <!-- New review form -->
-      <form class="card pad" id="reviewForm">
-        <h3>Deja tu reseña</h3>
-        <div class="pill-grid" style="margin-bottom:12px">
-          <input type="text" id="name" placeholder="Tu nombre" required />
-          <select id="rating" required>
-            <option value="" disabled selected>Valoración</option>
-            <option>★★★★★</option>
-            <option>★★★★☆</option>
-            <option>★★★☆☆</option>
-            <option>★★☆☆☆</option>
-            <option>★☆☆☆☆</option>
-          </select>
-        </div>
-        <textarea id="message" rows="4" placeholder="¿Qué te ha aportado la guía?" required></textarea>
-        <div class="pill-grid" style="margin:12px 0">
-          <input type="url" id="avatar" placeholder="URL de foto (opcional)" />
-        </div>
-        <button class="btn btn-primary" type="submit">Publicar reseña</button>
-      </form>
-    </div>
-  </section>
-
-  <!-- ===================== FAQ + GARANTÍA ===================== -->
-  <section class="container" aria-labelledby="faqTitle">
-    <h2 id="faqTitle" class="section-title">Preguntas frecuentes</h2>
-    <details>
-      <summary>¿Es para principiantes?</summary>
-      <p>Sí. Empiezas por mentalidad, sistemas y guiones listos. Si ya vendes UGC, las secciones de precios/licencias y negociación te suben el ticket.</p>
-    </details>
-    <details>
-      <summary>¿Actualizaciones incluidas?</summary>
-      <p>Obtienes acceso a pequeñas revisiones y correcciones. Las grandes ediciones se ofrecen con descuento para alumnos.</p>
-    </details>
-    <details>
-      <summary>¿Garantía?</summary>
-      <p>Garantía de satisfacción de 7 días. Si no te aporta claridad accionable, te devolvemos el dinero.</p>
-    </details>
-  </section>
-
-  <!-- ===================== CTA FINAL ===================== -->
-  <section class="cta-final" aria-labelledby="ctaFinal">
-    <div class="container">
-      <h2 id="ctaFinal" class="section-title">Empieza hoy. Tu primer cliente te está buscando.</h2>
-      <a class="btn btn-primary" href="payment.html">Quiero mi guía</a>
-    </div>
-  </section>
-
-  <!-- ===================== SCRIPTS ===================== -->
-  <script>
-    // =====================================================
-    // FAST LEFT-TO-RIGHT TYPEWRITER (eye-friendly)
-    // - Always types left-to-right
-    // - Slightly faster to avoid bothering users
-    // - Respect reduced motion settings
-    // =====================================================
-    function typeSentence(target, sentence, speed, cb){
-      // If user prefers reduced motion, skip typing effect
-      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if(reduce){
-        target.textContent = sentence;
-        target.classList.add('visible');
-        cb && cb();
-        return;
-      }
-
-      let i = 0;
-      target.textContent = '';
-      target.dir = 'ltr'; // enforce left-to-right typing direction
-      target.style.opacity = 1;
-
-      (function type(){
-        if(i < sentence.length){
-          target.textContent += sentence.charAt(i++);
-          setTimeout(type, speed);
-        } else {
-          target.classList.add('visible');
-          if(cb) cb();
-        }
-      })();
-    }
-
-    function startTypewriterIn(container){
-      const items = container.querySelectorAll('.type-target[data-text]');
-      let idx = 0;
-      function next(){
-        if(idx < items.length){
-          const el = items[idx];
-          const text = el.getAttribute('data-text');
-          // Speed: 10–14ms per char is fast but readable
-          typeSentence(el, text, 12, () => { idx++; next(); });
-        }
-      }
-      next();
-    }
-
-    // IntersectionObserver to start typing when section enters viewport
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{
-        if(e.isIntersecting){
-          startTypewriterIn(e.target);
-          io.unobserve(e.target);
-        }
-      });
-    },{threshold:0.15});
-
-    document.addEventListener('DOMContentLoaded', ()=>{
-      document.querySelectorAll('.hero .inner, .book-shell, .benefits, .testi-grid').forEach(el=>io.observe(el));
-      initBook();
-      initReviews();
-      initGeoGreeting();
-    });
-
-    // =====================================================
-    // REALISTIC BOOK FLIP (desktop click + mobile swipe)
-    // - 3D page rotation with shading
-    // - Keyboard arrows, buttons, and swipe gestures
-    // - Faster animation on mobile to feel snappy
-    // =====================================================
-    function initBook(){
-      const shell = document.querySelector('.book-shell');
-      if(!shell) return;
-      const pages = Array.from(shell.querySelectorAll('.page'));
-      const prev = shell.querySelector('.nav.prev');
-      const next = shell.querySelector('.nav.next');
-      let index = 0;
-
-      function render(){
-        pages.forEach((p,i)=>{
-          p.style.zIndex = (pages.length - i).toString();
-          p.classList.remove('prev','current','next');
-          // Reset transform so future flips start cleanly
-          if(i !== index-1) p.style.transform = '';
-        });
-        const curr = pages[index];
-        const nxt  = pages[index+1];
-        const prv  = pages[index-1];
-        if(curr) curr.classList.add('current');
-        if(nxt)  nxt.classList.add('next');
-        if(prv)  prv.classList.add('prev');
-      }
-
-      function flipNext(){
-        if(index < pages.length - 1){
-          const curr = pages[index];
-          curr.style.transform = 'rotateY(-180deg)';
-          index++;
-          setTimeout(render, 320); // mobile-friendly quick snap
-        }
-      }
-      function flipPrev(){
-        if(index > 0){
-          const prevPage = pages[index-1];
-          prevPage.style.transform = 'rotateY(0deg)';
-          index--;
-          setTimeout(render, 220);
-        }
-      }
-
-      // Buttons
-      next.addEventListener('click', flipNext);
-      prev.addEventListener('click', flipPrev);
-
-      // Keyboard support
-      document.addEventListener('keydown', (e)=>{
-        if(e.key === 'ArrowRight') flipNext();
-        if(e.key === 'ArrowLeft') flipPrev();
-      });
-
-      // Touch swipe (LTR only)
-      let startX = 0, isTouching = false;
-      shell.addEventListener('touchstart', (e)=>{
-        isTouching = true; startX = e.touches[0].clientX;
-      }, {passive:true});
-      shell.addEventListener('touchmove', (e)=>{
-        // Optional: could add live drag preview; keeping simple for speed
-      }, {passive:true});
-      shell.addEventListener('touchend', (e)=>{
-        if(!isTouching) return; isTouching = false;
-        const endX = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0].clientX : startX;
-        const dx = endX - startX;
-        if(Math.abs(dx) > 40){
-          if(dx < 0) flipNext(); else flipPrev();
-        }
-      });
-
-      render();
-    }
-
-    // =====================================================
-    // REVIEWS: append new cards to grid
-    // =====================================================
-    function initReviews(){
-      const form = document.getElementById('reviewForm');
-      const grid = document.getElementById('testiGrid');
-      if(!form || !grid) return;
-
-      form.addEventListener('submit', (e)=>{
-        e.preventDefault();
-        const name = document.getElementById('name').value.trim() || 'Usuario';
-        const rating = document.getElementById('rating').value || '★★★★★';
-        const message = document.getElementById('message').value.trim();
-        const avatar = document.getElementById('avatar').value.trim() || '../images/profile.png';
-        if(!message) return;
-
-        const fig = document.createElement('figure');
-        fig.className = 'card';
-        fig.innerHTML = `
-          <img src="${avatar}" alt="Perfil de ${name}" />
-          <figcaption class="pad">
-            <div class="stars" aria-label="${rating.length} de 5">${rating}</div>
-            <p>${message}</p>
-            <span>— ${name}</span>
-          </figcaption>
-        `;
-        grid.prepend(fig);
-        form.reset();
-        form.querySelector('select').selectedIndex = 0;
-      });
-    }
-
-    // =====================================================
-    // GEO GREETING by IP (friendly, fails gracefully)
-    // - Tries ipapi.co first
-    // - Falls back to ipinfo.io
-    // - If both fail, keeps a generic message
-    // =====================================================
-    function initGeoGreeting(){
-      const el = document.getElementById('geoStrip');
-      if(!el) return;
-
-      // Helper to write the Spanish friendly message
-      function setMsg(city, country) {
-  const citySafe = city || 'tu ciudad';
-  const countrySafe = country ? `, ${country}` : '';
-  el.innerHTML = `
-    👋 Hola, parece que nos visitas desde 
-    <strong>${citySafe}${countrySafe}</strong>. 
-    En un lugar con tantas oportunidades, dominar el UGC puede ser la clave para destacar y atraer marcas 🚀
-  `;
-}
-
-
-      // Try primary service
-      fetch('https://ipapi.co/json')
-        .then(r=> r.ok ? r.json() : Promise.reject())
-        .then(d=> setMsg(d.city, d.country_name))
-        .catch(()=>{
-          // Fallback service
-          fetch('https://ipinfo.io/json?token=') // ← optionally add your token
-            .then(r=> r.ok ? r.json() : Promise.reject())
-            .then(d=> {
-              const [city, country] = [d.city, d.country];
-              setMsg(city, country);
-            })
-            .catch(()=>{/* keep default text */});
-        });
-    }
-  </script>
+  <footer>
+    <small>© 2025 UGC Studio · Política de privacidad · Términos</small>
+  </footer>
 </body>
 </html>
