@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Guía UGC – Landing</title>
+    <meta name="description" content="Guía UGC en PDF: aprende a tratar con marcas, fijar precios y negociar con seguridad. Vista previa en popup." />
+    
+    <!-- Fonts -->
+    <style>
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('../fonts/montserrat/Montserrat-Bold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Futura';
+            src: url('../fonts/futura-pt/futura-light.ttf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        /* Reset and Base Styles */
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; margin: 0; }
+        body {
+            margin: 0;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            color: var(--ink);
+            font-family: 'Futura', 'Helvetica', 'Arial', sans-serif;
+            background: #000 url('../images/guideBkgnd.jpg') center/cover no-repeat fixed;
+        }
+        img, svg, video { display: block; max-width: 100%; }
+        button { font: inherit; }
+
+        /* Variables */
+        :root {
+            --bg1: #fbe9f1;
+            --bg2: #f1d1b1;
+            --bg3: #e6e2db;
+            --bg4: #eeebe6;
+            --ink: #222;
+            --muted: #444;
+            --brand: #252525;
+            --brand-2: #7aad54;
+            --card: #fff;
+            --ring: 0 0 0 3px #1484cf33;
+            --shadow: 0 12px 30px #0000001a;
+        }
+
+        /* Utility Classes */
+        a { color: inherit; text-decoration: none; }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border-radius: 999px;
+            padding: 12px 18px;
+            font-weight: 800;
+            border: 0;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: var(--brand);
+            color: #fff;
+            box-shadow: 0 8px 20px #00000026;
+            transition: transform 0.15s ease, background 0.2s ease;
+        }
+        .btn-primary:hover {
+            background: var(--brand-2);
+            transform: translateY(-1px);
+        }
+
+        .container { width: min(1040px, 92vw); margin-inline: auto; }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 70svh;
+            display: grid;
+            align-items: center;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: transparent;
+            backdrop-filter: saturate(130%) blur(1px);
+        }
+        .hero .inner {
+            position: relative;
+            z-index: 1;
+            padding: 64px 12px;
+            text-align: center;
+        }
+        .eyebrow {
+            display: inline-block;
+            margin: 0 auto 10px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: #ffffffb3;
+            border: 1px solid #00000014;
+            font-weight: 700;
+        }
+        h1 {
+            font-family: 'Montserrat', system-ui, sans-serif;
+            font-size: clamp(1.9rem, 5vw, 3.2rem);
+            margin: 0 0 6px;
+        }
+        .lead {
+            font-size: clamp(1.02rem, 2.4vw, 1.25rem);
+            color: var(--muted);
+            margin: 0 auto 22px;
+        }
+
+        /* Geo-strip */
+        .geo {
+            display: inline-block;
+            margin: 8px auto 14px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            border-color: #252525;
+            border-width: 2px;
+            background: linear-gradient(180deg, var(--bg1), var(--bg2), var(--bg4));
+            color: #3f5048;
+            font-weight: 700;
+        }
+
+        /* Benefits Section */
+        .benefits { padding: 10px 0 6px; }
+        .benefits .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+        .benefits ul { list-style: none; margin: 0; padding: 0; }
+        .benefits li {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            background: var(--card);
+            border: 1px solid #00000012;
+            border-radius: 14px;
+            padding: 12px 14px;
+            box-shadow: var(--shadow);
+        }
+        .benefits li img {
+            width: 20px;
+            height: 20px;
+            flex: 0 0 20px;
+            margin-top: 2px;
+        }
+        .benefits li:nth-child(odd) img { content: url('../icons/check1.png'); }
+        .benefits li:nth-child(even) img { content: url('../icons/check.png'); }
+
+        /* CTA Inline */
+        .cta-inline { margin: 18px 0 2px; text-align: center; }
+        .price { font-weight: 900; color: #1484cf; }
+
+        /* Sticky Mobile Buy Bar */
+        .buy-bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 50;
+            background: linear-gradient(180deg, #9aa690, #3f5048, #9aa690);
+            color: #fff;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 -8px 24px #00000033;
+        }
+        .buy-bar .price { color: #fff; }
+        @media (min-width: 780px) { .buy-bar { display: none; } }
+
+        /* Popup Modal */
+        .modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            place-items: center;
+            background: #00000080;
+            z-index: 60;
+            padding: 18px;
+        }
+        .modal[open] { display: grid; }
+        .dialog {
+            background: linear-gradient(180deg, var(--bg1), var(--bg2), var(--bg4));
+            border-radius: 18px;
+            max-width: min(980px, 96vw);
+            width: 100%;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: 0 30px 70px #00000055;
+            border: 1px solid #00000022;
+        }
+        .dialog header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            border-bottom: 1px solid #00000014;
+        }
+        .dialog header h3 { margin: 0; font-family: 'Montserrat', sans-serif; }
+        .dialog .content { padding: 0; }
+        .dialog iframe, .dialog embed { display: block; border: 0; width: 100%; height: min(78vh, 100%); }
+        .close {
+            background: #eee;
+            border: 0;
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        /* Showcase Section */
+        .showcase { padding: 12px 0 40px; }
+        .showcase .row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            align-items: start;
+        }
+        .showcase .item {
+            background: linear-gradient(180deg, var(--bg1), var(--bg2), var(--bg4));
+            border: 1px solid #00000012;
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .showcase h3 {
+            font-family: 'Montserrat', system-ui, sans-serif;
+            margin: 0 0 6px;
+            font-size: 1.05rem;
+            text-align: center;
+        }
+        .showcase .text-content {
+            max-width: calc(100%); /* Adjust based on image size */
+        }
+        .showcase .shape {
+            width: 280px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 16px;
+        }
+        .showcase .shape.right { float: right; margin-left: 16px; }
+
+        /* Realistic Book Flip */
+        .book {
+            position: relative;
+            perspective: 1600px;
+            width: min(980px, 94vw);
+            height: 45vh;
+            margin: 0 auto;
+        }
+        .book-shell {
+            position: relative;
+            background: #5c4e3363;
+            border-radius: 16px;
+            height: 100%;
+            box-shadow: 0 18px 50px #0000001a;
+            padding: 22px 16px;
+            border: 1px solid #00000012;
+        }
+        .page {
+            position: absolute;
+            inset: 16px;
+            background: #d7cbbd;
+            border-radius: 12px;
+            border: 1px solid #00000010;
+            padding: 24px;
+            min-height: 340px;
+            transform-origin: left center;
+            transform: rotateY(0deg);
+            transition: transform 0.55s ease, box-shadow 0.55s ease, opacity 0.3s ease;
+            box-shadow: 0 12px 24px #00000012;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .page.current { z-index: 4; opacity: 1; pointer-events: auto; }
+        .page.next { z-index: 3; }
+        .page.prev { z-index: 2; transform: rotateY(-180deg); }
+        .page::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(90deg, #00000010, transparent 18%, transparent 82%, #0000000f);
+            opacity: 0.5;
+            border-radius: inherit;
+        }
+        .nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            background: #fff;
+            box-shadow: 0 8px 18px #0000001a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            z-index: 10;
+        }
+        .nav.prev { left: 8px; }
+        .nav.next { right: 8px; }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .showcase .row { grid-template-columns: 1fr; }
+            .showcase .item { align-items: center; }
+            .showcase .text-content { margin: 0; max-width: 100%; }
+            .showcase .shape {
+                width: 100%;
+                height: auto;
+                border-radius: 20px;
+                margin-bottom: 12px;
+            }
+        }
+    </style>
+</head>
+<body data-preview-pdf="../pdfs/guia-ugc-preview.pdf">
+    <header class="hero">
+        <div class="inner container">
+            <div id="geo" class="geo" aria-live="polite">oye, si me visitas desde <strong>tu ciudad</strong>… esta guía te va a ahorrar horas 😉</div>
+            <span class="eyebrow">PDF práctico · 0% relleno</span>
+            <h1>Guía UGC para tratar con marcas y cobrar mejor</h1>
+            <p class="lead">Todo lo que necesitas para negociar con seguridad, fijar precios y entregar contenido que convierte.</p>
+            <div class="cta-inline">
+                <button class="btn btn-primary" id="openPreview">Ver adelanto</button>
+            </div>
+            <div class="modal" id="modal">
+                <div class="dialog">
+                    <header>
+                        <h3 id="modalTitle">Vista previa</h3>
+                        <button class="close" id="closeModal">✕</button>
+                    </header>
+                    <div class="content">
+                        <div class="book">
+                            <div class="book-shell">
+                                <article class="page current" data-index="0">
+                                    <h3>Introducción</h3>
+                                    <p>Esta guía condensa años trabajando con marcas: qué funciona, qué evitar y cómo cobrar sin miedo. Es directa, práctica y accionable.</p>
+                                    <p>No necesitas equipo caro: necesitas criterio, proceso y comunicación profesional. Aquí te lo doy, paso a paso.</p>
+                                </article>
+                                <article class="page" data-index="1">
+                                    <h3>Precios y paquetes</h3>
+                                    <p>Define tarifa base por pieza, añade licencias por uso (duración, territorios, plataformas) y considera buyouts con precio premium.</p>
+                                    <ul>
+                                        <li>Starter: 2 piezas + 1 variación.</li>
+                                        <li>Growth: 4 piezas + 4 hooks + 1 UGC Ad.</li>
+                                        <li>Performance: 6 piezas + 6 hooks + 2 UGC Ads + reporte.</li>
+                                    </ul>
+                                </article>
+                                <article class="page" data-index="2">
+                                    <h3>Legal esencial</h3>
+                                    <p>Usa contrato. Define propiedad intelectual, cesión de derechos, exclusividades, tiempos de uso y territorios.</p>
+                                    <p>Incluye pagos por adelantado, política de cancelación, límites de revisiones y confidencialidad.</p>
+                                </article>
+                                <article class="page" data-index="3">
+                                    <h3>Producción</h3>
+                                    <p>Checklist: hook, CTA, 3 beneficios, prueba social, objeción principal y cierre. Iluminación frontal y audio limpio.</p>
+                                    <p>Entrega con nombres claros, miniaturas y documento de ideas de iteración.</p>
+                                </article>
+                                <button class="nav prev" aria-label="Página anterior">◀</button>
+                                <button class="nav next" aria-label="Página siguiente">▶</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="showcase container" aria-label="Demostración UGC">
+                <div class="row">
+                    <article class="item">
+                        <img class="shape" src="../images/guide1Circle.png" alt="Mostrando su web en el iMac" />
+                        <div class="text-content">
+                            <h3>Portfolio que vende</h3>
+                            <p>Qué incluir, cómo presentarlo y cómo guiar a la marca a la acción. Estructura simple, ejemplos claros y pequeños detalles que elevan tu autoridad.</p>
+                        </div>
+                    </article>
+                    <article class="item">
+                        <img class="shape right" src="../images/guide2Elipse.png" alt="Grabación de contenido con móviles alrededor" />
+                        <div class="text-content">
+                            <h3>Producción ágil</h3>
+                            <p>Checklist antes de grabar, ángulos que convierten y ritmo. Cómo crear variaciones rápidas y formatos listos para ads sin perder calidad.</p>
+                        </div>
+                    </article>
+                    <article class="item">
+                        <img class="shape" src="../images/guide3Circle.png" alt="Mostrando resultados en su web" />
+                        <div class="text-content">
+                            <h3>Negocia con seguridad</h3>
+                            <p>Precios, paquetes y licencias explicados fácil. Scripts de objeciones y cierres para subir tu ticket medio sin parecer agresiva.</p>
+                        </div>
+                    </article>
+                </div>
+            </section>
+            <section class="benefits container" aria-labelledby="queLlevas">
+                <h2 id="queLlevas" class="sr-only">Lo que te llevas</h2>
+                <div class="grid">
+                    <ul>
+                        <li><img alt="" aria-hidden="true" /><div>Plantillas listas para copiar y pegar.</div></li>
+                        <li><img alt="" aria-hidden="true" /><div>Cómo responder objeciones y cerrar.</div></li>
+                        <li><img alt="" aria-hidden="true" /><div>Paquetes y licencias sin liarte.</div></li>
+                        <li><img alt="" aria-hidden="true" /><div>Checklist de producción rápida.</div></li>
+                        <li><img alt="" aria-hidden="true" /><div>Contrato básico explicado fácil.</div></li>
+                        <li><img alt="" aria-hidden="true" /><div>Roadmap de 30 días.</div></li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </header>
+    <div class="buy-bar" role="region" aria-label="Compra rápida">
+        <strong>PDF completo</strong>
+        <span class="price">5,99 €</span>
+        <a class="btn btn-primary" href="payment.html">Lo quiero</a>
+    </div>
+    <div class="modal" id="modal" aria-hidden="true">
+        <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <header>
+                <h3 id="modalTitle">Vista previa</h3>
+                <button class="close" id="closeModal" aria-label="Cerrar">✕</button>
+            </header>
+            <div class="content">
+                <embed id="pdfEmbed" src="" type="application/pdf" />
+            </div>
+        </div>
+    </div>
+    <section class="container" aria-labelledby="faqTitle" style="padding:40px 12px 80px">
+        <h2 id="faqTitle" class="section-title">Preguntas frecuentes</h2>
+        <details>
+            <summary>¿Es para principiantes?</summary>
+            <p>Sí. Empiezas por mentalidad, sistemas y guiones listos. Si ya vendes UGC, las secciones de precios/licencias y negociación te suben el ticket.</p>
+        </details>
+        <details>
+            <summary>¿Actualizaciones incluidas?</summary>
+            <p>Obtienes acceso a pequeñas revisiones y correcciones. Las grandes ediciones se ofrecen con descuento para alumnos.</p>
+        </details>
+        <details>
+            <summary>¿Garantía?</summary>
+            <p>Garantía de satisfacción de 7 días. Si no te aporta claridad accionable, te devolvemos el dinero.</p>
+        </details>
+    </section>
+    <script>
+        (function() {
+            const el = document.getElementById('geo');
+            if (!el) return;
+            function setMsg(city, country) {
+                const c = city || 'tu ciudad';
+                const k = country ? (', ' + country) : '';
+                el.innerHTML = `oye, si me visitas desde <strong>${c}${k}</strong>… esta guía te va a ahorrar horas 😉`;
+            }
+            fetch('https://ipapi.co/json')
+                .then(r => r.ok ? r.json() : Promise.reject())
+                .then(d => setMsg(d.city, d.country_name))
+                .catch(() => {
+                    fetch('https://ipinfo.io/json?token=')
+                        .then(r => r.ok ? r.json() : Promise.reject())
+                        .then(d => setMsg(d.city, d.country))
+                        .catch(() => {});
+                });
+        })();
+
+        function initBook() {
+            const shell = document.querySelector('.book-shell');
+            if (!shell || shell.dataset.ready) return;
+            const pages = Array.from(shell.querySelectorAll('.page'));
+            const prev = shell.querySelector('.nav.prev');
+            const next = shell.querySelector('.nav.next');
+            let index = 0;
+            function render() {
+                pages.forEach((p, i) => {
+                    p.classList.remove('prev', 'current', 'next');
+                    if (i === index) p.classList.add('current');
+                    if (i === index + 1) p.classList.add('next');
+                    if (i < index) p.classList.add('prev');
+                });
+            }
+            function flipNext() {
+                if (index < pages.length - 1) {
+                    pages[index].style.transform = 'rotateY(-180deg)';
+                    index++;
+                    setTimeout(render, 320);
+                }
+            }
+            function flipPrev() {
+                if (index > 0) {
+                    pages[index - 1].style.transform = 'rotateY(0deg)';
+                    index--;
+                    setTimeout(render, 220);
+                }
+            }
+            next.addEventListener('click', flipNext);
+            prev.addEventListener('click', flipPrev);
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') flipNext();
+                if (e.key === 'ArrowLeft') flipPrev();
+            });
+            shell.dataset.ready = '1';
+            render();
+        }
+
+        (function() {
+            const openBtn = document.getElementById('openPreview');
+            const modal = document.getElementById('modal');
+            const closeBtn = document.getElementById('closeModal');
+            function open() {
+                modal.setAttribute('open', '');
+                document.body.style.overflow = 'hidden';
+                initBook();
+                closeBtn.focus();
+            }
+            function close() {
+                modal.removeAttribute('open');
+                document.body.style.overflow = '';
+            }
+            openBtn.addEventListener('click', open);
+            closeBtn.addEventListener('click', close);
+            modal.addEventListener('click', e => { if (e.target === modal) close(); });
+            document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.hasAttribute('open')) close(); });
+        })();
+    </script>
+</body>
+</html>
