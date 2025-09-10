@@ -169,7 +169,7 @@ const observer = new IntersectionObserver((entries) => {
 });
 
 document.querySelectorAll('.scroll-animate-up:not(.work-block), .scroll-animate-right:not(.work-block)').forEach(el => {
-  observer.observe(el);
+    observer.observe(el);
 });
 
 //////////////////////////////////// Typewriter Animation Functions ////////////////////////////////////
@@ -280,79 +280,134 @@ function startContentTypewriterEffect() {
 
 //////////////////////////////////// Promo Popup ////////////////////////////////////
 function initPromoPopupOnce() {
-  const popup = document.getElementById("promo-popup");
-  if (!popup) return;
-
-  // fresh key so old tests don't block it
-  const STORAGE_KEY = "promoPopupShown_v3";
-  if (sessionStorage.getItem(STORAGE_KEY) === "1") return;
-
-  const trigger = document.getElementById("promo-trigger");
-  if (!trigger) return;
-
-  const show = () => {
-    popup.classList.remove("hidden");
-    popup.classList.add("show");
-    sessionStorage.setItem(STORAGE_KEY, "1");
-  };
-
-  // Observe the sentinel: it will intersect when you scroll past half the section
-  const io = new IntersectionObserver(([entry]) => {
-    if (entry.isIntersecting) {
-      show();
-      io.disconnect();
-    }
-  }, { threshold: 0 });
-
-  io.observe(trigger);
-
-  // Close/CTA behavior
-  popup.querySelector(".close-btn")?.addEventListener("click", () => {
-    popup.classList.remove("show");
-    setTimeout(() => popup.classList.add("hidden"), 400);
-  });
-
-  popup.querySelector(".contact-btn")?.addEventListener("click", (e) => {
-    e.preventDefault();
-    popup.classList.remove("show");
-    setTimeout(() => {
-      popup.classList.add("hidden");
-      window.location.href = e.currentTarget.href;
-    }, 400);
-  });
+    const popup = document.getElementById("promo-popup");
+    if (!popup) return;
+    
+    const STORAGE_KEY = "promoPopupShown_v3";
+    if (sessionStorage.getItem(STORAGE_KEY) === "1") return;
+    
+    const trigger = document.getElementById("promo-trigger");
+    if (!trigger) return;
+    
+    const show = () => {
+        popup.classList.remove("hidden");
+        popup.classList.add("show");
+        sessionStorage.setItem(STORAGE_KEY, "1");
+    };
+    
+    const io = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) {
+            show();
+            io.disconnect();
+        }
+    }, { threshold: 0 });
+    
+    io.observe(trigger);
+    
+    // Close button
+    popup.querySelector(".close-btn")?.addEventListener("click", () => {
+        popup.classList.remove("show");
+        setTimeout(() => popup.classList.add("hidden"), 400);
+    });
 }
+
+function smoothScrollToSelector(selector, offset = 20) {
+    const el = document.querySelector(selector);
+    if (!el) return;
+    
+    const y = el.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top: y, behavior: "smooth" });
+}
+
+function wirePopupContactBehavior() {
+    const popup = document.getElementById("promo-popup");
+    if (!popup) return;
+    
+    // Close button (unchanged)
+    popup.querySelector(".close-btn")?.addEventListener("click", () => {
+        popup.classList.remove("show");
+        // hide after animation
+        popup.addEventListener("transitionend", function onEnd() {
+            popup.classList.add("hidden");
+            popup.removeEventListener("transitionend", onEnd);
+        }, { once: true });
+    });
+    
+    // Contact button: close -> on transition end -> scroll
+    const contactBtn = popup.querySelector(".contact-btn");
+    if (!contactBtn) return;
+    
+    contactBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const targetSelector = contactBtn.getAttribute("href") || "#contact-form";
+        
+        // If already hidden, just scroll
+        if (!popup.classList.contains("show")) {
+            smoothScrollToSelector(targetSelector);
+            return;
+        }
+        
+        // Close popup
+        popup.classList.remove("show");
+        
+        let didScroll = false;
+        const doScroll = () => {
+            if (didScroll) return;
+            didScroll = true;
+            popup.classList.add("hidden"); // ensure hidden after anim
+            smoothScrollToSelector(targetSelector, 20);
+        };
+        
+        // Prefer transition end (cleanest)
+        popup.addEventListener("transitionend", doScroll, { once: true });
+        
+        // Fallback in case no transition fires
+        setTimeout(doScroll, 350);
+    });
+}
+
+// Call this after creating/showing the popup or inside your init
+document.addEventListener("DOMContentLoaded", () => {
+    wirePopupContactBehavior();
+});
+
+
+// Initialize the popup
+document.addEventListener("DOMContentLoaded", () => {
+    initPromoPopupOnce();
+});
 
 //////////////////////////////////// TikTok Shop Section Animation ////////////////////////////////////
 document.addEventListener("DOMContentLoaded", () => {
-  const gifSection = document.querySelector(".tiktok-section img");
-  if (!gifSection) return;
-
-  const observer = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        gifSection.src = gifSection.dataset.gif;
-        obs.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-
-  observer.observe(gifSection);
+    const gifSection = document.querySelector(".tiktok-section img");
+    if (!gifSection) return;
+    
+    const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                gifSection.src = gifSection.dataset.gif;
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    observer.observe(gifSection);
 });
 
 //////////////////////////////////// Work Animation ////////////////////////////////////
 // One-time animation for Work section blocks
 const workOnceObserver = new IntersectionObserver((entries, obs) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('scroll-animate-visible'); // triggers the .work animations inside
-      obs.unobserve(entry.target); // 👈 make it run only once
-    }
-  });
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('scroll-animate-visible'); // triggers the .work animations inside
+            obs.unobserve(entry.target); // 👈 make it run only once
+        }
+    });
 }, { threshold: 0.3 });
 
 // Observe only the Work blocks
 document.querySelectorAll('.work-section .work-block').forEach(el => {
-  workOnceObserver.observe(el);
+    workOnceObserver.observe(el);
 });
 
 //////////////////////////////////// Initialize Animations ////////////////////////////////////

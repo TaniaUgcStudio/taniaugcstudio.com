@@ -138,22 +138,22 @@
     .sidebar ul li a span {
         display: inline;
     }
-
+    
     .sidebar-bottom {
         display: none; /* Hide sidebar bottom on mobile */
     }
-
+    
     .contact-bar {
         position: fixed;
         bottom: 0;
         width: 100%;
-        background: linear-gradient(180deg, #eeebe6 0%, #3f5048 25%, #2f3b35 100%);
+        /*background: linear-gradient(180deg, #eeebe6 0%, #3f5048 25%, #2f3b35 100%);*/
         display: flex;
         justify-content: space-around;
         padding: 10px 0;
         z-index: 1000;
     }
-
+    
     .contact-bar ul {
         list-style: none;
         display: flex;
@@ -162,13 +162,13 @@
         margin: 0;
         width: 100%;
     }
-
+    
     .contact-bar li {
         flex: 1;
         text-align: center;
         position: relative;
     }
-
+    
     /* Add vertical line on the right of each item except the last */
     .contact-bar li:not(:last-child)::after {
         content: "";
@@ -179,7 +179,7 @@
         width: 1px;
         background-color: rgba(255, 255, 255, 0.3);
     }
-
+    
     .contact-bar a {
         color: #fff;
         text-decoration: none;
@@ -188,14 +188,42 @@
         align-items: center;
         padding: 5px;
     }
-
+    
     .contact-bar a img {
         width: 25px;
         height: 25px;
         margin: 0;
     }
-
+    
     .contact-bar a span {
         display: none; /* Ensure no text is shown */
     }
+    
+    /* Floating mail button */
+    .fab-mail {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(180deg, #eeebe6 0%, #3f5048 25%, #2f3b35 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        z-index: 1000;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .fab-mail:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    }
+    
+    .fab-mail img {
+        width: 28px;
+        height: 28px;
+    }
+    
 }
