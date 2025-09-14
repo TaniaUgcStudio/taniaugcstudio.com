@@ -1359,6 +1359,7 @@ button:hover {
         z-index: 910;
         position: relative;
         padding-right: 5px; /* Reduced padding to give more space */
+        padding-bottom: 72px;   /* reserve space for the absolute CTA */
     }
     
     .sobre-mi-text p:nth-child(2) {
