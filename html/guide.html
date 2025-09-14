@@ -1,276 +1,94 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Guía UGC — limpio y claro</title>
-  <meta name="description" content="Guía UGC: precios, negociación, contratos y plantillas. Diseño limpio con un único foco: comprar." />
-  <style>
-    /* ---- TOKENS (1 accent, mucho aire) ---- */
-    :root{
-      --bg1:#fbe9f1;
-      --bg2:#f1d1b1;
-      --bg3:#e6e2db;
-      --bg4:#eeebe6;
-      --ink:#252425;
-      --muted:#505050;
-      --accent:#1484cf;
-      --cta:#8c7c6d;
-      --cta-hover:#7aad54;
-      --card:#ffffff;
-      --ring: 0 0 0 3px #1484cf33;
-      --shadow-lg: 0 18px 50px #0000001a;
-      --shadow-md: 0 10px 28px #00000014;
-      --shadow-sm: 0 6px 16px #0000000d;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Scrolling Brand Logos</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
 
-    h1,h2,h3,h4,h5,h6{ font-family: 'Montserrat', system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            padding: 20px 0;
+        }
 
-    /* ---- BASE ---- */
-    *{box-sizing:border-box}
-    html,body{margin:0}
-    body{
-      color: var(--ink);
-      font-family: 'Futura', 'Helvetica Neue', Arial, sans-serif;
-      background:linear-gradient(180deg, var(--bg1), var(--bg2), var(--bg4));
-    }
-    img{max-width:100%; display:block}
-    h1,h2,h3{line-height:1.2; margin:0 0 .4rem; font-weight:800}
-    h1{font-size:clamp(2rem, 3.5vw, 3rem)}
-    h2{font-size:clamp(1.4rem, 2.2vw, 1.8rem)}
-    p{margin:.25rem 0 .8rem 0; color:var(--muted)}
-    .container{width:min(960px, 92vw); margin-inline:auto}
-    .stack{display:grid; gap:16px}
-    .sp-1{padding-block:10px}
-    .sp-2{padding-block:28px}
-    .sp-3{padding-block:48px}
+        .marquee-row {
+            display: flex;
+            width: 100%;
+        }
 
-    @font-face {
-      font-family: 'Montserrat';
-      src: url('../fonts/montserrat/Montserrat-Bold.otf') format('opentype');
-      font-weight: 400;
-      font-style: normal;
-    }
+        .marquee-content {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            will-change: transform; /* Optimize for animation */
+        }
 
-    @font-face {
-      font-family: 'Futura';
-      src: url('../fonts/futura-pt/futura-light.ttf') format('opentype');
-      font-weight: 400;
-      font-style: normal;
-    }
+        /* Top row: Scroll to the right */
+        .marquee-top .marquee-content {
+            animation: scroll-right 20s linear infinite;
+        }
 
-    html, body {
-      margin: 0;
-      font-family: 'Futura', 'Helvetica', 'Arial', sans-serif;
-      color: #252425;
-      overflow-x: hidden;
-      position: relative;
-      transition: background 0.5s ease;
-    }
+        /* Bottom row: Scroll to the left */
+        .marquee-bottom .marquee-content {
+            animation: scroll-left 20s linear infinite;
+        }
 
-    /* ---- HEADER / HERO ---- */
-    header.hero{padding-block:64px}
-    .hero-wrap{display:grid; grid-template-columns: 1.1fr .9fr; gap:36px; align-items:center}
-    @media (max-width:860px){.hero-wrap{grid-template-columns:1fr; gap:18px}}
+        .marquee-content img {
+            height: 80px; /* Adjust logo height */
+            margin: 0 20px; /* Space between logos */
+            object-fit: contain;
+        }
 
-    .cover{aspect-ratio:4/3; border-radius:12px; overflow:hidden; background:var(--card); box-shadow:var(--shadow-md)}
-    .lead{font-size:clamp(1.05rem,1.6vw,1.15rem)}
+        /* Keyframes for scrolling animations */
+        @keyframes scroll-right {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%); /* Moves half the content width */
+            }
+        }
 
-    /* ---- BUY CARD ---- */
-    .buy{position:sticky; top:12px; align-self:start; background:var(--card); border-radius:12px; box-shadow:var(--shadow-md); padding:18px; border:1px solid #eee}
-    .price{font-weight:900; font-size:1.6rem}
-    .cta{display:flex; align-items:center; justify-content:center; gap:.6rem; border:none; background:var(--accent); color:#fff; font-weight:800; padding:14px 18px; border-radius:999px; cursor:pointer}
-    .cta:focus{outline:none; box-shadow:var(--ring)}
-    .row{display:flex; justify-content:space-between; align-items:center; gap:12px}
+        @keyframes scroll-left {
+            0% {
+                transform: translateX(-50%);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
 
-    /* ---- SECTIONS ---- */
-    section{border-top:1px solid #eee}
-    .bullets{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px}
-    .bullets li{background:transparent; padding:10px 0; border-radius:12px; list-style:none}
-    .bullets li::before{content:'✔'; margin-right:.6rem; color:var(--accent); font-weight:900}
-    @media (max-width:720px){.bullets{grid-template-columns:1fr}}
-
-    .kicker{font-weight:800; color:#111; letter-spacing:.2px; text-transform:uppercase; font-size:.78rem; opacity:.7}
-
-    /* ---- MINI GRID BENEFITS ---- */
-    .minicards{display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
-    .card{background:var(--card); border:1px solid #eee; border-radius:16px; padding:16px}
-    @media (max-width:900px){.minicards{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:520px){.minicards{grid-template-columns:1fr}}
-
-    /* ---- TESTIMONIOS ---- */
-    .testis{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
-    .testi{background:var(--card); border:1px solid #eee; border-radius:16px; padding:16px}
-    .stars{color:#f1b90b}
-    @media (max-width:900px){.testis{grid-template-columns:1fr 1fr}}
-    @media (max-width:520px){.testis{grid-template-columns:1fr}}
-
-    /* ---- FAQ ---- */
-    details{background:var(--card); border:1px solid #eee; border-radius:16px; padding:14px 16px}
-    details+details{margin-top:10px}
-    summary{cursor:pointer; font-weight:800}
-
-    /* ---- FOOTER ---- */
-    footer{padding-block:48px; text-align:center; color:var(--muted)}
-
-    /* ---- PASSWORD PROTECTION ---- */
-    #content {
-      display: none; /* Initially hide the content */
-    }
-    .password-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--bg1);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    .password-box {
-      background: var(--card);
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: var(--shadow-md);
-      text-align: center;
-    }
-    .password-box input {
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #eee;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-    .password-box button {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-weight: 800;
-    }
-    .password-box button:hover {
-      background: var(--cta-hover);
-    }
-  </style>
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .marquee-content img {
+                height: 50px;
+                margin: 0 10px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <!-- Password Prompt Overlay -->
-  <div id="passwordOverlay" class="password-overlay">
-    <div class="password-box">
-      <h3>Enter Password</h3>
-      <input type="password" id="passwordInput" placeholder="Enter password" />
-      <button onclick="checkPassword()">Submit</button>
-    </div>
-  </div>
+    
 
-  <!-- Page Content -->
-  <div id="content">
-    <header class="hero container">
-      <div class="hero-wrap">
-        <div class="stack">
-          <span class="kicker">Guía en PDF</span>
-          <h1>UGC Pro — claro, corto y cobrable</h1>
-          <p class="lead">Aprende a fijar precios, negociar como pro y proteger tu trabajo con contratos claros. Todo en un PDF directo al grano (sin relleno).</p>
-          <ul class="bullets" aria-label="Lo esencial que incluye">
-            <li>Tarifas, licencias y paquetes explicados fácil</li>
-            <li>Guiones de negociación y respuestas a objeciones</li>
-            <li>Modelo de contrato editable</li>
-            <li>Plantillas de propuestas, emails y checklist</li>
-          </ul>
-        </div>
-        <aside class="buy" aria-label="Comprar la guía">
-          <img class="cover" src="../images/guide.png" alt="Vista previa de la guía UGC" />
-          <div class="row" style="margin-top:14px">
-            <div>
-              <div class="price">5,99 €</div>
-              <small class="muted">PDF + actualizaciones menores</small>
-            </div>
-            <button class="cta" onclick="location.href='payment.html'">Comprar ahora</button>
-          </div>
-        </aside>
-      </div>
-    </header>
+    <script>
+        // Optional: Pause animation on hover
+        const marqueeContents = document.querySelectorAll('.marquee-content');
 
-    <section class="container sp-3" aria-labelledby="inside">
-      <h2 id="inside">Qué vas a conseguir</h2>
-      <div class="minicards" style="margin-top:12px">
-        <div class="card"><strong>Precios sin miedo</strong><p>Cómo calcular tarifas, licencias por uso (duración/territorios) y buyouts.</p></div>
-        <div class="card"><strong>Negociación real</strong><p>Plantillas de mensajes y cierres. Objeciones comunes resueltas.</p></div>
-        <div class="card"><strong>Legal sencillo</strong><p>Contrato UGC editable y explicado paso a paso.</p></div>
-        <div class="card"><strong>Proceso claro</strong><p>Checklist de producción, entrega y límites de revisiones.</p></div>
-      </div>
-    </section>
-
-    <section class="container sp-3" aria-labelledby="temario">
-      <h2 id="temario">Temario (resumen)</h2>
-      <div class="stack">
-        <ul class="bullets">
-          <li>Mindset y posicionamiento profesional</li>
-          <li>Portafolio que vende y outreach</li>
-          <li>Briefs, propuestas y cierre</li>
-          <li>Producción, entrega y retención</li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="container sp-3" aria-labelledby="testimonios">
-      <h2 id="testimonios">Testimonios</h2>
-      <div class="testis" style="margin-top:12px">
-        <figure class="testi"><div class="stars">★★★★★</div><figcaption>“Cerré dos marcas la primera semana. La parte de licencias me dio seguridad.” — Ana</figcaption></figure>
-        <figure class="testi"><div class="stars">★★★★☆</div><figcaption>“Muy claro y accionable. Subí mis precios sin miedo.” — Marcos</figcaption></figure>
-        <figure class="testi"><div class="stars">★★★★★</div><figcaption>“El contrato y los guiones valen oro.” — Lucía</figcaption></figure>
-      </div>
-    </section>
-
-    <section class="container sp-3" aria-labelledby="faq">
-      <h2 id="faq">Preguntas frecuentes</h2>
-      <details><summary>¿Es para principiantes?</summary><p>Sí. Empiezas por fundamentos y plantillas. Si ya vendes, te ayudará a subir ticket.</p></details>
-      <details><summary>¿Qué recibo exactamente?</summary><p>PDF de la guía + contrato editable + plantillas. Acceso a revisiones menores.</p></details>
-      <details><summary>¿Garantía?</summary><p>7 días de garantía: si no te aporta claridad accionable, te devolvemos el dinero.</p></details>
-    </section>
-
-    <section class="container sp-3" aria-labelledby="cta-final">
-      <div class="buy" style="position:static; max-width:560px; margin-inline:auto">
-        <h2 id="cta-final" style="margin-bottom:6px">Empieza hoy</h2>
-        <p>Convierte tu talento en un negocio serio.</p>
-        <div class="row">
-          <div>
-            <div class="price">5,99 €</div>
-            <small class="muted">Pago único — PDF</small>
-          </div>
-          <button class="cta" onclick="location.href='payment.html'">Comprar ahora</button>
-        </div>
-      </div>
-    </section>
-
-    <footer>
-      <small>© 2025 Tania UGC Studio · Política de privacidad · Términos</small>
-    </footer>
-  </div>
-
-  <script>
-    function checkPassword() {
-      const password = document.getElementById('passwordInput').value;
-      const correctPassword = '585858';
-      if (password === correctPassword) {
-        document.getElementById('passwordOverlay').style.display = 'none';
-        document.getElementById('content').style.display = 'block';
-      } else {
-        alert('Incorrect password. Please try again.');
-        document.getElementById('passwordInput').value = ''; // Clear input
-      }
-    }
-
-    // Allow Enter key to submit password
-    document.getElementById('passwordInput').addEventListener('keypress', function(event) {
-      if (event.key === 'Enter') {
-        checkPassword();
-      }
-    });
-  </script>
+        marqueeContents.forEach(content => {
+            content.addEventListener('mouseenter', () => {
+                content.style.animationPlayState = 'paused';
+            });
+            content.addEventListener('mouseleave', () => {
+                content.style.animationPlayState = 'running';
+            });
+        });
+    </script>
 </body>
 </html>

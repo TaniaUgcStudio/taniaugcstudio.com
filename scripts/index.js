@@ -248,34 +248,38 @@ function startIntroTypewriterEffect() {
 }
 
 function startContentTypewriterEffect() {
-    const contentSection = document.querySelector('.content-section');
-    if (!contentSection) return; // Safeguard against null
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                contentSection.classList.add('visible');
-                const items = document.querySelectorAll('.content-item ul li span');
-                let index = 0;
-                
-                function typeNext() {
-                    if (index < items.length) {
-                        const text = items[index].textContent;
-                        typeSentence(items[index], text, 16, () => {
-                            index++;
-                            typeNext();
-                        });
-                    } else {
-                        const stamp = document.querySelector('.stamp');
-                        if (stamp) stamp.classList.add('animate');
-                    }
-                }
-                
-                typeNext();
-                observer.unobserve(contentSection);
-            }
-        });
-    }, { threshold: 0.1 });
-    observer.observe(contentSection);
+  const section = document.querySelector('.content-section');
+  if (!section) return;
+
+  let started = false;
+
+  const io = new IntersectionObserver((entries) => {
+    const entry = entries[0];
+    if (entry.isIntersecting && !started) {
+      started = true;
+      section.classList.add('visible');
+
+      const items = [...section.querySelectorAll('.content-item ul li span')];
+      let i = 0;
+
+      function revealNext() {
+        if (i < items.length) {
+          const el = items[i++];
+          el.classList.add('reveal'); // slide-up + fade-in
+          setTimeout(revealNext, 120); // stagger each line
+        } else {
+          // after all lines are revealed, stamp lands
+          const stamp = section.querySelector('.stamp');
+          if (stamp) stamp.classList.add('animate');
+          io.disconnect();
+        }
+      }
+
+      revealNext();
+    }
+  }, { threshold: 0.15 });
+
+  io.observe(section);
 }
 
 //////////////////////////////////// Promo Popup ////////////////////////////////////

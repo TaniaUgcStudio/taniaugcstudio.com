@@ -360,6 +360,59 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
+.marquee-container {
+    width: 100%;
+    overflow: hidden;
+    padding: 20px 0;
+}
+
+.marquee-row {
+    display: flex;
+    width: 100%;
+}
+
+.marquee-content {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    will-change: transform; /* Optimize for animation */
+}
+
+/* Top row: Scroll to the right */
+.marquee-top .marquee-content {
+    animation: scroll-right 20s linear infinite;
+}
+
+/* Bottom row: Scroll to the left */
+.marquee-bottom .marquee-content {
+    animation: scroll-left 20s linear infinite;
+}
+
+.marquee-content img {
+    height: 80px; /* Adjust logo height */
+    margin: 0 20px; /* Space between logos */
+    object-fit: contain;
+}
+
+/* Keyframes for scrolling animations */
+@keyframes scroll-right {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%); /* Moves half the content width */
+    }
+}
+
+@keyframes scroll-left {
+    0% {
+        transform: translateX(-50%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
 /***************************** ABOUT ME CONTENT *****************************/
 .sobre-mi {
     background: linear-gradient(to right, #44514a 0%, #9aa690 100%);
@@ -571,7 +624,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .content-section.visible .stamp {
-    animation: stampMove 1s ease 4s forwards;
+    animation: stampMove 0.5s ease 1.5s forwards;
 }
 
 @keyframes stampMove {
@@ -601,7 +654,7 @@ h1, h2, h3, h4, h5, h6 {
     height: 20px;
     top: 40%;
     left: 40%;
-    animation: inkSpread 0.5s ease 5s forwards;
+    animation: inkSpread 0.5s ease 2.1s forwards;
 }
 
 .content-section.visible .ink-drop:nth-child(2) {
@@ -609,7 +662,7 @@ h1, h2, h3, h4, h5, h6 {
     height: 15px;
     top: 60%;
     left: 60%;
-    animation: inkSpread 0.5s ease 5.2s forwards;
+    animation: inkSpread 0.5s ease 2.2s forwards;
 }
 
 .content-section.visible .ink-drop:nth-child(3) {
@@ -617,7 +670,7 @@ h1, h2, h3, h4, h5, h6 {
     height: 25px;
     top: 45%;
     left: 55%;
-    animation: inkSpread 0.5s ease 5.1s forwards;
+    animation: inkSpread 0.5s ease 2.1s forwards;
 }
 
 @keyframes inkSpread {
@@ -629,6 +682,17 @@ h1, h2, h3, h4, h5, h6 {
         opacity: 0;
         transform: scale(2);
     }
+}
+
+.content-item ul li span {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: transform 2s ease, opacity 2s ease;
+}
+
+.content-item ul li span.reveal {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /***************************** VIDEO CONTENT *****************************/
@@ -1269,6 +1333,12 @@ button:hover {
     
     .cookie-buttons button {
         width: 100%;
+    }
+
+    /**************************************************************************/
+    .marquee-content img {
+        height: 50px;
+        margin: 0 10px;
     }
     
     /**************************************************************************/
