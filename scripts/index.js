@@ -266,7 +266,7 @@ function startContentTypewriterEffect() {
         if (i < items.length) {
           const el = items[i++];
           el.classList.add('reveal'); // slide-up + fade-in
-          setTimeout(revealNext, 120); // stagger each line
+          setTimeout(revealNext, 500); // stagger each line
         } else {
           // after all lines are revealed, stamp lands
           const stamp = section.querySelector('.stamp');

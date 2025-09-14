@@ -624,7 +624,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .content-section.visible .stamp {
-    animation: stampMove 0.5s ease 1.5s forwards;
+    animation: stampMove 0.5s ease 4.5s forwards;
 }
 
 @keyframes stampMove {
@@ -654,7 +654,7 @@ h1, h2, h3, h4, h5, h6 {
     height: 20px;
     top: 40%;
     left: 40%;
-    animation: inkSpread 0.5s ease 2.1s forwards;
+    animation: inkSpread 0.5s ease 4.1s forwards;
 }
 
 .content-section.visible .ink-drop:nth-child(2) {
@@ -662,7 +662,7 @@ h1, h2, h3, h4, h5, h6 {
     height: 15px;
     top: 60%;
     left: 60%;
-    animation: inkSpread 0.5s ease 2.2s forwards;
+    animation: inkSpread 0.5s ease 4.2s forwards;
 }
 
 .content-section.visible .ink-drop:nth-child(3) {
@@ -670,7 +670,7 @@ h1, h2, h3, h4, h5, h6 {
     height: 25px;
     top: 45%;
     left: 55%;
-    animation: inkSpread 0.5s ease 2.1s forwards;
+    animation: inkSpread 0.5s ease 4.1s forwards;
 }
 
 @keyframes inkSpread {
@@ -687,7 +687,7 @@ h1, h2, h3, h4, h5, h6 {
 .content-item ul li span {
   opacity: 0;
   transform: translateY(12px);
-  transition: transform 2s ease, opacity 2s ease;
+  transition: transform 6s ease, opacity 6s ease;
 }
 
 .content-item ul li span.reveal {
@@ -1359,7 +1359,6 @@ button:hover {
         z-index: 910;
         position: relative;
         padding-right: 5px; /* Reduced padding to give more space */
-        padding-bottom: 72px;   /* reserve space for the absolute CTA */
     }
     
     .sobre-mi-text p:nth-child(2) {
@@ -1389,7 +1388,7 @@ button:hover {
         position: absolute; /* Break out of .sobre-mi-text */
         left: 0;
         right: 0;
-        bottom: -50px;
+        bottom: -35px;
         text-align: center;
         padding: 0 10px;
         font-size: 1em;
