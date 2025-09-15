@@ -156,21 +156,19 @@ function animateStatsCounters() {
 }
 
 //////////////////////////////////// About Me Animation ////////////////////////////////////
+// About Me Animation — one-way, no removal
 const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('scroll-animate-visible');
-        } else {
-            entry.target.classList.remove('scroll-animate-visible');
-        }
-    });
-}, {
-    threshold: 0.3
-});
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('scroll-animate-visible');
+      observer.unobserve(entry.target); // run once, then stop
+    }
+  });
+}, { threshold: 0.3 });
 
-document.querySelectorAll('.scroll-animate-up:not(.work-block), .scroll-animate-right:not(.work-block)').forEach(el => {
-    observer.observe(el);
-});
+document
+  .querySelectorAll('.scroll-animate-up:not(.work-block), .scroll-animate-right:not(.work-block)')
+  .forEach(el => observer.observe(el));
 
 //////////////////////////////////// Typewriter Animation Functions ////////////////////////////////////
 function typeSentence(target, sentence, speed, callback) {
@@ -266,7 +264,7 @@ function startContentTypewriterEffect() {
         if (i < items.length) {
           const el = items[i++];
           el.classList.add('reveal'); // slide-up + fade-in
-          setTimeout(revealNext, 500); // stagger each line
+          setTimeout(revealNext, 420); // stagger each line
         } else {
           // after all lines are revealed, stamp lands
           const stamp = section.querySelector('.stamp');

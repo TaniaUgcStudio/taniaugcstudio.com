@@ -624,7 +624,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .content-section.visible .stamp {
-    animation: stampMove 0.5s ease 4.5s forwards;
+    animation: stampMove 0.5s ease 3.5s forwards;
 }
 
 @keyframes stampMove {
@@ -1381,14 +1381,14 @@ button:hover {
         height: auto;
         object-fit: contain;
         animation: slideInRight 1.2s ease forwards;
-        margin-top: -200px;
+        margin-top: -210px;
     }
     
     .cta-full {
         position: absolute; /* Break out of .sobre-mi-text */
         left: 0;
         right: 0;
-        bottom: -35px;
+        bottom: -50px;
         text-align: center;
         padding: 0 10px;
         font-size: 1em;
