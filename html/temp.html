@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rotating Crystalline Pyramid</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle, #1a1a1a, #000);
+      overflow: hidden;
+      perspective: 1000px;
+    }
+    .tetra {
+      position: relative;
+      width: 300px;
+      height: 259.8px; /* sqrt(3)/2 * 300px ≈ 259.8px for equilateral triangle */
+      transform-style: preserve-3d;
+      animation: rotate 20s infinite linear;
+    }
+    .face {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(5px);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      overflow: hidden;
+      transform-style: preserve-3d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .face img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* ✅ entire image is always visible */
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%); /* fit inside triangle */
+      background: #000; /* fills empty transparent parts */
+    }
+    .face.ugc {
+      font-family: Arial, sans-serif;
+      font-size: 60px;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+      background: rgba(0, 102, 204, 0.3);
+    }
+    /* Face positions for tetrahedron */
+    .face:nth-child(1) { /* Base or front */ }
+    .face:nth-child(2) {
+      transform-origin: 0% 100%;
+      transform: rotate(-60deg) rotateX(-109.5deg);
+    }
+    .face:nth-child(3) {
+      transform-origin: 100% 100%;
+      transform: rotate(60deg) rotateX(-109.5deg);
+    }
+    .face:nth-child(4) {
+      transform-origin: 50% 100%;
+      transform: rotate(180deg) rotateX(-109.5deg);
+    }
+    @keyframes rotate {
+      0%   { transform: rotateX(20deg) rotateY(0deg) rotateZ(0deg); }
+      33%  { transform: rotateX(200deg) rotateY(120deg) rotateZ(60deg); }
+      66%  { transform: rotateX(300deg) rotateY(240deg) rotateZ(120deg); }
+      100% { transform: rotateX(380deg) rotateY(360deg) rotateZ(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="tetra">
+    <div class="face"><img src="../images/guide1Triangle.png" alt="Guide 1"></div>
+    <div class="face"><img src="../images/guide2Triangle.png" alt="Guide 2"></div>
+    <div class="face ugc">UGC</div>
+    <div class="face"><img src="../images/guide3Triangle.png" alt="Guide 3"></div>
+  </div>
+</body>
+</html>

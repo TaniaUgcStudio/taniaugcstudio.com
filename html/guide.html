@@ -1,94 +1,840 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infinite Scrolling Brand Logos</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Guía UGC – Landing</title>
+    <meta name="description" content="Guía UGC en PDF: aprende a tratar con marcas, fijar precios y negociar con seguridad. Vista previa en popup." />
+    
+    <!-- Fonts -->
     <style>
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('../fonts/montserrat/Montserrat-Bold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Futura';
+            src: url('../fonts/futura-pt/futura-light.ttf') format('opentype');
+            font-weight: 400;
+            font-style: normal;
+        }
+        
+        /* Reset and Base Styles */
+        *, *::before, *::after { box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; margin: 0; }
         body {
             margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            color: var(--ink);
+            font-family: 'Futura', 'Helvetica', 'Arial', sans-serif;
+            background: #000 url('../images/guideBkgnd.jpg') center/cover no-repeat fixed;
+        }
+        img, svg, video { display: block; max-width: 100%; }
+        button { font: inherit; }
+        
+        /* Variables */
+        :root {
+            --bg1: #fbe9f1;
+            --bg2: #f1d1b1;
+            --bg3: #e6e2db;
+            --bg4: #eeebe6;
+            --ink: #222;
+            --muted: #444;
+            --brand: #252525;
+            --brand-2: #7aad54;
+            --card: #fff;
+            --ring: 0 0 0 3px #1484cf33;
+            --shadow: 0 12px 30px #0000001a;
         }
 
-        .marquee-container {
-            width: 100%;
-            overflow: hidden;
-            padding: 20px 0;
-        }
-
-        .marquee-row {
+        /* Background Animation */
+        .background-pyramid {
+            position: fixed;
+            inset: 0;
             display: flex;
-            width: 100%;
+            justify-content: center;
+            align-items: center;
+            z-index: 0;
+            pointer-events: none; /* ✅ no bloquea clics */
+        }      
+        .tetra {
+            position: relative;
+            width: 300px;
+            height: 259.8px; /* sqrt(3)/2 * 300px ≈ 259.8px for equilateral triangle */
+            transform-style: preserve-3d;
+            animation: rotate 20s infinite linear;
         }
-
-        .marquee-content {
+        .face {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            overflow: hidden;
+            transform-style: preserve-3d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .face img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* ✅ entire image is always visible */
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%); /* fit inside triangle */
+            background: #000; /* fills empty transparent parts */
+        }
+        .face.ugc {
+            font-family: Arial, sans-serif;
+            font-size: 60px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            background: rgba(0, 102, 204, 0.3);
+        }
+        /* Face positions for tetrahedron */
+        .face:nth-child(1) { /* Base or front */ }
+        .face:nth-child(2) {
+            transform-origin: 0% 100%;
+            transform: rotate(-60deg) rotateX(-109.5deg);
+        }
+        .face:nth-child(3) {
+            transform-origin: 100% 100%;
+            transform: rotate(60deg) rotateX(-109.5deg);
+        }
+        .face:nth-child(4) {
+            transform-origin: 50% 100%;
+            transform: rotate(180deg) rotateX(-109.5deg);
+        }
+        @keyframes rotate {
+            0%   { transform: rotateX(20deg) rotateY(0deg) rotateZ(0deg); }
+            33%  { transform: rotateX(200deg) rotateY(120deg) rotateZ(60deg); }
+            66%  { transform: rotateX(300deg) rotateY(240deg) rotateZ(120deg); }
+            100% { transform: rotateX(380deg) rotateY(360deg) rotateZ(360deg); }
+        }
+        
+        /* Utility Classes */
+        a { color: inherit; text-decoration: none; }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            border-radius: 999px;
+            padding: 12px 18px;
+            font-weight: 800;
+            border: 0;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: var(--brand);
+            color: #fff;
+            box-shadow: 0 8px 20px #00000026;
+            transition: transform 0.15s ease, background 0.2s ease;
+        }
+        .btn-primary:hover {
+            background: var(--brand-2);
+            transform: translateY(-1px);
+        }
+        
+        .container { width: min(1200px, 100%); margin-inline: auto; }
+        
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 70svh;
+            display: grid;
+            align-items: center;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: transparent;
+            backdrop-filter: saturate(130%) blur(1px);
+        }
+        .hero .inner {
+            position: relative;
+            z-index: 1;
+            padding: 64px 12px;
+            text-align: center;
+        }
+        .eyebrow {
+            display: inline-block;
+            margin: 0 auto 10px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: #ffffffb3;
+            border: 1px solid #00000014;
+            font-weight: 700;
+        }
+        h1 {
+            font-family: 'Montserrat', system-ui, sans-serif;
+            font-size: clamp(1.9rem, 5vw, 3.2rem);
+            margin: 0 0 6px;
+        }
+        .lead {
+            font-size: clamp(1.02rem, 2.4vw, 1.25rem);
+            color: var(--muted);
+            margin: 0 auto 22px;
+        }
+        
+        /* Geo-strip */
+        .geo {
+            display: inline-block;
+            margin: 8px auto 14px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            border-color: #252525;
+            border-width: 2px;
+            background: linear-gradient(180deg, var(--bg1), var(--bg2), var(--bg4));
+            color: #3f5048;
+            font-weight: 700;
+        }
+        
+        /* CTA Inline */
+        .cta-inline { margin: 18px 0 2px; text-align: center; }
+        .price { font-weight: 900; color: #1484cf; }
+        
+        /* Sticky Mobile Buy Bar */
+        .buy-bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 50;
+            background: linear-gradient(180deg, #9aa690, #3f5048, #9aa690);
+            color: #fff;
+            padding: 10px 12px;
             display: flex;
             align-items: center;
-            white-space: nowrap;
-            will-change: transform; /* Optimize for animation */
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 -8px 24px #00000033;
         }
-
-        /* Top row: Scroll to the right */
-        .marquee-top .marquee-content {
-            animation: scroll-right 20s linear infinite;
+        .buy-bar .price { color: #fff; }
+        @media (min-width: 780px) { .buy-bar { display: none; } }
+        
+        /* Popup Modal */
+        .modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            place-items: center;
+            background: #00000080;
+            z-index: 60;
+            padding: 18px;
         }
-
-        /* Bottom row: Scroll to the left */
-        .marquee-bottom .marquee-content {
-            animation: scroll-left 20s linear infinite;
+        .modal[open] { display: grid; }
+        .dialog {
+            /* Single-color gradient from center light brown to slightly darker edges */
+            background: linear-gradient(
+            90deg,
+            #c7b89c 0%,   /* darker edge */
+            #d7cbbd 50%,  /* main center light brown */
+            #c7b89c 100%  /* darker edge */
+            );
+            border-radius: 18px;
+            max-width: min(980px, 96vw);
+            width: 100%;
+            max-height: 90vh;
+            overflow: hidden;
+            box-shadow: 0 30px 70px #00000055;
+            border: 1px solid #00000022;
         }
-
-        .marquee-content img {
-            height: 80px; /* Adjust logo height */
-            margin: 0 20px; /* Space between logos */
+        
+        .dialog header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            border-bottom: 1px solid #00000014;
+        }
+        .dialog header h3 { margin: 0; font-family: 'Montserrat', sans-serif; }
+        .dialog .content { padding: 0; }
+        .dialog iframe, .dialog embed { display: block; border: 0; width: 100%; height: min(78vh, 100%); }
+        .close {
+            background: #eee;
+            border: 0;
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        
+        /* Realistic Book Flip */
+        .book {
+            position: relative;
+            perspective: 1600px;
+            width: min(980px, 100%);
+            height: 45vh;
+            margin: 0 auto;
+        }
+        .book-shell {
+            position: relative;
+            background: #5c4e3363; /* keep subtle outer shell color */
+            border-radius: 16px;
+            height: 100%;
+            box-shadow: 0 18px 50px #0000001a;
+            padding: 22px 16px;
+            border: 1px solid #00000012;
+        }
+        .page {
+            position: absolute;
+            inset: 4px;
+            border-radius: 12px;
+            border: 1px solid #00000010;
+            padding: 24px;
+            min-height: 340px;
+            transform-origin: left center;
+            transform: rotateY(0deg);
+            transition: transform 1.2s ease, box-shadow 1.2s ease, opacity 0.5s ease; /* slower animation */
+            box-shadow: 0 12px 24px #00000012;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            opacity: 0;
+            pointer-events: none;
+            text-align: left;
+            
+            /* Single-layer light brown with horizontal gradient */
+            background: linear-gradient(
+            90deg,
+            #c7b89c 0%,   /* slightly darker at edges */
+            #d7cbbd 50%,  /* main light brown */
+            #c7b89c 100%
+            );
+        }
+        
+        .page.current { 
+            z-index: 4; 
+            opacity: 1; 
+            pointer-events: auto; 
+        }
+        
+        .page.next { 
+            z-index: 3; 
+        }
+        
+        .page.prev { 
+            z-index: 2; 
+            transform: rotateY(-180deg); 
+        }
+        
+        /* Gradient shadow on page edges for more depth */
+        .page::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(90deg, #00000010, transparent 18%, transparent 82%, #0000000f);
+            opacity: 0.4;
+            border-radius: inherit;
+        }
+        
+        /* Optional: make page text really pop */
+        .page p, .page li {
+            color: #3b2e1a; /* slightly darker text for readability */
+        }
+        
+        .page ul {
+            margin: 0 0 8px 0;
+            padding-left: 20px;
+        }
+        
+        .nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            z-index: 10;
+        }
+        .nav.prev { left: 8px; }
+        .nav.next { right: 8px; }
+        .nav img {
+            width: 30px;
+            height: 30px;
             object-fit: contain;
         }
-
-        /* Keyframes for scrolling animations */
-        @keyframes scroll-right {
-            0% {
-                transform: translateX(0);
-            }
-            100% {
-                transform: translateX(-50%); /* Moves half the content width */
-            }
+        
+        /* Index Section */
+        .index-section { padding: 12px 0 40px; }
+        .index-section h2 {
+            font-family: 'Montserrat', system-ui, sans-serif;
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .index-section .index-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px; /* Increased gap for better legibility */
+        }
+        .index-section .index-item {
+            background: linear-gradient(180deg, #fbe9f1cc, #f1d1b1cc, #e6e2dbcc);
+            border: 1px solid #00000012;
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 24px; /* Increased padding for airiness */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            text-align: center;
+        }
+        .index-section .index-item h3 {
+            font-family: 'Montserrat', system-ui, sans-serif;
+            margin: 0;
+            font-size: 1.3rem; /* Slightly larger for legibility */
+        }
+        .index-section .index-item p {
+            margin: 0;
+            font-size: 1rem; /* Larger font */
+            color: var(--muted);
+            line-height: 1.6; /* Better line spacing */
+        }
+        .index-section .index-item ul {
+            list-style-type: disc;
+            padding-left: 20px;
+            margin: 0;
+            font-size: 1rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+        .index-section .index-item .shape {
+            width: 180px;
+            height: auto;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 12px;
+        }
+        
+        /* Check List */
+        .sr-only {
+           font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 32px;
+            background: linear-gradient(90deg, #8c7c6d, #d7cbbd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        @keyframes scroll-left {
-            0% {
-                transform: translateX(-50%);
-            }
-            100% {
-                transform: translateX(0);
-            }
+        /* Benefits Section */
+        .benefits {
+            padding: 20px 0;
+            position: relative;
+            z-index: 1;
         }
-
-        /* Responsive adjustments */
+        
+        .benefits .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+        }
+        
+        .benefits ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .benefits li {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: linear-gradient(135deg, #e7d98c7e, #f8f8f8cc);
+            border: 1px solid #00000010;
+            border-radius: 18px;
+            padding: 16px 18px;
+            box-shadow: 0 6px 20px #00000014;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .benefits li:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 12px 28px #00000026;
+        }
+        
+        .benefits li img {
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #7aad54, #4d8d2d);
+            padding: 6px;
+            filter: drop-shadow(0 0 6px #7aad5488);
+            animation: pulseCheck 2.5s infinite;
+        }
+        
+        .benefits li div {
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: #333;
+            line-height: 1.5;
+        }
+        
+        /* Subtle glowing pulse on the check */
+        @keyframes pulseCheck {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.15); opacity: 0.85; }
+        }
+        .benefits li:nth-child(odd) img { content: url('../icons/check1.png'); }
+        .benefits li:nth-child(even) img { content: url('../icons/check.png'); }
+        
+        /* Fancy FAQ */
+        .faq-section {
+            padding: 10px 20px 90px;
+            max-width: 880px;
+            margin: 0 auto;
+            margin-top: 0;
+            z-index: 100;
+        }
+        
+        .faq-section h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 32px;
+            background: linear-gradient(90deg, #8c7c6d, #d7cbbd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .faq-section details {
+            background: #3f504891;
+            border: 1px solid #00000010;
+            border-radius: 14px;
+            margin-bottom: 14px;
+            padding: 16px 18px;
+            box-shadow: 0 6px 20px #00000012;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            overflow: hidden;
+        }
+        
+        .faq-section details:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px #00000020;
+        }
+        
+        .faq-section summary {
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            list-style: none;
+            position: relative;
+            padding-right: 28px;
+        }
+        
+        .faq-section summary::after {
+            content: "+";
+            position: absolute;
+            right: 0;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #f3e306;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        
+        .faq-section details[open] summary::after {
+            content: "–";
+            color: #d33a14;
+            transform: rotate(180deg);
+        }
+        
+        .faq-section p {
+            margin: 12px 0 0;
+            color: #444;
+            line-height: 1.6;
+            font-size: 1rem;
+            opacity: 0;
+            max-height: 0;
+            transition: all 0.35s ease;
+        }
+        
+        .faq-section details[open] p {
+            opacity: 1;
+            max-height: 500px;
+        }
+        
+        /* Mobile Adjustments */
         @media (max-width: 768px) {
-            .marquee-content img {
-                height: 50px;
-                margin: 0 10px;
+            .index-section .index-list { grid-template-columns: 1fr; }
+            .index-section .index-item .shape {
+                width: 140px;
             }
         }
     </style>
 </head>
-<body>
+<body data-preview-pdf="../pdfs/guia-ugc-preview.pdf">
     
-
+    <!-- Fondo con pirámide -->
+    <div class="background-pyramid">
+        <div class="tetra">
+            <div class="face"><img src="../images/guide1Triangle.png" alt="Guide 1"></div>
+            <div class="face"><img src="../images/guide2Triangle.png" alt="Guide 2"></div>
+            <div class="face ugc">UGC</div>
+            <div class="face"><img src="../images/guide3Triangle.png" alt="Guide 3"></div>
+        </div>
+    </div>
+    
+    <header class="hero">
+        <div class="inner container">
+            <h1>Guía UGC para tratar con marcas y cobrar mejor</h1>
+            <span class="eyebrow">PDF práctico · 0% relleno</span>
+            <p class="lead">Todo lo que necesitas para negociar con seguridad, fijar precios y entregar contenido que convierte, basado en años de edición en CapCut y colaboraciones con marcas líderes.</p>
+            <div class="cta-inline">
+                <button class="btn btn-primary" id="openPreview">Ver adelanto</button>
+            </div>
+            <div class="modal" id="modal">
+                <div class="dialog">
+                    <header>
+                        <h3 id="modalTitle">Vista previa</h3>
+                        <button class="close" id="closeModal">✕</button>
+                    </header>
+                    <div class="content">
+                        <div class="book">
+                            <div class="book-shell">
+                                <article class="page current" data-index="0">
+                                    <h3>Introducción</h3>
+                                    <p>Esta guía condensa años trabajando con marcas: qué funciona, qué evitar y cómo cobrar sin miedo. Es directa, práctica y accionable, con énfasis en edición eficiente en CapCut para resultados profesionales.</p>
+                                    <p>No necesitas equipo caro: necesitas criterio, proceso y comunicación profesional. Aquí te lo doy, paso a paso, basado en experiencias reales con múltiples marcas.</p>
+                                </article>
+                                <article class="page" data-index="1">
+                                    <h3>Precios y paquetes</h3>
+                                    <p>Define tarifa base por pieza, añade licencias por uso (duración, territorios, plataformas) y considera buyouts con precio premium. Ejemplos adaptados a ediciones rápidas en CapCut.</p>
+                                    <ul>
+                                        <li>Starter: 2 piezas + 1 variación + tips de edición básica.</li>
+                                        <li>Growth: 4 piezas + 4 hooks + 1 UGC Ad + plantillas CapCut.</li>
+                                        <li>Performance: 6 piezas + 6 hooks + 2 UGC Ads + reporte + workflow avanzado.</li>
+                                    </ul>
+                                </article>
+                                <article class="page" data-index="2">
+                                    <h3>Legal esencial</h3>
+                                    <p>Usa contrato. Define propiedad intelectual, cesión de derechos, exclusividades, tiempos de uso y territorios. Incluye cláusulas para ediciones y revisiones en herramientas como CapCut.</p>
+                                    <p>Incluye pagos por adelantado, política de cancelación, límites de revisiones y confidencialidad.</p>
+                                </article>
+                                <article class="page" data-index="3">
+                                    <h3>Producción</h3>
+                                    <p>Checklist: hook, CTA, 3 beneficios, prueba social, objeción principal y cierre. Iluminación frontal, audio limpio y edición en CapCut para transiciones fluidas.</p>
+                                    <p>Entrega con nombres claros, miniaturas y documento de ideas de iteración, optimizado para colaboraciones con marcas.</p>
+                                </article>
+                                <article class="page" data-index="4">
+                                    <h3>Edición avanzada en CapCut</h3>
+                                    <p>Técnicas probadas para editar UGC que convierte: efectos, transiciones, texto overlay y exportación óptima para plataformas sociales.</p>
+                                    <p>Ejemplos de workflows que ahorran tiempo, basados en años de experiencia con marcas variadas.</p>
+                                </article>
+                                <article class="page" data-index="5">
+                                    <h3>Colaboraciones con marcas</h3>
+                                    <p>Cómo atraer y retener marcas: pitching efectivo, manejo de feedback y upselling de servicios adicionales como ediciones personalizadas.</p>
+                                    <ul>
+                                        <li>Scripts para negociaciones.</li>
+                                        <li>Casos reales de éxitos y errores.</li>
+                                        <li>Estrategias para escalar tu negocio UGC.</li>
+                                    </ul>
+                                </article>
+                                <button class="nav prev" aria-label="Página anterior">
+                                    <img src="../icons/left.png" alt="Previous page" />
+                                </button>
+                                <button class="nav next" aria-label="Página siguiente">
+                                    <img src="../icons/right.png" alt="Next page" />
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <section class="index-section container" aria-label="Índice de la guía">
+                <h2>Índice de la guía: Todo lo que encontrarás</h2>
+                <ul class="index-list">
+                    <li class="index-item">
+                        <h3>Introducción al UGC profesional</h3>
+                        <p>Fundamentos basados en años de experiencia: mentalidad ganadora, errores comunes con marcas y cómo empezar sin equipo caro.</p>
+                    </li>
+                    <li class="index-item">
+                        <h3>Portfolio que atrae marcas</h3>
+                        <p>Estructura tu portfolio para destacar ediciones en CapCut, ejemplos reales y cómo guiar a las marcas hacia la contratación.</p>
+                    </li>
+                    <li class="index-item">
+                        <h3>Producción ágil y efectiva</h3>
+                        <p>Checklist completa para grabación, ángulos que convierten y variaciones rápidas. Enfocado en flujos de trabajo eficientes.</p>
+                    </li>
+                    <li class="index-item">
+                        <h3>Edición maestra en CapCut</h3>
+                        <p>Técnicas avanzadas: transiciones, efectos, texto y audio. Tips de una experta con años editando para marcas.</p>
+                    </li>
+                    <li class="index-item">
+                        <h3>Precios, paquetes y licencias</h3>
+                        <p>Guía detallada para fijar precios justos, crear paquetes escalables y manejar licencias sin complicaciones legales.</p>
+                    </li>
+                    <li class="index-item">
+                        <h3>Negociación y cierres</h3>
+                        <p>Scripts probados para objeciones, upselling y cierres suaves. Basado en colaboraciones reales con múltiples marcas.</p>
+                    </li>
+                    <li class="index-item">
+                        <h3>Aspectos legales esenciales</h3>
+                        <p>Contratos simples, propiedad intelectual y protecciones para creators. Incluye plantillas adaptadas a UGC.</p>
+                    </li>
+                    <li class="index-item">
+                        <h3>Colaboraciones exitosas con marcas</h3>
+                        <p>Estrategias para atraer marcas, manejar feedback y construir relaciones a largo plazo. Casos de estudio reales.</p>
+                    </li>
+                    <li class="index-item">
+                        <h3>Roadmap de 30 días y recursos</h3>
+                        <p>Plan accionable para lanzar o escalar tu UGC, más plantillas, checklists y recursos extras para edición y negociación.</p>
+                    </li>
+                </ul>
+            </section>
+            <section class="benefits container" aria-labelledby="queLlevas">
+                <h2 id="queLlevas" class="sr-only">Lo que te llevas</h2>
+                <div class="grid">
+                    <ul>
+                        <li><img src="../icons/check.png" alt="" aria-hidden="true" /><div>Plantillas listas para copiar y pegar, incluyendo workflows de CapCut.</div></li>
+                        <li><img src="../icons/check.png" alt="" aria-hidden="true" /><div>Cómo responder objeciones y cerrar con marcas.</div></li>
+                        <li><img src="../icons/check.png" alt="" aria-hidden="true" /><div>Paquetes y licencias sin liarte, adaptados a editores experimentados.</div></li>
+                        <li><img src="../icons/check.png" alt="" aria-hidden="true" /><div>Checklist de producción rápida con tips de edición.</div></li>
+                        <li><img src="../icons/check.png" alt="" aria-hidden="true" /><div>Contrato básico explicado fácil.</div></li>
+                        <li><img src="../icons/check.png" alt="" aria-hidden="true" /><div>Roadmap de 30 días para escalar colaboraciones.</div></li>
+                        <li><img src="../icons/check.png" alt="" aria-hidden="true" /><div>Casos reales de marcas y ediciones en CapCut.</div></li>
+                    </ul>
+                </div>
+            </section>
+            
+        </div>
+    </header>
+    <div class="buy-bar" role="region" aria-label="Compra rápida">
+        <strong>PDF completo</strong>
+        <span class="price">5,99 €</span>
+        <a class="btn btn-primary" href="payment.html">Lo quiero</a>
+    </div>
+    <div class="modal" id="modal" aria-hidden="true">
+        <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <header>
+                <h3 id="modalTitle">Vista previa</h3>
+                <button class="close" id="closeModal" aria-label="Cerrar">✕</button>
+            </header>
+            <div class="content">
+                <embed id="pdfEmbed" src="" type="application/pdf" />
+            </div>
+        </div>
+    </div>
+    <section class="faq-section container" aria-labelledby="faqTitle">
+        <h2 id="faqTitle">Preguntas frecuentes</h2>
+        
+        <details>
+            <summary>¿Es para principiantes?</summary>
+            <p>Sí. Empiezas por mentalidad, sistemas y guiones listos. Si ya vendes UGC, las secciones de precios/licencias, edición en CapCut y negociación te suben el ticket.</p>
+        </details>
+        
+        <details>
+            <summary>¿Actualizaciones incluidas?</summary>
+            <p>Obtienes acceso a pequeñas revisiones y correcciones. Las grandes ediciones se ofrecen con descuento para alumnos.</p>
+        </details>
+        
+        <details>
+            <summary>¿Garantía?</summary>
+            <p>Garantía de satisfacción de 7 días. Si no te aporta claridad accionable, te devolvemos el dinero.</p>
+        </details>
+    </section>
+    
     <script>
-        // Optional: Pause animation on hover
-        const marqueeContents = document.querySelectorAll('.marquee-content');
-
-        marqueeContents.forEach(content => {
-            content.addEventListener('mouseenter', () => {
-                content.style.animationPlayState = 'paused';
+        (function() {
+            const el = document.getElementById('geo');
+            if (!el) return;
+            function setMsg(city, country) {
+                const c = city || 'tu ciudad';
+                const k = country ? (', ' + country) : '';
+                el.innerHTML = `oye, si me visitas desde <strong>${c}${k}</strong>… esta guía te va a ahorrar horas 😉`;
+            }
+            fetch('https://ipapi.co/json')
+            .then(r => r.ok ? r.json() : Promise.reject())
+            .then(d => setMsg(d.city, d.country_name))
+            .catch(() => {
+                fetch('https://ipinfo.io/json?token=')
+                .then(r => r.ok ? r.json() : Promise.reject())
+                .then(d => setMsg(d.city, d.country))
+                .catch(() => {});
             });
-            content.addEventListener('mouseleave', () => {
-                content.style.animationPlayState = 'running';
+        })();
+        
+        function initBook() {
+            const shell = document.querySelector('.book-shell');
+            if (!shell || shell.dataset.ready) return;
+            const pages = Array.from(shell.querySelectorAll('.page'));
+            const prev = shell.querySelector('.nav.prev');
+            const next = shell.querySelector('.nav.next');
+            let index = 0;
+            function render() {
+                pages.forEach((p, i) => {
+                    p.classList.remove('prev', 'current', 'next');
+                    if (i === index) p.classList.add('current');
+                    if (i === index + 1) p.classList.add('next');
+                    if (i < index) p.classList.add('prev');
+                });
+            }
+            function flipNext() {
+                if (index < pages.length - 1) {
+                    pages[index].style.transform = 'rotateY(-180deg)';
+                    index++;
+                    setTimeout(render, 320);
+                }
+            }
+            function flipPrev() {
+                if (index > 0) {
+                    pages[index - 1].style.transform = 'rotateY(0deg)';
+                    index--;
+                    setTimeout(render, 220);
+                }
+            }
+            next.addEventListener('click', flipNext);
+            prev.addEventListener('click', flipPrev);
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight') flipNext();
+                if (e.key === 'ArrowLeft') flipPrev();
             });
-        });
+            shell.dataset.ready = '1';
+            render();
+        }
+        
+        (function() {
+            const openBtn = document.getElementById('openPreview');
+            const modal = document.getElementById('modal');
+            const closeBtn = document.getElementById('closeModal');
+            function open() {
+                modal.setAttribute('open', '');
+                document.body.style.overflow = 'hidden';
+                initBook();
+                closeBtn.focus();
+            }
+            function close() {
+                modal.removeAttribute('open');
+                document.body.style.overflow = '';
+            }
+            openBtn.addEventListener('click', open);
+            closeBtn.addEventListener('click', close);
+            modal.addEventListener('click', e => { if (e.target === modal) close(); });
+            document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.hasAttribute('open')) close(); });
+        })();
     </script>
 </body>
 </html>
