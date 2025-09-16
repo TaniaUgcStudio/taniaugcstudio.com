@@ -1,87 +1,441 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rotating Crystalline Pyramid</title>
+  <title>Guía de UGC - Vista Previa</title>
   <style>
+    *{margin:0;padding:0;box-sizing:border-box}
     body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: radial-gradient(circle, #1a1a1a, #000);
-      overflow: hidden;
-      perspective: 1000px;
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-family: 'Futura', 'Helvetica', 'Arial', sans-serif;
+      /* With an image */
+      background-image: url("../images/guideBackgnd.png"); /* path to your image */
+      background-size: cover;   /* cover the whole viewport */
+      background-position: center;
+      background-attachment: fixed; /* optional: makes it stay while scrolling */
     }
-    .tetra {
-      position: relative;
-      width: 300px;
-      height: 259.8px; /* sqrt(3)/2 * 300px ≈ 259.8px for equilateral triangle */
-      transform-style: preserve-3d;
-      animation: rotate 20s infinite linear;
+    
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('../fonts/montserrat/Montserrat-Bold.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
     }
-    .face {
+    
+    @font-face {
+      font-family: 'Futura';
+      src: url('../fonts/futura-pt/futura-light.ttf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    .book {
+      position:relative;
+      width: 550px;   /* bigger book */
+      height: 800px;
+      max-width: 80vw;   /* still responsive */
+      max-height: 90vh;
+    }
+    
+    .paper {
+      position:absolute;
+      inset:0;
+      transform-style:preserve-3d;
+      border-radius:8px;
+      transform-origin: 0% 50%; /* right center */
+    }
+    
+    .front, .back {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.05);
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      backdrop-filter: blur(5px);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-      overflow: hidden;
-      transform-style: preserve-3d;
+      inset: 0;
       display: flex;
       justify-content: center;
       align-items: center;
+      
+      /* Fondo pergamino marrón (no transparente) */
+      background: #f3e1c0;
+      background: radial-gradient(120% 100% at 50% 20%, #f6e6c8, #e2c9a0 80%);
+      backface-visibility: hidden;
+      border: 1px solid #b48a5a;
+      border-radius: 8px;
+      overflow: hidden;
     }
-    .face img {
+    
+    .front{ transform:rotateY(0deg) }
+    .back { transform:rotateY(180deg) }
+    
+    .page-content {
+      width:88%;
+      height:86%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      gap:18px;
+    }
+    
+    /* show the image with its native shape (use transparency if present) */
+    .tutor-image{
+      max-width: 75%;     /* responsive inside page */
+      height: auto;       /* keep native aspect */
+      object-fit: contain;/* no cropping */
+      border-radius: 0;   /* no forced circle */
+      background: transparent;
+      box-shadow: none;   /* optional: no ring */
+    }
+    
+    h2{ font-size:24px; color:#8b4513 }
+    p,li{ font-size:18px; line-height:1.5 }
+    ul{list-style:none;display:grid;gap:.4rem}
+    
+    /* ===== Realistic flip animation ===== */
+    .paper.turning {
+      animation: turn 1200ms ease-in-out forwards;
+    }
+    @keyframes turn {
+      0%   { transform: rotateY(0deg); }
+      25%  { transform: rotateY(40deg); }
+      50%  { transform: rotateY(100deg); }
+      75%  { transform: rotateY(150deg); }
+      100% { transform: rotateY(180deg); }
+    }
+    .paper.turning.backwards {
+      animation: turnBack 1200ms ease-in-out forwards;
+    }
+    @keyframes turnBack {
+      0%   { transform: rotateY(180deg); }
+      25%  { transform: rotateY(140deg); }
+      50%  { transform: rotateY(80deg); }
+      75%  { transform: rotateY(30deg); }
+      100% { transform: rotateY(0deg); }
+    }
+    .paper.flipped { transform: rotateY(180deg); }
+    
+    /* curl & shade overlays */
+    .paper .curl, .paper .shade {
+      position:absolute; inset:0; pointer-events:none;
+    }
+    .paper .curl {
+      background:radial-gradient(60% 120% at 0% 50%,rgba(255,255,255,.35),transparent 60%),
+      linear-gradient(90deg,rgba(0,0,0,.06),transparent);
+      mix-blend-mode:multiply;
+      opacity:0;
+    }
+    .paper .shade {
+      background:linear-gradient(90deg,rgba(0,0,0,.35),transparent 35%);
+      filter:blur(6px);
+      opacity:0;
+    }
+    .paper.turning .curl {
+      animation: curlA 1200ms ease-in-out forwards;
+    }
+    @keyframes curlA {
+      0%{opacity:0;transform:translateX(0)}
+      20%{opacity:.4}
+      50%{opacity:.65;transform:translateX(20%)}
+      80%{opacity:.35}
+      100%{opacity:0;transform:translateX(100%)}
+    }
+    .paper.turning .shade {
+      animation: shadeA 1200ms ease-in-out forwards;
+    }
+    @keyframes shadeA {
+      0%{opacity:0;transform:translateX(-6%)}
+      40%{opacity:.55}
+      70%{opacity:.35}
+      100%{opacity:0;transform:translateX(100%)}
+    } 
+    /* ===== Nav buttons ===== */
+    .nav-btn {
+      position: absolute;
+      top: 50%;                      /* vertically centered */
+      transform: translateY(-50%);   /* true vertical center */
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: none;
+      background: #8b4513;
+      color: #fff;
+      font-size: 22px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      transition: background 0.3s;
+      z-index: 200;
+    }
+    .nav-btn:hover {
+      background: #a0522d;
+    }
+    #prev-btn { left: -100px; }   /* next to book */
+    #next-btn { right: -100px; }
+    
+    /* ===== Buy ribbon ===== */
+    .buy-ribbon {
+      position:fixed;
+      bottom:30px;left:50%;
+      transform:translateX(-50%);
+      display:flex;align-items:center;gap:14px;
+      padding:10px 16px;
+      background:#f9f2e2;
+      border:1px solid #cdae86;
+      border-radius:999px;
+      box-shadow:0 8px 14px rgba(0,0,0,.25);
+      font-size:18px;
+      z-index:1000;
+    }
+    .buy-btn {
+      border:0;
+      border-radius:999px;
+      padding:10px 18px;
+      font-weight:700;
+      background:linear-gradient(#9c6b34,#7f5428);
+      color:#fff;
+      cursor:pointer;
+    }
+    .buy-btn:hover{filter:brightness(1.05)}
+    
+    /* ===== Mobile ===== */
+    @media(max-width:640px){
+      #prev-btn,#next-btn{display:none}
+      .buy-ribbon{
+        width:90%;
+        border-radius:40px;
+        justify-content:center;
+      }
+      .book {
+        width: 95%;
+        height: 60%;
+        max-width: 95vw;   /* still responsive */
+        max-height: 70vh;
+      }
+    }
+    
+    /* ===== Cover full bleed ===== */
+    #f1 {
       width: 100%;
       height: 100%;
-      object-fit: contain; /* ✅ entire image is always visible */
-      clip-path: polygon(50% 0%, 0% 100%, 100% 100%); /* fit inside triangle */
-      background: #000; /* fills empty transparent parts */
+      padding: 0;              /* remove inner spacing */
     }
-    .face.ugc {
-      font-family: Arial, sans-serif;
-      font-size: 60px;
-      font-weight: bold;
-      color: #fff;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-      background: rgba(0, 102, 204, 0.3);
+    #f1 img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;        /* cover the whole page */
+      border-radius: 0;         /* no rounded corners */
+      display: block;
     }
-    /* Face positions for tetrahedron */
-    .face:nth-child(1) { /* Base or front */ }
-    .face:nth-child(2) {
-      transform-origin: 0% 100%;
-      transform: rotate(-60deg) rotateX(-109.5deg);
+    #p1 .front {
+      background: none;
+      border: none;
+      box-shadow: none;
     }
-    .face:nth-child(3) {
-      transform-origin: 100% 100%;
-      transform: rotate(60deg) rotateX(-109.5deg);
+    
+    #p1 { z-index: 60; }
+    #p2 { z-index: 50; }
+    #p3 { z-index: 40; }
+    #p4 { z-index: 30; }
+    #p5 { z-index: 20; }
+    #p6 { z-index: 10; }
+    #p7 { z-index: 5; }
+    
+    /* in-page index layout (compact, legible) */
+    /* English comment: these styles are scoped to the third page index content */
+    .page-index{
+      width: 90%;
+      height: 90%;
+      text-align: left;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 12px;
     }
-    .face:nth-child(4) {
-      transform-origin: 50% 100%;
-      transform: rotate(180deg) rotateX(-109.5deg);
+    
+    .page-index h2{
+      width: 100%;
+      text-align: center;
+      font-size: clamp(18px, 2.8vw, 24px);
+      color: #7e4f27;
+      margin-bottom: 6px;
     }
-    @keyframes rotate {
-      0%   { transform: rotateX(20deg) rotateY(0deg) rotateZ(0deg); }
-      33%  { transform: rotateX(200deg) rotateY(120deg) rotateZ(60deg); }
-      66%  { transform: rotateX(300deg) rotateY(240deg) rotateZ(120deg); }
-      100% { transform: rotateX(380deg) rotateY(360deg) rotateZ(360deg); }
+    
+    .page-index .index-list{
+      margin: 0;
+      padding-left: 16px;
+      display: grid;
+      gap: 10px;
+      list-style: disc;
+      font-size: clamp(14px, 2.2vw, 16px);
+      line-height: 1.5;
+    }
+    
+    .page-index .index-list li{
+      margin-left: 8px;
     }
   </style>
 </head>
 <body>
-  <div class="tetra">
-    <div class="face"><img src="../images/guide1Triangle.png" alt="Guide 1"></div>
-    <div class="face"><img src="../images/guide2Triangle.png" alt="Guide 2"></div>
-    <div class="face ugc">UGC</div>
-    <div class="face"><img src="../images/guide3Triangle.png" alt="Guide 3"></div>
-  </div>
-</body>
-</html>
+  <div id="book" class="book">
+    <!-- Page 1 (cover full-bleed) -->
+    <div id="p1" class="paper">
+      <div class="front">
+        <div class="page-content" id="f1">
+          <img src="../images/guideBookShell.png" alt="Portada">
+        </div>
+      </div>
+      <div class="curl"></div><div class="shade"></div>
+    </div>
+    
+    <!-- Page 2 (imagen + frase) -->
+    <div id="p2" class="paper">
+      <div class="front">
+        <div class="page-content" id="f2">
+          <img src="../images/guide3Circle.png" class="tutor-image" alt="Tania - portada 2">
+          <p>¿Te gustaría aprender todo de UGC desde cero hasta 100 en pocos pasos y con un PDF simple?</p>         
+        </div>
+      </div>
+      <div class="curl"></div><div class="shade"></div>
+    </div>
+    
+    <!-- Page 3 (imagen + frase) -->
+    <div id="p3" class="paper">
+      <div class="front">
+        <div class="page-content" id="f3">
+          <img src="../images/guide2Elipse.png" class="tutor-image" alt="Tania - portada 2">
+          <p>Cada paso que das te acerca más a tu éxito en el mundo del contenido generado por usuarios.</p>
+        </div>
+      </div>
+      <div class="curl"></div><div class="shade"></div>
+    </div>
+    
+    <!-- Page 4 (Intro a Índice) -->
+    <div id="p4" class="paper">
+      <div class="front">
+        <div class="page-content" id="f4">
+          <h2 style="font-size:2rem; font-weight:800; text-align:center; color:#7e3f1c;">
+            VAMOS A POR ELLO
+          </h2>
+          <p style="font-size:1.2rem; font-weight:600; margin-top:20px; text-align:center;">
+            Y te paso un índice simple de lo que vas a leer en este PDF.
+          </p>
+        </div>
+      </div>
+      <div class="curl"></div><div class="shade"></div>
+    </div>
+    
+    <!-- Page 5 (ÍNDICE parte 1) -->
+    <div id="p5" class="paper">
+      <div class="front">
+        <div class="page-content page-index" id="f5">
+          <h2>Índice de la guía: Todo lo que encontrarás</h2>
+          <ul class="index-list">
+            <li><strong>Introducción al UGC profesional</strong><br>Fundamentos basados en años de experiencia: mentalidad ganadora, errores comunes y cómo empezar sin equipo caro.</li>
+            <li><strong>Portfolio que atrae marcas</strong><br>Estructura tu portfolio, ejemplos reales y cómo guiar a las marcas hacia la contratación.</li>
+            <li><strong>Producción ágil y efectiva</strong><br>Checklist para grabación, variaciones rápidas y flujos eficientes.</li>
+            <li><strong>Edición maestra en CapCut</strong><br>Transiciones, efectos, texto y audio con técnicas avanzadas.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="curl"></div><div class="shade"></div>
+    </div>
+    
+    <!-- Page 6 (ÍNDICE parte 2) -->
+    <div id="p6" class="paper">
+      <div class="front">
+        <div class="page-content page-index" id="f6">
+          <ul class="index-list">
+            <li><strong>Precios, paquetes y licencias</strong><br>Precios justos, paquetes escalables y licencias sin líos.</li>
+            <li><strong>Negociación y cierres</strong><br>Scripts para objeciones, upselling y cierres suaves.</li>
+            <li><strong>Aspectos legales esenciales</strong><br>Contratos simples, propiedad intelectual y protecciones.</li>
+            <li><strong>Colaboraciones exitosas con marcas</strong><br>Atraer marcas, manejar feedback y relaciones a largo plazo.</li>
+            <li><strong>Roadmap de 30 días y recursos</strong><br>Plan accionable + plantillas, checklists y recursos extra.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="curl"></div><div class="shade"></div>
+    </div>
+    
+    <!-- Page 7 (Final motivación + stop) -->
+    <div id="p7" class="paper">
+      <div class="front">
+        <div class="page-content" id="f7">
+          <img src="../images/offer.gif" class="tutor-image" alt="Final UGC">
+          <p style="font-size:1.2rem; font-weight:700; color:#7e3f1c;">
+            ¡Vengaaaaaaa! Vamos a comprarlo 🚀<br>No pierdes nada, te aseguro que si no te gusta,<br>te devolvemos el dinero hasta 48 horas.
+          </p>
+        </div>
+      </div>
+      <div class="curl"></div><div class="shade"></div>
+    </div>
+    
+    <!-- Replace old prev/next buttons -->
+    <button id="prev-btn" class="nav-btn">◀</button>
+    <button id="next-btn" class="nav-btn">▶</button>
+    
+    <div class="buy-ribbon">
+      <span>Compro el PDF por <strong>5,99 €</strong></span>
+      <button class="buy-btn" onclick="window.location.href='https://example.com/payment'">Comprar ahora</button>
+    </div>
+    
+    <script>
+      const papers = [...document.querySelectorAll(".paper")];
+      let current = 0;
+      
+      function flipForward() {
+        if (current >= papers.length - 1) return; // ✅ stop at last page
+        const leaf = papers[current];
+        leaf.classList.add("turning");
+        leaf.addEventListener("animationend", () => {
+          leaf.classList.remove("turning");
+          leaf.classList.add("flipped");
+          current++;
+        }, { once: true });
+      }
+      
+      function flipBackward() {
+        if (current <= 0) return; // ✅ stop at first page
+        const leaf = papers[current - 1];
+        leaf.classList.add("turning", "backwards");
+        leaf.addEventListener("animationend", () => {
+          leaf.classList.remove("turning", "backwards", "flipped");
+          current--;
+        }, { once: true });
+      }
+      
+      document.getElementById("next-btn").onclick = flipForward;
+      document.getElementById("prev-btn").onclick = flipBackward;
+      
+      // swipe for mobile
+      let startX = 0;
+      document.getElementById("book").addEventListener("touchstart", e => {
+        startX = e.touches[0].clientX;
+      }, { passive: true });
+      document.getElementById("book").addEventListener("touchend", e => {
+        const dx = e.changedTouches[0].clientX - startX;
+        if (dx < -30) flipForward();
+        else if (dx > 30) flipBackward();
+      }, { passive: true });
+    </script>
+    
+    <script>
+      (function() {
+        var pass = prompt("Introduce la contraseña:");
+        if (pass !== "585858") {
+          alert("Contraseña incorrecta. Acceso denegado.");
+          window.location.href = "about:blank"; // kicks them out
+        }
+      })();
+    </script>
+    
+  </body>
+  </html>
+  
