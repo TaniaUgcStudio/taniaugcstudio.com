@@ -184,13 +184,13 @@
     .nav-btn:hover {
       background: #a0522d;
     }
-    #prev-btn { left: 150px; }   /* next to book */
-    #next-btn { right: 150px; }
+    #prev-btn { left: -100px; }   /* next to book */
+    #next-btn { right: -100px; }
     
     /* ===== Buy ribbon ===== */
     .buy-ribbon {
       position:fixed;
-      bottom:30px;left:50%;
+      top:20px;left:50%;
       transform:translateX(-50%);
       display:flex;align-items:center;gap:14px;
       padding:10px 16px;
@@ -211,7 +211,7 @@
       cursor:pointer;
     }
     .buy-btn:hover{filter:brightness(1.05)}
-
+    
     /* ===== Cover full bleed ===== */
     #f1 {
       width: 100%;
@@ -294,14 +294,13 @@
     
     /* ===== Mobile ===== */
     @media(max-width:768px){
-
+      
       @media (max-width: 768px) {
-  body {
-    height: 100vh;          /* fija altura igual al viewport */
-    overscroll-behavior: none; /* bloquea el “bounce” */
-  }
-}
-
+        body {
+          height: 100vh;          /* fija altura igual al viewport */
+          overscroll-behavior: none; /* bloquea el “bounce” */
+        }
+      }
       .book {
         width: 95%;
         height: 70%;
@@ -325,111 +324,111 @@
   </style>
 </head>
 <body>
-    <div id="book" class="book">
+  <div id="book" class="book">
     <!-- Arrow shown only on mobile -->
     <img src="../icons/left-arrow.gif" alt="Desliza" class="mobile-arrow">
     
-      <!-- Page 1 (cover full-bleed) -->
-      <div id="p1" class="paper">
-        <div class="front">
-          <div class="page-content" id="f1">
-            <img src="../images/guideBookShell.png" alt="Portada">
-          </div>
+    <!-- Page 1 (cover full-bleed) -->
+    <div id="p1" class="paper">
+      <div class="front">
+        <div class="page-content" id="f1">
+          <img src="../images/guideBookShell.png" alt="Portada">
         </div>
-        <div class="curl"></div><div class="shade"></div>
       </div>
-      
-      <!-- Page 2 (imagen + frase) -->
-      <div id="p2" class="paper">
-        <div class="front">
-          <div class="page-content" id="f2">
-            <img src="../images/guide3Circle.png" class="tutor-image" alt="Tania - portada 2">
-            <p>¿Te gustaría aprender todo de UGC desde cero hasta 100 en pocos pasos y con un PDF simple?</p>         
-          </div>
-        </div>
-        <div class="curl"></div><div class="shade"></div>
-      </div>
-      
-      <!-- Page 3 (imagen + frase) -->
-      <div id="p3" class="paper">
-        <div class="front">
-          <div class="page-content" id="f3">
-            <img src="../images/guide2Elipse.png" class="tutor-image" alt="Tania - portada 2">
-            <p>Cada paso que das te acerca más a tu éxito en el mundo del contenido generado por usuarios.</p>
-          </div>
-        </div>
-        <div class="curl"></div><div class="shade"></div>
-      </div>
-      
-      <!-- Page 4 (Intro a Índice) -->
-      <div id="p4" class="paper">
-        <div class="front">
-          <div class="page-content" id="f4">
-            <h2 style="font-size:2rem; font-weight:800; text-align:center; color:#7e3f1c;">
-              VAMOS A POR ELLO
-            </h2>
-            <p style="font-size:1.2rem; font-weight:600; margin-top:20px; text-align:center;">
-              Y te paso un índice simple de lo que vas a leer en este PDF.
-            </p>
-          </div>
-        </div>
-        <div class="curl"></div><div class="shade"></div>
-      </div>
-      
-      <!-- Page 5 (ÍNDICE parte 1) -->
-      <div id="p5" class="paper">
-        <div class="front">
-          <div class="page-content page-index" id="f5">
-            <h2>Índice de la guía: Todo lo que encontrarás</h2>
-            <ul class="index-list">
-              <li><strong>Introducción al UGC profesional</strong><br>Fundamentos basados en años de experiencia: mentalidad ganadora, errores comunes y cómo empezar sin equipo caro.</li>
-              <li><strong>Portfolio que atrae marcas</strong><br>Estructura tu portfolio, ejemplos reales y cómo guiar a las marcas hacia la contratación.</li>
-              <li><strong>Producción ágil y efectiva</strong><br>Checklist para grabación, variaciones rápidas y flujos eficientes.</li>
-              <li><strong>Edición maestra en CapCut</strong><br>Transiciones, efectos, texto y audio con técnicas avanzadas.</li>
-            </ul>
-          </div>
-        </div>
-        <div class="curl"></div><div class="shade"></div>
-      </div>
-      
-      <!-- Page 6 (ÍNDICE parte 2) -->
-      <div id="p6" class="paper">
-        <div class="front">
-          <div class="page-content page-index" id="f6">
-            <ul class="index-list">
-              <li><strong>Precios, paquetes y licencias</strong><br>Precios justos, paquetes escalables y licencias sin líos.</li>
-              <li><strong>Negociación y cierres</strong><br>Scripts para objeciones, upselling y cierres suaves.</li>
-              <li><strong>Aspectos legales esenciales</strong><br>Contratos simples, propiedad intelectual y protecciones.</li>
-              <li><strong>Colaboraciones exitosas con marcas</strong><br>Atraer marcas, manejar feedback y relaciones a largo plazo.</li>
-              <li><strong>Roadmap de 30 días y recursos</strong><br>Plan accionable + plantillas, checklists y recursos extra.</li>
-            </ul>
-          </div>
-        </div>
-        <div class="curl"></div><div class="shade"></div>
-      </div>
-      
-      <!-- Page 7 (Final motivación + stop) -->
-      <div id="p7" class="paper">
-        <div class="front">
-          <div class="page-content" id="f7">
-            <!-- Add a new class "final-image" -->
-            <img src="../images/offer.gif" class="final-image" alt="Final UGC">
-            <p style="font-size:1.2rem; font-weight:700; color:#7e3f1c;">
-              ¡Vengaaaaaaa! Vamos a comprarlo 🚀<br>No pierdes nada, te aseguro que si no te gusta,<br>te devolvemos el dinero hasta 48 horas.
-            </p>
-          </div>
-        </div>
-        <div class="curl"></div><div class="shade"></div>
-      </div>
+      <div class="curl"></div><div class="shade"></div>
     </div>
-  
-  <!-- Replace old prev/next buttons -->
-  <button id="prev-btn" class="nav-btn">◀</button>
-  <button id="next-btn" class="nav-btn">▶</button>
-  
-  <div class="buy-ribbon">
-    <span>Compro el PDF por <strong>5,99 €</strong></span>
-    <button class="buy-btn" onclick="window.location.href='https://example.com/payment'">Comprar ahora</button>
+    
+    <!-- Page 2 (imagen + frase) -->
+    <div id="p2" class="paper">
+      <div class="front">
+        <div class="page-content" id="f2">
+          <img src="../images/guide3Circle.png" class="tutor-image" alt="Tania - portada 2">
+          <p>¿Te gustaría aprender todo de UGC desde cero hasta 100 en pocos pasos y con un PDF simple?</p>         
+        </div>
+      </div>
+      <div class="curl"></div><div class="shade"></div>
+    </div>
+    
+    <!-- Page 3 (imagen + frase) -->
+    <div id="p3" class="paper">
+      <div class="front">
+        <div class="page-content" id="f3">
+          <img src="../images/guide2Elipse.png" class="tutor-image" alt="Tania - portada 2">
+          <p>Cada paso que das te acerca más a tu éxito en el mundo del contenido generado por usuarios.</p>
+        </div>
+      </div>
+      <div class="curl"></div><div class="shade"></div>
+    </div>
+    
+    <!-- Page 4 (Intro a Índice) -->
+    <div id="p4" class="paper">
+      <div class="front">
+        <div class="page-content" id="f4">
+          <h2 style="font-size:2rem; font-weight:800; text-align:center; color:#7e3f1c;">
+            VAMOS A POR ELLO
+          </h2>
+          <p style="font-size:1.2rem; font-weight:600; margin-top:20px; text-align:center;">
+            Y te paso un índice simple de lo que vas a leer en este PDF.
+          </p>
+        </div>
+      </div>
+      <div class="curl"></div><div class="shade"></div>
+    </div>
+    
+    <!-- Page 5 (ÍNDICE parte 1) -->
+    <div id="p5" class="paper">
+      <div class="front">
+        <div class="page-content page-index" id="f5">
+          <h2>Índice de la guía: Todo lo que encontrarás</h2>
+          <ul class="index-list">
+            <li><strong>Introducción al UGC profesional</strong><br>Fundamentos basados en años de experiencia: mentalidad ganadora, errores comunes y cómo empezar sin equipo caro.</li>
+            <li><strong>Portfolio que atrae marcas</strong><br>Estructura tu portfolio, ejemplos reales y cómo guiar a las marcas hacia la contratación.</li>
+            <li><strong>Producción ágil y efectiva</strong><br>Checklist para grabación, variaciones rápidas y flujos eficientes.</li>
+            <li><strong>Edición maestra en CapCut</strong><br>Transiciones, efectos, texto y audio con técnicas avanzadas.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="curl"></div><div class="shade"></div>
+    </div>
+    
+    <!-- Page 6 (ÍNDICE parte 2) -->
+    <div id="p6" class="paper">
+      <div class="front">
+        <div class="page-content page-index" id="f6">
+          <ul class="index-list">
+            <li><strong>Precios, paquetes y licencias</strong><br>Precios justos, paquetes escalables y licencias sin líos.</li>
+            <li><strong>Negociación y cierres</strong><br>Scripts para objeciones, upselling y cierres suaves.</li>
+            <li><strong>Aspectos legales esenciales</strong><br>Contratos simples, propiedad intelectual y protecciones.</li>
+            <li><strong>Colaboraciones exitosas con marcas</strong><br>Atraer marcas, manejar feedback y relaciones a largo plazo.</li>
+            <li><strong>Roadmap de 30 días y recursos</strong><br>Plan accionable + plantillas, checklists y recursos extra.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="curl"></div><div class="shade"></div>
+    </div>
+    
+    <!-- Page 7 (Final motivación + stop) -->
+    <div id="p7" class="paper">
+      <div class="front">
+        <div class="page-content" id="f7">
+          <!-- Add a new class "final-image" -->
+          <img src="../images/offer.gif" class="final-image" alt="Final UGC">
+          <p style="font-size:1.2rem; font-weight:700; color:#7e3f1c;">
+            ¡Vengaaaaaaa! Vamos a comprarlo 🚀<br>No pierdes nada, te aseguro que si no te gusta,<br>te devolvemos el dinero hasta 48 horas.
+          </p>
+        </div>
+      </div>
+      <div class="curl"></div><div class="shade"></div>
+    </div>
+    
+    <!-- Replace old prev/next buttons -->
+    <button id="prev-btn" class="nav-btn">◀</button>
+    <button id="next-btn" class="nav-btn">▶</button>
+    
+    <div class="buy-ribbon">
+      <span>Compro el PDF por <strong>5,99 €</strong></span>
+      <button class="buy-btn" onclick="window.location.href='https://example.com/payment'">Comprar ahora</button>
+    </div>
   </div>
   
   <script>
@@ -480,16 +479,5 @@
       else if (dx > 30) flipBackward();
     }, { passive: true });
   </script>
-  
-  <script>
-  (function() {
-    var pass = prompt("Introduce la contraseña:");
-    if (pass !== "585858") {
-      alert("Contraseña incorrecta. Acceso denegado.");
-      window.location.href = "about:blank"; // kicks them out
-    }
-  })();
-</script>
-  
 </body>
 </html>
