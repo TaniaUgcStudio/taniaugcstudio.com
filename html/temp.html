@@ -6,8 +6,14 @@
   <title>Guía de UGC - Vista Previa</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    body {
-      height:100vh;
+    html, body {
+      height: 100%;
+      overflow: hidden;      /* bloquea scroll */
+      position: fixed;       /* evita “rebotes” */
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       display:flex;
       justify-content:center;
       align-items:center;
@@ -178,8 +184,8 @@
     .nav-btn:hover {
       background: #a0522d;
     }
-    #prev-btn { left: -100px; }   /* next to book */
-    #next-btn { right: -100px; }
+    #prev-btn { left: 150px; }   /* next to book */
+    #next-btn { right: 150px; }
     
     /* ===== Buy ribbon ===== */
     .buy-ribbon {
