@@ -281,6 +281,16 @@
     .page-index .index-list li{
       margin-left: 8px;
     }
+
+    /* Special style for the final motivational image */
+.final-image {
+  width: 300px;       /* smaller fixed size */
+  height: 300px;
+  border-radius: 50%; /* perfect circle */
+  object-fit: cover;  /* crop inside the circle */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
   </style>
 </head>
 <body>
@@ -365,10 +375,12 @@
     </div>
     
     <!-- Page 7 (Final motivación + stop) -->
+    <!-- Page 7 (Final motivación + stop) -->
     <div id="p7" class="paper">
       <div class="front">
         <div class="page-content" id="f7">
-          <img src="../images/offer.gif" class="tutor-image" alt="Final UGC">
+          <!-- Add a new class "final-image" -->
+          <img src="../images/offer.gif" class="final-image" alt="Final UGC">
           <p style="font-size:1.2rem; font-weight:700; color:#7e3f1c;">
             ¡Vengaaaaaaa! Vamos a comprarlo 🚀<br>No pierdes nada, te aseguro que si no te gusta,<br>te devolvemos el dinero hasta 48 horas.
           </p>
@@ -376,7 +388,7 @@
       </div>
       <div class="curl"></div><div class="shade"></div>
     </div>
-    
+
     <!-- Replace old prev/next buttons -->
     <button id="prev-btn" class="nav-btn">◀</button>
     <button id="next-btn" class="nav-btn">▶</button>
@@ -389,25 +401,34 @@
     <script>
       const papers = [...document.querySelectorAll(".paper")];
       let current = 0;
+      let isTurning = false; // ✅ bloqueo durante animación
       
       function flipForward() {
-        if (current >= papers.length - 1) return; // ✅ stop at last page
+        if (isTurning) return;                 // si está animando, no hacer nada
+        if (current >= papers.length - 1) return; // ya en la última página
+        isTurning = true;
+        
         const leaf = papers[current];
         leaf.classList.add("turning");
         leaf.addEventListener("animationend", () => {
           leaf.classList.remove("turning");
           leaf.classList.add("flipped");
           current++;
+          isTurning = false; // ✅ liberar bloqueo
         }, { once: true });
       }
       
       function flipBackward() {
-        if (current <= 0) return; // ✅ stop at first page
+        if (isTurning) return;
+        if (current <= 0) return; // ya en la primera
+        isTurning = true;
+        
         const leaf = papers[current - 1];
         leaf.classList.add("turning", "backwards");
         leaf.addEventListener("animationend", () => {
           leaf.classList.remove("turning", "backwards", "flipped");
           current--;
+          isTurning = false;
         }, { once: true });
       }
       
@@ -427,14 +448,15 @@
     </script>
     
     <script>
-      (function() {
-        var pass = prompt("Introduce la contraseña:");
-        if (pass !== "585858") {
-          alert("Contraseña incorrecta. Acceso denegado.");
-          window.location.href = "about:blank"; // kicks them out
-        }
-      })();
-    </script>
+  (function() {
+    var pass = prompt("Introduce la contraseña:");
+    if (pass !== "585858") {
+      alert("Contraseña incorrecta. Acceso denegado.");
+      window.location.href = "about:blank"; // kicks them out
+    }
+  })();
+</script>
+    
     
   </body>
   </html>
