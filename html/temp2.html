@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Guía UGC — Claro, directo y visual</title>
+  <meta name="description" content="Guía de UGC clara, directa y visual. Todo de un vistazo con CTA evidente." />
+  <style>
+    /* -------- Reset & Tokens -------- */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; color: #1f1f1f; }
+
+    :root{
+      --bg-blur: 12px;
+      --card-bg: rgba(255,255,255,0.5);
+      --muted: #5b5b5b;
+      --brand: #7a4a2a;   /* cálido, profesional */
+      --brand-2: #a56c41; /* hover */
+      --ok: #0ea5e9;      /* acentos sutiles */
+      --radius: 18px;
+      --shadow: 0 10px 30px rgba(0,0,0,.15);
+      --maxw: 1100px;
+    }
+
+    /* -------- Background image (mantener) -------- */
+    body::before{
+      content: "";
+      position: fixed; inset: 0; z-index: -2;
+      background-image: url("../images/guideBackgnd.png");
+      background-size: cover; background-position: center;
+      filter: none;
+    }
+    /* overlay suave para legibilidad */
+    body::after{
+      content: "";
+      position: fixed; inset: 0; z-index: -1;
+      background: linear-gradient(180deg, rgba(255,255,255,.7), rgba(255,255,255,.3) 40%, rgba(255,255,255,.6));
+    }
+
+    /* -------- Tipografías -------- */
+    @font-face {
+      font-family: 'Montserrat';
+      src: url('../fonts/montserrat/Montserrat-Bold.otf') format('opentype');
+      font-weight: 700; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Futura';
+      src: url('../fonts/futura-pt/futura-light.ttf') format('opentype');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    :root{ --title: 'Montserrat', system-ui, -apple-system, Segoe UI, Arial, sans-serif; }
+    body{ font-family: 'Futura', system-ui, -apple-system, Segoe UI, Arial, sans-serif; }
+    h1,h2,h3{ font-family: var(--title); margin: 0 0 .4rem; }
+    p{ margin: 0; color: var(--muted); }
+    a{ color: inherit; text-decoration: none; }
+
+    /* -------- Layout helpers -------- */
+    .wrap{ width: min(100% - 2rem, var(--maxw)); margin-inline: auto; }
+    .stack{ display: grid; gap: 1rem; }
+    .row{ display: flex; gap: 1rem; align-items: center; }
+
+    /* -------- Header -------- */
+    header{ position: sticky; top: 0; z-index: 20; backdrop-filter: blur(var(--bg-blur)); }
+    .head{
+      margin: .75rem auto; padding: .65rem 1rem;
+      background: var(--card-bg); border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    }
+    .brand{ display: flex; align-items: center; gap: .65rem; font-weight: 700; }
+    .dot{ width: 10px; height: 10px; border-radius: 50%; background: var(--brand); box-shadow: 0 0 0 4px rgba(122,74,42,.18); }
+    nav{ display: flex; gap: .75rem; }
+    nav a{ opacity: .85; font-weight: 600; }
+    nav a:hover{ opacity: 1; }
+
+    /* -------- Hero -------- */
+    .hero{
+      margin-top: clamp(1rem, 4vh, 2rem);
+    }
+    .hero-card{
+      background: var(--card-bg); border-radius: calc(var(--radius) + 6px);
+      box-shadow: var(--shadow); padding: clamp(1rem, 5vw, 2.25rem);
+      backdrop-filter: blur(var(--bg-blur));
+      display: grid; gap: 1rem; text-align: center;
+    }
+    .eyebrow{ font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--brand); }
+    .hero h1{ font-size: clamp(28px, 4.6vw, 48px); line-height: 1.05; }
+    .hero p{ font-size: clamp(15px, 2.2vw, 18px); }
+
+    .hero-portrait{
+      width: clamp(120px, 22vw, 180px);
+      height: clamp(120px, 22vw, 180px);
+      border-radius: 50%;
+      object-fit: cover;
+      margin: .25rem auto .25rem;
+      box-shadow: var(--shadow);
+      border: 3px solid rgba(255,255,255,.6);
+    }
+
+    .btn{ display: inline-flex; align-items: center; justify-content: center; gap: .5rem; padding: .85rem 1.2rem; border-radius: 999px; font-weight: 800; border: 2px solid transparent; cursor: pointer; }
+    .btn-primary{ background: var(--brand); color: #fff; }
+    .btn-primary:hover{ background: var(--brand-2); }
+    .btn-ghost{ background: transparent; border-color: #00000020; }
+    .btn-ghost:hover{ border-color: #00000040; }
+
+    .cta-row{ display: flex; gap: .6rem; flex-wrap: wrap; justify-content: center; margin-top: .5rem; }
+
+    /* -------- Highlights (ver todo de un vistazo) -------- */
+    .grid{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 1.25rem; }
+    @media (max-width: 900px){ .grid{ grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px){ .grid{ grid-template-columns: 1fr; } }
+
+    .card{
+      background: var(--card-bg); border-radius: var(--radius); padding: 1rem 1.1rem; box-shadow: var(--shadow);
+      backdrop-filter: blur(var(--bg-blur));
+      display: grid; gap: .35rem; min-height: 140px;
+    }
+    .card .kicker{ font-size: clamp(1rem, 1.4vw, 1.15rem); }
+    .card .muted{ font-size: clamp(1rem, 1.6vw, 1.15rem); }
+    .kicker{ font-weight: 800; color: #222; }
+    .muted{ color: var(--muted); font-size: .95rem; }
+
+    /* -------- Índice compacto -------- */
+    .index{ margin-top: 1rem; }
+    .index .card{ padding: 1.2rem; }
+    .index ul{ margin: .2rem 0 0; padding-left: 1.1rem; display: grid; gap: .35rem; }
+    .index li{ line-height: 1.45; }
+    .index li{ font-size: clamp(1rem, 1.6vw, 1.15rem); }
+    .index strong{ color: #222; }
+
+    /* -------- Testimonios / prueba social -------- */
+    .social{ margin-top: 1rem; }
+    .quote{
+      display: grid; gap: .35rem; padding: 1rem 1.1rem; border-left: 4px solid var(--brand); background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow);
+    }
+
+    /* -------- FAQ simple -------- */
+    details{ background: var(--card-bg); border-radius: var(--radius); padding: .8rem 1rem; box-shadow: var(--shadow); }
+    details + details{ margin-top: .6rem; }
+    summary{ cursor: pointer; font-weight: 700; }
+    summary{ font-size: 1.05rem; }
+    details p{ font-size: 1.05rem; }
+    summary::-webkit-details-marker{ display: none; }
+
+    /* -------- Soft star particles inside blocks -------- */
+    .card, .hero-card{ position: relative; overflow: hidden; }
+    .stars{ position: absolute; inset: 0; pointer-events: none; }
+    .star{
+      position: absolute; border-radius: 50%;
+      background: radial-gradient(circle, #ffe58a 0%, #ffd34d 35%, rgba(255,211,77,0) 70%);
+      opacity: .7;
+      animation: float var(--dur, 10s) linear infinite, twinkle 3s ease-in-out infinite;
+      will-change: transform, opacity;
+    }
+    @keyframes float{ from{ transform: translateY(15%);} to{ transform: translateY(-120%);} }
+    @keyframes twinkle{ 0%,100%{ opacity: .35;} 50%{ opacity: .95;} }
+
+    /* -------- Sticky buy bar -------- */
+    .buybar{
+      position: sticky; bottom: .75rem; z-index: 25; display: flex; justify-content: center;
+      padding: .25rem; pointer-events: none; /* sólo el contenido clicable */
+    }
+    .buybar > div{
+      pointer-events: auto; display: flex; gap: .8rem; align-items: center; justify-content: center;
+      background: var(--card-bg); border-radius: 1000px; padding: .4rem .6rem; box-shadow: var(--shadow);
+      backdrop-filter: blur(var(--bg-blur));
+    }
+    .price{ font-weight: 900; }
+
+    /* -------- Footer minimal -------- */
+    footer{ opacity: .8; padding: 2rem 0; text-align: center; font-size: .9rem; }
+
+    /* -------- Motion respect -------- */
+    @media (prefers-reduced-motion: reduce){
+      *{ animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="wrap head" role="navigation" aria-label="Principal">
+      <div class="brand" aria-label="Marca">
+        <span class="dot" aria-hidden="true"></span>
+        <span>Guía UGC</span>
+      </div>
+      <nav>
+        <a href="#ver-todo">Ver todo</a>
+        <a href="#indice">Índice</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Hero: claro y directo -->
+    <section class="hero" id="ver-todo">
+      <div class="hero-card">
+        <h1>Aprende UGC de 0 a 100 sin perder el tiempo</h1>
+        <img class="hero-portrait" src="../images/guide1Circle.png" alt="Tania" />
+        <p>Todo lo importante en una sola pantalla: temario, valor y botón de compra. Sin juegos, sin pasar páginas.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://example.com/payment" aria-label="Comprar la guía por 5,99 €">Comprar ahora — 5,99 €</a>
+          <a class="btn btn-ghost" href="#indice" aria-label="Ver índice">Ver índice</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Highlights: 6 puntos clave, de un vistazo -->
+    <section class="grid" aria-label="Puntos clave">
+      <article class="card">
+        <span class="kicker">Base profesional</span>
+        <p class="muted">Mentalidad, errores comunes y cómo empezar sin equipo caro.</p>
+      </article>
+      <article class="card">
+        <span class="kicker">Portfolio que convierte</span>
+        <p class="muted">Estructura, ejemplos y guía para atraer marcas.</p>
+      </article>
+      <article class="card">
+        <span class="kicker">Producción ágil</span>
+        <p class="muted">Checklist, flujos y variaciones rápidas.</p>
+      </article>
+      <article class="card">
+        <span class="kicker">Edición en CapCut</span>
+        <p class="muted">Transiciones, efectos, texto y audio.</p>
+      </article>
+      <article class="card">
+        <span class="kicker">Precios y licencias</span>
+        <p class="muted">Paquetes justos y licencias sin líos.</p>
+      </article>
+      <article class="card">
+        <span class="kicker">Negociación & cierres</span>
+        <p class="muted">Scripts, objeciones y relaciones a largo plazo.</p>
+      </article>
+    </section>
+
+    <!-- Índice compacto -->
+    <section class="index" id="indice" aria-label="Índice de la guía">
+      <div class="card stack">
+        <h2>Índice de la guía</h2>
+        <ul>
+          <li><strong>Introducción al UGC profesional</strong> — fundamentos y errores comunes.</li>
+          <li><strong>Portfolio que atrae marcas</strong> — estructura y ejemplos reales.</li>
+          <li><strong>Producción ágil y efectiva</strong> — checklist y flujos eficientes.</li>
+          <li><strong>Edición maestra en CapCut</strong> — trucos prácticos.</li>
+          <li><strong>Precios, paquetes y licencias</strong> — claridad total.</li>
+          <li><strong>Negociación y cierres</strong> — scripts y upselling.</li>
+          <li><strong>Aspectos legales esenciales</strong> — contratos simples.</li>
+          <li><strong>Colaboración con marcas</strong> — feedback y largo plazo.</li>
+          <li><strong>Roadmap de 30 días</strong> — plan accionable + recursos.</li>
+        </ul>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://example.com/payment">Comprar ahora — 5,99 €</a>
+          <a class="btn btn-ghost" href="#faq">Dudas rápidas</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Prueba social -->
+    <section class="social" aria-label="Testimonios">
+      <div class="quote">
+        <p><strong>"Limpio, directo y sin relleno."</strong> En 1 tarde monté mi primer porfolio y cerré 2 colaboraciones.</p>
+        <p class="muted">— Creadora UGC</p>
+      </div>
+    </section>
+
+    <!-- FAQ mínimas -->
+    <section id="faq" class="stack" style="margin-top:1rem" aria-label="Preguntas frecuentes">
+      <details>
+        <summary>¿Qué recibo exactamente?</summary>
+        <p>Un PDF conciso con plantillas, checklist y un plan de 30 días.</p>
+      </details>
+      <details>
+        <summary>¿Y si no me gusta?</summary>
+        <p>Reembolso dentro de 48&nbsp;horas. Sin preguntas.</p>
+      </details>
+    </section>
+
+    <!-- Sticky Buy Bar -->
+    <div class="buybar" aria-hidden="false">
+      <div>
+        <span class="price">5,99&nbsp;€</span>
+        <a class="btn btn-primary" href="https://example.com/payment">Comprar ahora</a>
+        <a class="btn btn-ghost" href="#indice">Ver índice</a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="wrap">
+    © <span id="year"></span> Guía UGC — Hecho con cariño y claridad.
+  </footer>
+
+  <script>
+    // Año dinámico y enfoque accesible a anclas
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', e=>{
+        const id = a.getAttribute('href').slice(1);
+        const el = document.getElementById(id);
+        if(el){ el.setAttribute('tabindex','-1'); el.focus({preventScroll:true}); }
+      });
+    });
+  </script>
+  <script>
+    (function(){
+      // Partículas suaves: estrellas amarillas dentro de cada bloque
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const blocks = document.querySelectorAll('.card, .hero-card');
+      blocks.forEach(block=>{
+        const layer = document.createElement('div');
+        layer.className = 'stars';
+        const count = block.classList.contains('hero-card') ? 16 : 10;
+        for (let i=0; i<count; i++){
+          const s = document.createElement('span');
+          s.className = 'star';
+          const size = 2 + Math.random()*3; // 2-5px
+          const x = Math.random()*100;
+          const y = Math.random()*100;
+          const dur = 8 + Math.random()*8; // 8-16s
+          const delay = -Math.random()*dur;
+          s.style.width = size+'px';
+          s.style.height = size+'px';
+          s.style.left = x+'%';
+          s.style.top = y+'%';
+          s.style.setProperty('--dur', dur+'s');
+          s.style.animationDelay = delay+'s';
+          layer.appendChild(s);
+        }
+        block.appendChild(layer);
+      });
+    })();
+  </script>
+  <script>
+  (function() {
+    var pass = prompt("Introduce la contraseña:");
+    if (pass !== "585858") {
+      alert("Contraseña incorrecta. Acceso denegado.");
+      window.location.href = "about:blank"; // kicks them out
+    }
+  })();
+</script>
+</body>
+</html>
