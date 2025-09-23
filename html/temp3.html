@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Guía UGC — Claro, directo y visual</title>
+    <meta name="description" content="Guía de UGC clara, directa y visual. Todo de un vistazo con CTA evidente." />
+    <style>               
+        :root{
+            --bg:#EEEBE6;
+            --text:#252525;
+            --g1:#8C7C6D;   /* ribbon top gradient start */
+            --g2:#D7CBBD;   /* ribbon top gradient end   */
+            --shade:#3F5048;/* shaded edge color        */
+            --title: 'Montserrat', system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+            --body: 'Futura', system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+        }
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+            margin:0; background:var(--bg); color: var(--text);
+            font-family: var(--body);
+        }
+        @font-face {
+            font-family: 'Montserrat';
+            src: url('../fonts/montserrat/Montserrat-Bold.otf') format('opentype');
+            font-weight: 700; font-style: normal; font-display: swap;
+        }
+        @font-face {
+            font-family: 'Futura';
+            src: url('../fonts/futura-pt/futura-light.ttf') format('opentype');
+            font-weight: 400; font-style: normal; font-display: swap;
+        }
+        
+        /* Background image and overlay from UGC page */
+        body::before{
+            content: "";
+            position: fixed; inset: 0; z-index: -2;
+            background-image: url("../images/guideBackgnd.png");
+            background-size: cover; background-position: center;
+            filter: none;
+        }
+        body::after{
+            content: "";
+            position: fixed; inset: 0; z-index: -1;
+            background: linear-gradient(180deg, rgba(255,255,255,.7), rgba(255,255,255,.3) 40%, rgba(255,255,255,.6));
+        }
+        
+        /* Header hint */
+        header{
+            position:fixed; inset:0 0 auto 0; height:60px; z-index:50;
+            display:flex; align-items:center; justify-content:space-between;
+            padding:0 16px; font-weight:700; font-family: var(--title);
+            background:linear-gradient(to bottom, rgba(255,255,255,.75), rgba(255,255,255,0));
+            backdrop-filter: blur(6px);
+        }
+        
+        /* Snap one screen at a time */
+        .snapper{
+            height:100dvh; overflow-y:auto;
+            scroll-snap-type:y mandatory; scroll-behavior:smooth;
+            position:relative;
+        }
+        .panel{
+            height:100dvh; scroll-snap-align:start;
+            display:grid; place-items:center; position:relative;
+            padding:10vh 8vw;
+        }
+        .panel-content{ z-index:2; text-align:left; max-width:820px; }
+        .letter{
+            font-family: var(--title);
+            font-size: clamp(120px, 22vmin, 260px);
+            line-height:.8; margin:0 0 .25em;
+        }
+        .desc{ font-size:clamp(18px,2.2vmin,22px); max-width:46ch; opacity:.92; }
+        
+        /* The connected ribbon sits behind everything */
+        .ribbon-stage{ position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+        svg{ width:100%; height:100%; display:block }
+        .rib-top{ fill:url(#grad); filter: drop-shadow(0 26px 34px rgba(0,0,0,.15)); }
+        .rib-edge{ fill:var(--shade); opacity:.9; }
+        .rib-image{ opacity:0.5; }
+        
+        /* Top hero title + image (only first ribbon) */
+        .hero {
+            text-align: center;
+            margin-top: -15vh;
+        }
+        .hero img {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 8px 20px rgba(0,0,0,.25);
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-family: var(--title);
+            font-size: clamp(28px, 4vw, 46px);
+            margin: 0.5em 0;
+        }
+        
+        /* Bottom buy ribbon */
+        .buy-ribbon {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 200;
+            background: linear-gradient(90deg, var(--g1), var(--g2));
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            font-family: var(--title);
+            font-size: 1.2rem;
+            box-shadow: 0 -4px 20px rgba(0,0,0,.15);
+        }
+        .buy-ribbon span.price {
+            font-weight: bold;
+            font-size: 1.4rem;
+        }
+        .buy-ribbon a.button {
+            background: white;
+            color: var(--g1);
+            font-weight: bold;
+            padding: 0.6em 1.4em;
+            border-radius: 999px;
+            text-decoration: none;
+            transition: all .25s ease;
+        }
+        .buy-ribbon a.button:hover {
+            background: var(--shade);
+            color: white;
+        }
+        
+        
+        @media (prefers-reduced-motion: reduce){ .snapper{scroll-behavior:auto} }
+    </style>
+</head>
+<body>
+    <header>
+        <div>Guía UGC</div>
+        <div>Scroll: un mérito por letra</div>
+    </header>
+    
+    <!-- Connected ribbon -->
+    <div class="ribbon-stage" aria-hidden="true">
+        <svg id="svg" viewBox="0 0 1000 1000" preserveAspectRatio="none">
+            <defs>
+                <!-- Top face gradient -->
+                <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%"  stop-color="var(--g1)"/>
+                    <stop offset="100%" stop-color="var(--g2)"/>
+                </linearGradient>
+                <!-- Clip path for image (reused for ribbon shape) -->
+                <clipPath id="ribbon-clip">
+                    <polygon id="clip-poly"/>
+                </clipPath>
+            </defs>
+            <g id="scrollGroup">
+                <image id="ribbon-image" clip-path="url(#ribbon-clip)" href="../images/guide1Circle.png" width="1000" height="1000" preserveAspectRatio="xMidYMid slice"/>
+            </g>
+        </svg>
+    </div>
+    
+    <main id="snapper" class="snapper" role="main" aria-label="Sections"></main>
+    
+    <!-- Buy ribbon -->
+    <div class="buy-ribbon">
+        <span class="price">PDF, 5.99 €</span>
+        <a href="https://tu-pagina-de-pago.com" class="button">Comprar Ahora</a>
+    </div>
+    
+    <script>
+        /* =========================
+        CONFIG
+        ========================= */
+        const LETTERS = ['A','B','C','D','E','F'];
+        
+        const LINES = [
+        "A. Actitud y Mentalidad: Cómo cultivar una visión creativa, evitar errores comunes y comenzar en UGC sin necesidad de invertir en equipo costoso.",
+        "B. Branding y Estructura: Guía detallada para diseñar tu portafolio, ejemplos de piezas atractivas y cómo estructurar tu presencia para atraer marcas.",
+        "C. Checklist Creativo: Listas prácticas para grabación, flujos de trabajo eficientes y variaciones rápidas que multiplican tu contenido.",
+        "D. Dinámica de Edición: Uso de transiciones, efectos visuales, tipografías y audio para dar vida a los videos y mantener la atención del público.",
+        "E. Entregables y Paquetes: Cómo armar propuestas claras, establecer precios justos, licencias de uso y evitar complicaciones legales.",
+        "F. Fluidez Comercial: Scripts efectivos para contactar marcas, cómo superar objeciones y construir relaciones sólidas a largo plazo."
+        ];
+        
+        const PALETTES = [
+        {bg:"#FFF5E6", text:"#2D2D2D", g1:"#FF9A76", g2:"#FFD4B2", shade:"#D96C00"}, // warm orange
+        {bg:"#E6F7FF", text:"#1C1C1C", g1:"#76B6FF", g2:"#B2E4FF", shade:"#005C99"}, // cool blue
+        {bg:"#F2E6FF", text:"#252525", g1:"#A176FF", g2:"#D9B2FF", shade:"#5C00B2"}, // purple
+        {bg:"#E6FFE6", text:"#202020", g1:"#76FF76", g2:"#B2FFB2", shade:"#008000"}, // green
+        {bg:"#FFF0F5", text:"#2A2A2A", g1:"#FF76A0", g2:"#FFB2C8", shade:"#B2004C"}, // pink/rose
+        {bg:"#FFFBE6", text:"#252525", g1:"#FFD976", g2:"#FFEDB2", shade:"#B28C00"}, // golden yellow
+        ];
+        
+        /* =========================
+        PAGE SECTIONS (one screen each)
+        ========================= */
+        const snapper = document.getElementById('snapper');
+        LETTERS.forEach((L,i)=>{
+            const sec = document.createElement('section');
+            sec.className = 'panel'; sec.dataset.index = i; 
+            const box = document.createElement('div'); box.className = 'panel-content';
+
+            if (i === 0) {
+                const hero = document.createElement('div');
+                hero.className = 'hero';
+                hero.innerHTML = `
+                    <h1>Guía Completa de UGC para Principiantes</h1>
+                    <img src="../images/guide1Circle.png" alt="Autora de la guía">
+                `;
+                box.appendChild(hero);
+            }
+            const h = document.createElement('h1'); h.className = 'letter'; h.textContent = L;
+            const p = document.createElement('p');  p.className = 'desc'; p.textContent = LINES[i % LINES.length];
+            
+            box.appendChild(h); box.appendChild(p); sec.appendChild(box); snapper.appendChild(sec);
+        });
+        
+        /* =========================
+        RIBBON GEOMETRY (SVG)
+        ========================= */
+        const svg = document.getElementById('svg');
+        const g = document.getElementById('scrollGroup');
+        const clipPoly = document.getElementById('clip-poly');
+        const ribbonImage = document.getElementById('ribbon-image');
+        
+        function buildRibbon(total, angleFromVerticalDeg = 45, thickness = 990){
+            g.innerHTML = ''; // Clear previous content
+            if (ribbonImage) g.appendChild(ribbonImage); // Re-append image to keep it in group
+            
+            const W = 1000;               // viewBox width
+            const unit = 1000;            // units per viewport height
+            const dy = unit * 0.5;        // 70% vertical space
+            const run = Math.tan(angleFromVerticalDeg * Math.PI/180) * dy; // horizontal offset
+            const cx = W / 2;             // center x
+            let y = dy * (total + 3);     // start well below
+            
+            // Starting endpoints (centered)
+            let dir = 1; // 1 = slope up-right, -1 = up-left
+            let xA = cx - (run/2), yA = y;
+            let xB = cx + (run/2), yB = y - dy;
+            
+            // Helper to add one segment polygon
+            function addSegment(x1,y1,x2,y2, edgeDownward=true, isFirst=false){
+                // Vector along segment
+                const vx = x2 - x1, vy = y2 - y1;
+                const len = Math.hypot(vx, vy);
+                const nx = -(vy/len), ny = (vx/len); // Unit normal (perpendicular)
+                
+                const half = thickness/2;
+                // Rectangle corners (top face)
+                const p1 = [x1 + nx*half, y1 + ny*half];
+                const p2 = [x2 + nx*half, y2 + ny*half];
+                const p3 = [x2 - nx*half, y2 - ny*half];
+                const p4 = [x1 - nx*half, y1 - ny*half];
+                
+                // Update clip-path for image (only for first segment)
+                if (isFirst) {
+                    clipPoly.setAttribute('points', [p1,p2,p3,p4].map(p=>p.join(',')).join(' '));
+                }
+                
+                // Shaded narrow strip along one edge
+                const edgeW = Math.max(18, thickness*0.18);
+                const e1 = [x1 - nx*(half), y1 - ny*(half)];
+                const e2 = [x2 - nx*(half), y2 - ny*(half)];
+                const e3 = [x2 - nx*(half-edgeW), y2 - ny*(half-edgeW)];
+                const e4 = [x1 - nx*(half-edgeW), y1 - ny*(half-edgeW)];
+                
+                // Create elements
+                const top = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+                top.setAttribute('points', [p1,p2,p3,p4].map(p=>p.join(',')).join(' '));
+                top.setAttribute('class','rib-top');
+                
+                const edge = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+                edge.setAttribute('points', [e1,e2,e3,e4].map(p=>p.join(',')).join(' '));
+                edge.setAttribute('class','rib-edge');
+                
+                // Render order: edge under top
+                g.appendChild(edge);
+                g.appendChild(top);
+            }
+            
+            // Build all segments for continuous feel
+            for(let i=0;i<total+4;i++){
+                addSegment(xA,yA,xB,yB, true, i===0);
+                dir *= -1;
+                const nxA = cx - dir*(run/2);
+                const nxB = cx + dir*(run/2);
+                const nyA = yA - dy, nyB = yB - dy;
+                xA = nxA; yA = nyA; xB = nxB; yB = nyB;
+            }
+        }
+        buildRibbon(LETTERS.length, 45, 990);
+        
+        /* =========================
+        Sync ribbon with scroll
+        ========================= */
+        function rafScroll(){
+            const unit = 1000;
+            const vh = window.innerHeight;
+            const translateY = -snapper.scrollTop * (unit / vh);
+            g.setAttribute('transform', `translate(0, ${translateY})`);
+            requestAnimationFrame(rafScroll);
+        }
+        requestAnimationFrame(rafScroll);
+        
+        /* =========================
+        Per-section palette + snap control
+        ========================= */
+        function setPalette(p){
+            const r = document.documentElement.style;
+            r.setProperty('--bg', p.bg);
+            r.setProperty('--text', p.text);
+            r.setProperty('--g1', p.g1);
+            r.setProperty('--g2', p.g2);
+            r.setProperty('--shade', p.shade);
+        }
+        setPalette(PALETTES[0]);
+        
+        let currentIdx = 0;
+        const io = new IntersectionObserver((entries)=>{
+            entries.forEach(e=>{
+                if(e.isIntersecting && e.intersectionRatio >= 0.98){
+                    const idx = +e.target.dataset.index;
+                    if(idx !== currentIdx){
+                        currentIdx = idx;
+                        setPalette(PALETTES[idx % PALETTES.length]);
+                        ribbonImage.style.display = idx === 0 ? 'block' : 'none'; // Show image only for first section
+                    }
+                }
+            });
+        },{root:snapper, threshold:[0.98]});
+        document.querySelectorAll('.panel').forEach(p=>io.observe(p));
+        
+        /* One wheel/gesture => one section */
+        snapper.addEventListener('wheel', (e)=>{
+            if (Math.abs(e.deltaY) < 4) return;
+            e.preventDefault();
+            const dir = e.deltaY > 0 ? 1 : -1;
+            const sections = [...document.querySelectorAll('.panel')];
+            const target = Math.min(sections.length-1, Math.max(0, currentIdx + dir));
+            sections[target].scrollIntoView({behavior:'smooth', block:'start'});
+        },{passive:false});
+        
+        let startY=null;
+        snapper.addEventListener('touchstart',e=>{ startY=e.touches[0].clientY; },{passive:true});
+        snapper.addEventListener('touchmove',e=>{
+            if(startY==null) return;
+            const dy = startY - e.touches[0].clientY;
+            if(Math.abs(dy)>24){
+                e.preventDefault();
+                const dir = dy>0?1:-1;
+                const sections = [...document.querySelectorAll('.panel')];
+                const target = Math.min(sections.length-1, Math.max(0, currentIdx + dir));
+                sections[target].scrollIntoView({behavior:'smooth', block:'start'});
+                startY=null;
+            }
+        },{passive:false});
+    </script>
+    <script>
+        (function() {
+            var pass = prompt("Introduce la contraseña:");
+            if (pass !== "585858") {
+                alert("Contraseña incorrecta. Acceso denegado.");
+                window.location.href = "about:blank"; // kicks them out
+            }
+        })();
+    </script>
+</body>
+</html>
