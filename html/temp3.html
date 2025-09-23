@@ -189,12 +189,15 @@
         ];
         
         const PALETTES = [
+            {bg:"#FFFBE6", text:"#252525", g1:"#FFD976", g2:"#FFEDB2", shade:"#B28C00"}, // golden yellow
         {bg:"#FFF5E6", text:"#2D2D2D", g1:"#FF9A76", g2:"#FFD4B2", shade:"#D96C00"}, // warm orange
-        {bg:"#E6F7FF", text:"#1C1C1C", g1:"#76B6FF", g2:"#B2E4FF", shade:"#005C99"}, // cool blue
-        {bg:"#F2E6FF", text:"#252525", g1:"#A176FF", g2:"#D9B2FF", shade:"#5C00B2"}, // purple
-        {bg:"#E6FFE6", text:"#202020", g1:"#76FF76", g2:"#B2FFB2", shade:"#008000"}, // green
         {bg:"#FFF0F5", text:"#2A2A2A", g1:"#FF76A0", g2:"#FFB2C8", shade:"#B2004C"}, // pink/rose
-        {bg:"#FFFBE6", text:"#252525", g1:"#FFD976", g2:"#FFEDB2", shade:"#B28C00"}, // golden yellow
+        {bg:"#F2E6FF", text:"#252525", g1:"#A176FF", g2:"#D9B2FF", shade:"#5C00B2"}, // purple
+        {bg:"#E6F7FF", text:"#1C1C1C", g1:"#76B6FF", g2:"#B2E4FF", shade:"#005C99"}, // cool blue
+        
+        {bg:"#E6FFE6", text:"#202020", g1:"#76FF76", g2:"#B2FFB2", shade:"#008000"} // green
+        
+        
         ];
         
         /* =========================
@@ -233,7 +236,7 @@
             g.innerHTML = ''; // Clear previous content
             if (ribbonImage) g.appendChild(ribbonImage); // Re-append image to keep it in group
             
-            const W = 1000;               // viewBox width
+            const W = 700;               // viewBox width
             const unit = 1000;            // units per viewport height
             const dy = unit * 0.9;        // 70% vertical space
             const run = Math.tan(angleFromVerticalDeg * Math.PI/180) * dy; // horizontal offset
