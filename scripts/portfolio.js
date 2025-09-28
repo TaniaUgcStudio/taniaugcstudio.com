@@ -23,7 +23,6 @@ const traceImg = document.getElementById('traceImg');
 const finalImg = document.getElementById('finalImg');
 
 const heroAbout   = document.getElementById('heroAbout');
-// 🔑 FIX: Ensure these IDs match your HTML for the second stage
 const stageAbout  = document.getElementById('stageAbout');
 const tracedImgAbout = document.getElementById('tracedImgAbout'); 
 const traceImgAbout = document.getElementById('traceImgAbout');

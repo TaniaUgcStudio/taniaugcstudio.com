@@ -287,7 +287,7 @@ section.hero {
         margin-bottom: -270px;
     }
     .stage {
-        margin-top: -120px;
+        margin-top: -130px;
         width: min(92vw, 520px);
     }
     .name {
@@ -307,10 +307,6 @@ section.hero {
     #heroAbout.about-layout #titlesAbout{
         order: 0;         /* override any previous .titles.about { order:-1 } */
         text-align: center;
-    }
-    
-    .titles.about .name{
-        margin-top: -40vh;
     }
     
     /* Slightly adjust how far the image hangs off the left on small screens */
