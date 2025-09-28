@@ -286,7 +286,7 @@ section.hero {
         margin-bottom: -200px;
     }
     .stage {
-        width: min(92vw, 520px);
+        width: min(80vw, 520px);
     }
     .name {
         font-size: clamp(100px, 7.8vmin, 88px);
@@ -312,12 +312,12 @@ section.hero {
     #heroAbout.about-layout #stageAbout{
         min-width: 60vw;
         min-height: 80vh;
-        margin-left: -25vw; /* let it spill more to the left */
+        margin-left: -40vw; /* let it spill more to the left */
     }
     
     #heroAbout.about-layout #titlesAbout #aboutRole {
-        min-width: 50vw;
+        min-width: 55vw;
         margin-left: -20vw;
-        margin-top: -20vh;
+        margin-top: -30vh;
     }
 }
