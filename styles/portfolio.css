@@ -8,17 +8,17 @@
     --trace-start-angle: -10deg;
 }
 *{box-sizing:border-box}
-html,body{height:100%}
+html{height:100%}
 body{
     margin:0;
     background: var(--bg);
-    overflow: hidden;
-    display: grid;
-    place-items: center;
+    display: block;
     font-family: 'Futura', 'Helvetica', 'Arial', sans-serif;
     font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-    background: #D8AE5E; 
-    background: url("../images/guideBackgnd.png") center/cover no-repeat;
+}
+body.no-scroll {
+    overflow: hidden;
+    height: 100vh;
 }
 
 @font-face {
@@ -53,15 +53,19 @@ h1, h2, h3, h4, h5, h6 {
     font-family: 'Montserrat', sans-serif;
 }
 
-/* ---------- FINAL LAYOUT CONTAINER ---------- */
+/***************************** BACKGROUND *****************************/
 .hero{
-    width: min(96vw, 1200px);
+    min-height: 100vh;
+    width: 100%;
     max-width: 100%;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr;   /* becomes 2 cols after sequence */
     align-items: center;
+    justify-content: center;
     gap: clamp(16px, 4vmin, 40px);
     transition: grid-template-columns .6s ease;
+    background: url("../images/guideBackgnd.png") center/cover no-repeat;
 }
 .hero.final-layout{
     grid-template-columns: 1.1fr 0.9fr; /* text | image (desktop) */
@@ -76,6 +80,7 @@ h1, h2, h3, h4, h5, h6 {
     background: transparent;
     justify-self: center;
     border-radius: var(--stage-radius, 16px);
+    align-self: center;
 }
 
 /* SHARDS */
@@ -109,11 +114,11 @@ h1, h2, h3, h4, h5, h6 {
     transform:translateZ(0);
     pointer-events:none;
 }
-#tracedImg{
+#tracedImg, #tracedImgAbout{
     opacity:0;
     transition:opacity .3s ease;
 }
-#traceImg{
+#traceImg, #traceImgAbout{
     opacity:0;
     transition:opacity .25s ease;
     -webkit-mask-image: conic-gradient(from var(--trace-start-angle) at 50% 50%, black 0deg, transparent 0deg);
@@ -122,7 +127,7 @@ h1, h2, h3, h4, h5, h6 {
     z-index: 10000;
 }
 /* Final portrait revealed bottom->top, synced to sweep */
-#finalImg{
+#finalImg, #finalImgAbout{
     opacity:1;
     --reveal: 0%;
     -webkit-mask-image: linear-gradient(to top, black var(--reveal), transparent var(--reveal));
@@ -136,23 +141,23 @@ h1, h2, h3, h4, h5, h6 {
     opacity:1; /* we’ll type into empty nodes */
     color:#fff;
     text-align:left;
-    padding-inline:15px;
+    padding-inline:50px;
 }
 .name{
     margin-top: 8px;
     font-family: 'Parisienne', sans-serif;
-    font-size: clamp(100px, 7.8vmin, 88px);
+    font-size: clamp(150px, 7.8vmin, 88px);
     line-height: 1.05;
     color: #3F5048;
     letter-spacing: .5px;
-    white-space: pre-wrap;
+    white-space: nowrap;
     min-height: 1.2em;
 }
 .role{
     margin-top: 15px;
     font-family: 'Futura', 'Helvetica', 'Arial', sans-serif;
     font-weight: 700;
-    font-size: clamp(40px, 3.2vmin, 34px);
+    font-size: clamp(80px, 3.2vmin, 34px);
     letter-spacing: .06em;
     color: #D8AE5E;
     white-space: pre-wrap;
@@ -186,7 +191,7 @@ h1, h2, h3, h4, h5, h6 {
 .frame-rect{
     fill: none;
     stroke: #D8AE5E;      /* frame color – tweak if you like */
-    stroke-width: 3.5;     /* thickness */
+    stroke-width: 7.5;     /* thickness */
     stroke-linecap: round;
     stroke-linejoin: round;
 }
@@ -226,12 +231,50 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-/* ---------- RESPONSIVE ---------- */
+/***************************** ABOUT ME CONTENT *****************************/
+section.hero {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    position: relative;
+    overflow: hidden;
+    background: #D8AE5E url("../images/guideBkgnd.jpg") center/cover;
+}
+
+.hero.about-layout{
+    grid-template-columns: 0.9fr 1.1fr;  /* stage | text */
+}
+
+/* About-section text styling */
+.titles.about .name{
+    font-family: "Pinion-Script", serif;
+    font-weight: 700;
+    font-size: clamp(30px, 6.2vmin, 56px);
+    color:#3F5048;
+}
+
+.titles.about .role{
+    margin-top: clamp(8px, 1.2vmin, 14px);
+    font-weight: 400;
+    font-size: clamp(16px, 2.4vmin, 20px);
+    line-height: 1.55;
+    letter-spacing: 0;
+    color:#2b2b2b;
+    opacity:0;
+    transform: translateY(8px);
+    transition: opacity .5s ease, transform .5s ease;
+    padding-left: clamp(20px, 5vmin, 50px); /* margin based on shape; adjust to fit your image's right contour */
+    white-space: pre-line;
+}
+.titles.about .role.visible{
+    opacity:1; transform: translateY(0);
+}
+
+/***************************** MOBILE STYLES *****************************/
 @media (max-width: 768px){
-    html, body {
-        height: 100%;
-        overflow: hidden;   /* 🚫 disables scrollbars */
-        touch-action: none; /* 🚫 blocks touch panning on mobile */
+    .no-scroll {
+        overflow: hidden;   /* disables scrollbars */
+        touch-action: none; /* blocks touch panning on mobile */
     }
     .hero.final-layout{
         grid-template-columns: 1fr;
@@ -239,8 +282,42 @@ h1, h2, h3, h4, h5, h6 {
     .titles{
         order: -1;
         text-align:center;
+        gap: 0;
+        margin-bottom: -200px;
     }
     .stage {
         width: min(92vw, 520px);
+    }
+    .name {
+        font-size: clamp(100px, 7.8vmin, 88px);
+        white-space: pre-wrap;
+    }
+    .role {
+        margin-top: 20px;
+        font-size: clamp(40px, 3.2vmin, 34px);
+    }
+    /**************************************************************************/
+    /* Keep side-by-side even on mobile as you want */
+    #heroAbout.about-layout{
+        padding: 5vh 4vw;
+        column-gap: 5vw;
+    }
+    
+    #heroAbout.about-layout #titlesAbout{
+        order: 0;         /* override any previous .titles.about { order:-1 } */
+        text-align: center;
+    }
+    
+    /* Slightly adjust how far the image hangs off the left on small screens */
+    #heroAbout.about-layout #stageAbout{
+        min-width: 60vw;
+        min-height: 80vh;
+        margin-left: -25vw; /* let it spill more to the left */
+    }
+    
+    #heroAbout.about-layout #titlesAbout #aboutRole {
+        min-width: 50vw;
+        margin-left: -20vw;
+        margin-top: -20vh;
     }
 }
