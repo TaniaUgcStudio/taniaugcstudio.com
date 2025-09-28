@@ -16,10 +16,10 @@ body{
     font-family: 'Futura', 'Helvetica', 'Arial', sans-serif;
     font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
-/*body.no-scroll {
+body.no-scroll {
     overflow: hidden;
     height: 100vh;
-}*/
+}
 
 @font-face {
     font-family: 'Montserrat';
@@ -272,10 +272,10 @@ section.hero {
 
 /***************************** MOBILE STYLES *****************************/
 @media (max-width: 768px){
-    /*.no-scroll {
+    .no-scroll {
         overflow: hidden;
         touch-action: none;
-    }*/
+    }
     .hero.final-layout{
         grid-template-columns: 1fr;
     }
@@ -283,13 +283,13 @@ section.hero {
         order: -1;
         text-align:center;
         gap: 0;
-        margin-bottom: -200px;
+        margin-bottom: -230px;
     }
     .stage {
-        width: min(80vw, 520px);
+        width: min(92vw, 520px);
     }
     .name {
-        font-size: clamp(100px, 7.8vmin, 88px);
+        font-size: clamp(80px, 7.8vmin, 88px);
         white-space: pre-wrap;
     }
     .role {
