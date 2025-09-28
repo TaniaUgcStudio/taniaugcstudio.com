@@ -283,7 +283,7 @@ section.hero {
         order: -1;
         text-align:center;
         gap: 0;
-        margin-bottom: -230px;
+        margin-bottom: -270px;
     }
     .stage {
         width: min(92vw, 520px);
