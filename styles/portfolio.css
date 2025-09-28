@@ -290,7 +290,6 @@ section.hero {
     }
     .name {
         font-size: clamp(80px, 7.8vmin, 88px);
-        white-space: pre-wrap;
     }
     .role {
         margin-top: 20px;
