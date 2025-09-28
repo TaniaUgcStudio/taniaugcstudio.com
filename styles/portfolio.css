@@ -309,6 +309,10 @@ section.hero {
         text-align: center;
     }
     
+    .titles.about .name{
+        margin-top: -40vh;
+    }
+    
     /* Slightly adjust how far the image hangs off the left on small screens */
     #heroAbout.about-layout #stageAbout{
         min-width: 60vw;

@@ -256,7 +256,7 @@ function createOrUpdateFrame() {
   const isMobile = window.matchMedia('(max-width:710px)').matches;
   const padSides = isMobile ? 15 : 15;   // small side gap
   const padTop = isMobile ? 80 : 100;    // space above the title
-  const padBot = isMobile ? 140 : 105;   // a bit larger at bottom
+  const padBot = isMobile ? 160 : 105;   // a bit larger at bottom
  
   // rounded corner radius
   const r = Math.max(12, Math.min(24, Math.floor(Math.min(w,h)*0.03)));
