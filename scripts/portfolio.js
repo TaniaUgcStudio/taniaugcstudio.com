@@ -293,12 +293,3 @@ window.addEventListener('resize', () => {
         createOrUpdateFrame();
     }, 120);
 });
-
-/* block page */
-function blockPage() {
-    var pass = prompt("Introduce la contraseña:");
-    if (pass !== "585858") {
-        alert("Contraseña incorrecta. Acceso denegado.");
-        window.location.href = "about:blank"; // kicks them out
-    }
-}
