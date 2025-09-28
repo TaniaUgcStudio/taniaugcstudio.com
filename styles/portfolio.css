@@ -16,10 +16,10 @@ body{
     font-family: 'Futura', 'Helvetica', 'Arial', sans-serif;
     font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
-body.no-scroll {
+/*body.no-scroll {
     overflow: hidden;
     height: 100vh;
-}
+}*/
 
 @font-face {
     font-family: 'Montserrat';
@@ -272,10 +272,10 @@ section.hero {
 
 /***************************** MOBILE STYLES *****************************/
 @media (max-width: 768px){
-    .no-scroll {
-        overflow: hidden;   /* disables scrollbars */
-        touch-action: none; /* blocks touch panning on mobile */
-    }
+    /*.no-scroll {
+        overflow: hidden;
+        touch-action: none;
+    }*/
     .hero.final-layout{
         grid-template-columns: 1fr;
     }
