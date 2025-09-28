@@ -1,0 +1,246 @@
+/***************************** BACKGROUND *****************************/
+:root{
+    --bg:#000;
+    --gold:#ffd54a;
+    --tri-a:#ff005d;
+    --tri-b:#c4003a;
+    --stage-size: min(86vmin, 640px);
+    --trace-start-angle: -10deg;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+    margin:0;
+    background: var(--bg);
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    font-family: 'Futura', 'Helvetica', 'Arial', sans-serif;
+    font-family: Poppins, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: #D8AE5E; 
+    background: url("../images/guideBackgnd.png") center/cover no-repeat;
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/montserrat/Montserrat-Bold.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Futura';
+    src: url('../fonts/futura-pt/futura-light.ttf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Parisienne';
+    src: url('../fonts/parisienne/Parisienne-Regular.ttf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Pinion-Script';
+    src: url('../fonts/pinyon-script/PinyonScript-Regular.ttf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* ---------- FINAL LAYOUT CONTAINER ---------- */
+.hero{
+    width: min(96vw, 1200px);
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;   /* becomes 2 cols after sequence */
+    align-items: center;
+    gap: clamp(16px, 4vmin, 40px);
+    transition: grid-template-columns .6s ease;
+}
+.hero.final-layout{
+    grid-template-columns: 1.1fr 0.9fr; /* text | image (desktop) */
+}
+
+/* ---------- STAGE (ANIMATION AREA) ---------- */
+.stage{
+    position: relative;
+    width: var(--stage-size);
+    aspect-ratio: 1/1;
+    overflow: hidden;
+    background: transparent;
+    justify-self: center;
+    border-radius: var(--stage-radius, 16px);
+}
+
+/* SHARDS */
+.shard{
+    position:absolute;
+    inset:0;
+    background-image:url("../images/meVectorized.png"); /* triangles image */
+    background-repeat:no-repeat;
+    will-change:transform,opacity,clip-path,background;
+    opacity:0;
+    transform:translate(0,0);
+    transition:
+    transform .9s cubic-bezier(.2,.7,.2,1),
+    opacity  .9s ease-out,
+    background-color .4s ease;
+}
+.shard:nth-child(odd){
+    filter:brightness(1.05)
+}
+.shard:nth-child(3n){
+    filter:brightness(.95)
+}
+
+/* Sweep stack */
+.overlay{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    transform:translateZ(0);
+    pointer-events:none;
+}
+#tracedImg{
+    opacity:0;
+    transition:opacity .3s ease;
+}
+#traceImg{
+    opacity:0;
+    transition:opacity .25s ease;
+    -webkit-mask-image: conic-gradient(from var(--trace-start-angle) at 50% 50%, black 0deg, transparent 0deg);
+    mask-image: conic-gradient(from var(--trace-start-angle) at 50% 50%, black 0deg, transparent 0deg);
+    transform: translateY(5px);
+    z-index: 10000;
+}
+/* Final portrait revealed bottom->top, synced to sweep */
+#finalImg{
+    opacity:1;
+    --reveal: 0%;
+    -webkit-mask-image: linear-gradient(to top, black var(--reveal), transparent var(--reveal));
+    mask-image: linear-gradient(to top, black var(--reveal), transparent var(--reveal));
+    transition: -webkit-mask-image 0s linear, mask-image 0s linear;
+    border-radius: var(--stage-radius, 16px);
+}
+
+/* ---------- TITLES ---------- */
+.titles{
+    opacity:1; /* we’ll type into empty nodes */
+    color:#fff;
+    text-align:left;
+    padding-inline:15px;
+}
+.name{
+    margin-top: 8px;
+    font-family: 'Parisienne', sans-serif;
+    font-size: clamp(100px, 7.8vmin, 88px);
+    line-height: 1.05;
+    color: #3F5048;
+    letter-spacing: .5px;
+    white-space: pre-wrap;
+    min-height: 1.2em;
+}
+.role{
+    margin-top: 15px;
+    font-family: 'Futura', 'Helvetica', 'Arial', sans-serif;
+    font-weight: 700;
+    font-size: clamp(40px, 3.2vmin, 34px);
+    letter-spacing: .06em;
+    color: #D8AE5E;
+    white-space: pre-wrap;
+    min-height: 1.2em;
+}
+
+/* optional caret for typing */
+.type-caret::after{
+    content: "│";
+    display:inline-block;
+    margin-left: 2px;
+    opacity:.9;
+    animation: caretBlink .9s steps(2, jump-none) infinite;
+}
+@keyframes caretBlink{
+    0%,49%{opacity:.9}
+    50%,100%{opacity:0}
+}
+
+/* ======= Hero frame & scroll indicator ======= */
+.frame-layer{
+    position: absolute;    /* we position it via JS over .hero */
+    pointer-events: none;
+    z-index: 10;
+}
+
+.frame-svg{
+    display: block;
+}
+
+.frame-rect{
+    fill: none;
+    stroke: #D8AE5E;      /* frame color – tweak if you like */
+    stroke-width: 3.5;     /* thickness */
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* thicker bottom stroke segment (optional) */
+.frame-bottom {
+    fill: none;
+    stroke: #D8AE5E;
+    stroke-width: 7.5;      /* thicker than the main 3.5 */
+    stroke-linecap: round;
+}
+
+/* Optional subtle glow */
+.frame-rect-glow{
+    filter: drop-shadow(0 0 6px rgba(216,174,94,.5));
+}
+
+/* Bottom-center scroll gif (you will set src in JS or here) */
+.scroll-indicator{
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 50%); /* outside the frame by 50% of its height */
+    bottom: 0;
+    width: 80px;
+    height: 80px;
+    pointer-events: auto;
+    z-index: 11;
+    animation: floatY 1.6s ease-in-out infinite; /* gentle motion */
+}
+
+@keyframes floatY{
+    0%,100%{
+        transform: translate(-50%, 50%) translateY(0);
+    }
+    50%  {
+        transform: translate(-50%, 50%) translateY(8px);
+    }
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px){
+    html, body {
+        height: 100%;
+        overflow: hidden;   /* 🚫 disables scrollbars */
+        touch-action: none; /* 🚫 blocks touch panning on mobile */
+    }
+    .hero.final-layout{
+        grid-template-columns: 1fr;
+    }
+    .titles{
+        order: -1;
+        text-align:center;
+    }
+    .stage {
+        width: min(92vw, 520px);
+    }
+}
