@@ -246,28 +246,30 @@ section.hero {
 }
 
 /* About-section text styling */
-.titles.about .name{
-    font-family: "Pinion-Script", serif;
-    font-weight: 700;
-    font-size: clamp(30px, 6.2vmin, 56px);
-    color:#3F5048;
+#titlesAbout .name {
+  font-family: "Pinion-Script", serif;
+  font-weight: 700;
+  font-size: clamp(30px, 6.2vmin, 56px);
+  color: #3F5048;
+  margin-bottom: 1rem;   /* 👈 ensures spacing below the title */
 }
 
-.titles.about .role{
-    margin-top: clamp(8px, 1.2vmin, 14px);
-    font-weight: 400;
-    font-size: clamp(16px, 2.4vmin, 20px);
-    line-height: 1.55;
-    letter-spacing: 0;
-    color:#2b2b2b;
-    opacity:0;
-    transform: translateY(8px);
-    transition: opacity .5s ease, transform .5s ease;
-    padding-left: clamp(20px, 5vmin, 50px); /* margin based on shape; adjust to fit your image's right contour */
-    white-space: pre-line;
+#titlesAbout .role {
+  margin-top: 0;         /* 👈 remove extra margins */
+  font-weight: 400;
+  font-size: clamp(16px, 2.4vmin, 20px);
+  line-height: 1.55;
+  letter-spacing: 0;
+  color: #2b2b2b;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .5s ease, transform .5s ease;
+  white-space: pre-line;
 }
-.titles.about .role.visible{
-    opacity:1; transform: translateY(0);
+
+#titlesAbout .role.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /***************************** MOBILE STYLES *****************************/
@@ -298,27 +300,33 @@ section.hero {
         font-size: clamp(40px, 3.2vmin, 34px);
     }
     /**************************************************************************/
-    /* Keep side-by-side even on mobile as you want */
-    #heroAbout.about-layout{
-        padding: 5vh 4vw;
-        column-gap: 5vw;
-    }
-    
-    #heroAbout.about-layout #titlesAbout{
-        order: 0;         /* override any previous .titles.about { order:-1 } */
-        text-align: center;
-    }
-    
-    /* Slightly adjust how far the image hangs off the left on small screens */
-    #heroAbout.about-layout #stageAbout{
-        min-width: 60vw;
-        min-height: 80vh;
-        margin-left: -40vw; /* let it spill more to the left */
-    }
-    
-    #heroAbout.about-layout #titlesAbout #aboutRole {
-        min-width: 55vw;
-        margin-left: -20vw;
-        margin-top: -30vh;
-    }
+    #heroAbout.about-layout {
+    flex-direction: column;   /* stack vertically on small screens */
+    align-items: center;
+    padding: 4vh 5vw;
+  }
+
+  #heroAbout.about-layout #stageAbout {
+    min-width: 60vw;
+    min-height: 80vh;
+    margin-left: -40vw; /* let it spill more to the left */
+  }
+
+  #titlesAbout {
+    order: 2;    /* text comes after image */
+    text-align: center;
+    margin-top: 2rem;
+  }
+
+  #titlesAbout .name {
+    margin-bottom: 0.5rem;
+    margin-top: -50vh;
+    text-align: center;
+  }
+
+  #titlesAbout .role {
+    margin-top: 0;
+    min-width: 55vw;
+    margin-left: -20vw;
+  }
 }
