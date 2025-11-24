@@ -716,7 +716,7 @@ body {
 }
 
 .content-section.visible .stamp {
-    animation: stampMove 0.5s ease 3.5s forwards;
+    animation: stampMove 0.5s ease 1.5s forwards;
 }
 
 @keyframes stampMove {
@@ -1515,12 +1515,13 @@ button:hover {
     
     /**************************************************************************/
     .content-section {
-        padding: 100px 20px;
+        padding: 50px 10px;
     }
     
     .content-section h2 {
         font-size: 2rem;
-        margin-bottom: 60px;
+        margin-top: 0;
+        margin-bottom: 30px;
     }
     
     .content-item {
@@ -1543,14 +1544,14 @@ button:hover {
     .stamp {
         width: 250px;
         height: 250px;
-        top: 85%;
+        top: 80%;
     }
     
     /**************************************************************************/
     .video-banner {
-        font-size: 1em;
+        width: 95%;
+        margin: 0 auto;
         padding: 10px 5px;
-        margin-bottom: 3px;
     }
     
     .video-frame {

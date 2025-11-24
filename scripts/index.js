@@ -158,17 +158,17 @@ function animateStatsCounters() {
 //////////////////////////////////// About Me Animation ////////////////////////////////////
 // About Me Animation — one-way, no removal
 const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('scroll-animate-visible');
-      observer.unobserve(entry.target); // run once, then stop
-    }
-  });
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('scroll-animate-visible');
+            observer.unobserve(entry.target); // run once, then stop
+        }
+    });
 }, { threshold: 0.3 });
 
 document
-  .querySelectorAll('.scroll-animate-up:not(.work-block), .scroll-animate-right:not(.work-block)')
-  .forEach(el => observer.observe(el));
+.querySelectorAll('.scroll-animate-up:not(.work-block), .scroll-animate-right:not(.work-block)')
+.forEach(el => observer.observe(el));
 
 //////////////////////////////////// Typewriter Animation Functions ////////////////////////////////////
 function typeSentence(target, sentence, speed, callback) {
@@ -201,7 +201,7 @@ function startIntroTypewriterEffect() {
     function typeNext() {
         if (index < items.length) {
             const text = items[index].getAttribute('data-text');
-            typeSentence(items[index], text, 16, () => {
+            typeSentence(items[index], text, 8, () => {        // 120 characters per second
                 index++;
                 typeNext();
             });
@@ -217,7 +217,7 @@ function startIntroTypewriterEffect() {
         // ⏳ Then start typewriter effect after a short delay
         setTimeout(() => {
             typeNext();
-        }, 1000); // You can adjust delay if needed
+        }, 100); // You can adjust delay if needed
     }
     
     // Intersection Observer for scroll-triggered animation
@@ -246,38 +246,38 @@ function startIntroTypewriterEffect() {
 }
 
 function startContentTypewriterEffect() {
-  const section = document.querySelector('.content-section');
-  if (!section) return;
-
-  let started = false;
-
-  const io = new IntersectionObserver((entries) => {
-    const entry = entries[0];
-    if (entry.isIntersecting && !started) {
-      started = true;
-      section.classList.add('visible');
-
-      const items = [...section.querySelectorAll('.content-item ul li span')];
-      let i = 0;
-
-      function revealNext() {
-        if (i < items.length) {
-          const el = items[i++];
-          el.classList.add('reveal'); // slide-up + fade-in
-          setTimeout(revealNext, 420); // stagger each line
-        } else {
-          // after all lines are revealed, stamp lands
-          const stamp = section.querySelector('.stamp');
-          if (stamp) stamp.classList.add('animate');
-          io.disconnect();
+    const section = document.querySelector('.content-section');
+    if (!section) return;
+    
+    let started = false;
+    
+    const io = new IntersectionObserver((entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting && !started) {
+            started = true;
+            section.classList.add('visible');
+            
+            const items = [...section.querySelectorAll('.content-item ul li span')];
+            let i = 0;
+            
+            function revealNext() {
+                if (i < items.length) {
+                    const el = items[i++];
+                    el.classList.add('reveal'); // slide-up + fade-in
+                    setTimeout(revealNext, 100); // stagger each line
+                } else {
+                    // after all lines are revealed, stamp lands
+                    const stamp = section.querySelector('.stamp');
+                    if (stamp) stamp.classList.add('animate');
+                    io.disconnect();
+                }
+            }
+            
+            revealNext();
         }
-      }
-
-      revealNext();
-    }
-  }, { threshold: 0.15 });
-
-  io.observe(section);
+    }, { threshold: 0.15 });
+    
+    io.observe(section);
 }
 
 //////////////////////////////////// Promo Popup ////////////////////////////////////
