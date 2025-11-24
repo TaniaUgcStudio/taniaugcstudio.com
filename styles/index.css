@@ -36,6 +36,98 @@ h1, h2, h3, h4, h5, h6 {
     height: calc(var(--vh, 1vh) * 100);
 }
 
+/***************************** FULL-PAGE SCROLL SNAPPING *****************************/
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;                    /* We control scroll on container only */
+}
+
+body {
+    font-family: 'Futura', sans-serif;
+}
+
+/* This is the magic container that does ALL the scrolling */
+#fullpage-container {
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);  /* respects your mobile fix */
+    overflow-y: scroll;                  /* ← THIS is the only scrollable element */
+    overflow-x: hidden;
+    scroll-snap-type: y mandatory;       /* One scroll = one section */
+    -webkit-scroll-snap-type: y mandatory; /* Safari/iOS */
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;   /* Smooth momentum on iOS */
+    scrollbar-width: none;               /* Hide scrollbar (optional) */
+}
+
+/* Hide scrollbar but keep functionality (purely cosmetic) */
+#fullpage-container::-webkit-scrollbar { display: none; }
+
+/* All your sections go inside this container */
+.hero,
+.sobre-mi,
+.content-section,
+.video-section,
+.work-section,
+.tiktok-section,
+.contact-section {
+    scroll-snap-align: start;            /* Every section is a snap point */
+    scroll-snap-stop: always;            /* Force stop even on fast scroll */
+    min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100);
+    width: 100%;
+    position: relative;
+}
+
+/* Let sections grow taller than screen when needed */
+.hero,
+.sobre-mi,
+.content-section,
+.video-section,
+.work-section,
+.tiktok-section,
+.contact-section {
+    height: auto;                        /* Critical: allows internal scroll */
+    padding-bottom: 1px;                 /* Prevents margin collapse */
+}
+
+/* Optional: nice visual cue that there's more content */
+.video-section,
+.content-section {
+    padding-bottom: 8vh;
+}
+
+/* Last section – add extra space so it doesn't feel cut off */
+.contact-section {
+    padding-bottom: 20vh;
+}
+
+/***************************** GUIDE DOTS *****************************/
+.snap-dots {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1000;
+}
+.snap-dots a {
+    display: block;
+    width: 12px;
+    height: 12px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 50%;
+    margin: 12px 0;
+    transition: all 0.3s;
+}
+.snap-dots a:hover,
+.snap-dots a.active {
+    background: white;
+    transform: scale(1.4);
+}
+
 /***************************** UGC LOADER *****************************/
 .ugc-loader {
     position: fixed;
