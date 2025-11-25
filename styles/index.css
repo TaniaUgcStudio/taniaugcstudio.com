@@ -1547,7 +1547,8 @@ button:hover {
     }
 
     .sobre-mi-text h2 {
-        font-size: 1.8rem;
+        font-size: 2rem;
+        margin-top: 20px;
         margin-bottom: 10px;
     }
 
@@ -1724,12 +1725,21 @@ button:hover {
     }
     
     /**************************************************************************/
+    .contact-section {
+        padding: 40px 20px;
+    }
+
+    .contact-section h2 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+    }
+
     .contact-form {
         max-width: 85%;
-        font-size: 1.15em;
-        line-height: 1.85;
+        font-size: 1.15rem;
+        line-height: 1.5;
     }
-    
+ 
     #thank-you-message {
         width: 85%;
         min-width: 85%;
