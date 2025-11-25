@@ -1246,9 +1246,7 @@ body {
     background-image: url("../images/tiktokBkgnd.jpg");
     position: relative;
     overflow: hidden;
-    
     display: flex;
-    
 }
 
 .tiktok-section.scroll-animate-visible {
@@ -1547,12 +1545,21 @@ button:hover {
         z-index: 910;
         position: relative; /* Added to position .cta-full */
     }
+
+    .sobre-mi-text h2 {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+    }
+
+    .sobre-mi-text p {
+        margin-bottom: 0.3em;
+    }
     
     .sobre-mi-text {
         flex: 1 1 60%;
         text-align: left;
         font-size: 1.15em;
-        line-height: 1.85;
+        line-height: 1.5;
         z-index: 910;
         position: relative;
         padding-right: 5px; /* Reduced padding to give more space */
@@ -1606,7 +1613,7 @@ button:hover {
     }
     
     .content-section h2 {
-        font-size: 2rem;
+        font-size: 1.8rem;
         margin-top: 0;
         margin-bottom: 30px;
     }
@@ -1640,6 +1647,10 @@ button:hover {
         margin: 0 auto;
         padding: 10px 5px;
     }
+
+    .video-section h2 {
+        font-size: 1.8rem;
+    }
     
     .video-frame {
         width: 50px;
@@ -1671,7 +1682,12 @@ button:hover {
     
     /**************************************************************************/
     .work-section {
-        padding: 50px 20px;
+        padding: 40px 20px;
+    }
+
+    .work-text h2 {
+        font-size: 1.8rem;
+        margin-bottom: 0.3rem;
     }
     
     .flow-container {
@@ -1681,17 +1697,17 @@ button:hover {
     }
     
     .work {
-        width: 220px;
-        height: 220px;
+        width: 180px;
+        height: 180px;
     }
     
     .work img {
-        width: 70px;
-        height: 70px;
+        width: 50px;
+        height: 50px;
     }
     
     .work h3 {
-        font-size: 26px;
+        font-size: 22px;
     }
     
     .description {
@@ -1699,7 +1715,10 @@ button:hover {
     }
     
     /**************************************************************************/
-    
+    .tiktok-card h2 {
+        font-size: 1.8rem;
+    }
+
     .tiktok-image img {
         content: url("../images/tiktokMobile.gif");
     }
