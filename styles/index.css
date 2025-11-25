@@ -1486,33 +1486,38 @@ button:hover {
     .ugc-title {
         font-size: 1.8rem;
         line-height: 1.3;
-        white-space: normal; /* Permite romper líneas */
+        white-space: normal;
     }
-
     .ugc-title .divider {
-        display: none; /* Oculta la barra | */
+        display: none;
     }
-
-    /* Mejor formato móvil: fuerza salto de línea */
     .ugc-title .role {
         display: block;
     }
 
-    /* Smaller hook & experience text */
-    .intro-hook {
-        font-size: 1.1rem;
-        margin: 6px 0;
-        line-height: 1.3;
+    .circle-wrapper {
+        width: 135px;
+        height: 135px;
     }
+    .circle-img {
+        width: 120px;
+        height: 120px;
+        top: 7.5px;
+        left: 7.5px;
+    }
+
+    /* Smaller hook & experience text */
+    .hero .intro-hook,
     .teaser-list li span {
         font-size: 1.05rem;
         line-height: 1.45;
+        margin-bottom: 0;
     }
     
     /* Smaller stats circles + tighter */
     .stats-circles {
         gap: 30px;
-        margin: 8px 0;
+        margin: 0;
     }
     .stat-circle {
         width: 96px;
