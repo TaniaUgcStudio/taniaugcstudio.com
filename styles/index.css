@@ -287,6 +287,17 @@ body {
     background: linear-gradient(180deg, #fbe9f1 0%, #f1d1b1 20%, #e6e2db 60%, #eeebe6 100%);
 }
 
+.ugc-title {
+    text-align: center;
+    font-size: 2rem;
+    line-height: 1.8;
+    white-space: nowrap; /* Todo en una sola línea */
+}
+
+.ugc-title .divider {
+    display: inline;
+}
+
 .hero .intro-hook {
     font-size: 1.5rem;
     font-weight: 500;
@@ -1466,24 +1477,60 @@ button:hover {
     }
     
     /**************************************************************************/
-    .hero .intro-hook,
-    .teaser-list li {
-        font-size: 1.2rem;
-        margin-bottom: 0;
+    .hero {
+        padding: 40px 15px 40px;
+        gap: 8px;                 /* Super tight spacing */
+        justify-content: flex-start;
     }
     
+    .ugc-title {
+        font-size: 1.8rem;
+        line-height: 1.3;
+        white-space: normal; /* Permite romper líneas */
+    }
+
+    .ugc-title .divider {
+        display: none; /* Oculta la barra | */
+    }
+
+    /* Mejor formato móvil: fuerza salto de línea */
+    .ugc-title .role {
+        display: block;
+    }
+
+    /* Smaller hook & experience text */
+    .intro-hook {
+        font-size: 1.1rem;
+        margin: 6px 0;
+        line-height: 1.3;
+    }
+    .teaser-list li span {
+        font-size: 1.05rem;
+        line-height: 1.45;
+    }
+    
+    /* Smaller stats circles + tighter */
     .stats-circles {
-        margin: 0px auto 0px;
+        gap: 30px;
+        margin: 8px 0;
     }
-    
     .stat-circle {
-        width: 110px;
-        height: 110px;
+        width: 96px;
+        height: 96px;
     }
-    
+    .circle-count { font-size: 1.6rem; }
+    .circle-label { 
+        font-size: 0.75rem; 
+        margin-top: 2px;
+    }
+
+    /* Smaller logo marquee bars */
+    .marquee-container {
+        padding: 8px 0;
+    }
     .marquee-content img {
-        height: 70px;
-        margin: 0 10px;
+        height: 52px;
+        margin: 0 12px;
     }
     
     /**************************************************************************/
