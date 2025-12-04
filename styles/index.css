@@ -1492,7 +1492,7 @@ button:hover {
     .ugc-title .role {
         display: block;
     }
-
+    
     .circle-wrapper {
         width: 135px;
         height: 135px;
@@ -1503,7 +1503,7 @@ button:hover {
         top: 7.5px;
         left: 7.5px;
     }
-
+    
     /* Smaller hook & experience text */
     .hero .intro-hook,
     .teaser-list li span {
@@ -1526,7 +1526,7 @@ button:hover {
         font-size: 0.75rem; 
         margin-top: 2px;
     }
-
+    
     /* Smaller logo marquee bars */
     .marquee-container {
         padding: 8px 0;
@@ -1545,13 +1545,13 @@ button:hover {
         z-index: 910;
         position: relative; /* Added to position .cta-full */
     }
-
+    
     .sobre-mi-text h2 {
         font-size: 2rem;
         margin-top: 20px;
         margin-bottom: 10px;
     }
-
+    
     .sobre-mi-text p {
         margin-bottom: 0.3em;
     }
@@ -1648,7 +1648,7 @@ button:hover {
         margin: 0 auto;
         padding: 10px 5px;
     }
-
+    
     .video-section h2 {
         font-size: 1.8rem;
     }
@@ -1685,10 +1685,9 @@ button:hover {
     .work-section {
         padding: 40px 20px;
     }
-
+    
     .work-text h2 {
         font-size: 1.8rem;
-        margin-bottom: 0.3rem;
     }
     
     .flow-container {
@@ -1705,21 +1704,28 @@ button:hover {
     .work img {
         width: 50px;
         height: 50px;
+        margin-bottom: 0px;
     }
     
     .work h3 {
-        font-size: 22px;
+        font-size: 18px;
     }
     
     .description {
-        font-size: 16px;
+        font-size: 14px;
     }
     
     /**************************************************************************/
     .tiktok-card h2 {
         font-size: 1.8rem;
     }
-
+    
+    .tiktok-text p {
+        font-size: 0.9rem;
+        line-height: 1.4;
+        color: #d7cbbd;
+    }
+    
     .tiktok-image img {
         content: url("../images/tiktokMobile.gif");
     }
@@ -1728,18 +1734,18 @@ button:hover {
     .contact-section {
         padding: 40px 20px;
     }
-
+    
     .contact-section h2 {
         font-size: 1.8rem;
         margin-bottom: 0.5rem;
     }
-
+    
     .contact-form {
         max-width: 85%;
-        font-size: 1.15rem;
-        line-height: 1.5;
+        font-size: 0.9rem;
+        line-height: 1.4;
     }
- 
+    
     #thank-you-message {
         width: 85%;
         min-width: 85%;
