@@ -1540,8 +1540,9 @@ button:hover {
     .sobre-mi-container {
         flex-direction: row;
         flex-wrap: nowrap;
+        align-items: flex-start;
         gap: 10px;
-        padding: 20px 10px;
+        padding: 50px 10px;
         z-index: 910;
         position: relative; /* Added to position .cta-full */
     }
@@ -1586,7 +1587,7 @@ button:hover {
         height: auto;
         object-fit: contain;
         animation: slideInRight 1.2s ease forwards;
-        margin-top: -210px;
+        margin-top: -260px;
     }
     
     .cta-full {
