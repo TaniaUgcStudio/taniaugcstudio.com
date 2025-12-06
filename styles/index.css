@@ -1625,7 +1625,7 @@ button:hover {
     }
     
     .content-item h3 {
-        font-size: 1.3rem;
+        font-size: 1rem;
     }
     
     .content-item ul li {
@@ -1638,9 +1638,13 @@ button:hover {
     }
     
     .stamp {
-        width: 250px;
-        height: 250px;
-        top: 90%;
+        width: 220px;
+        height: 220px;
+        top: auto !important;     /* cancel the desktop top value */
+        bottom: 5%;               /* place it below everything */
+        left: 70%;
+        transform: translate(100vw, 100vh) scale(0.5) rotate(30deg);
+        transform: translateX(-50%) translateY(0) scale(1) rotate(-15deg); /* will be applied after animation */
     }
     
     /**************************************************************************/
