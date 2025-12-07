@@ -112,6 +112,7 @@ body {
     top: 50%;
     transform: translateY(-50%);
     z-index: 1000;
+    visibility: hidden;
 }
 .snap-dots a {
     display: block;
@@ -1641,9 +1642,8 @@ button:hover {
         width: 220px;
         height: 220px;
         top: auto !important;     /* cancel the desktop top value */
-        bottom: 5%;               /* place it below everything */
+        bottom: 0%;               /* place it below everything */
         left: 70%;
-        transform: translate(100vw, 100vh) scale(0.5) rotate(30deg);
         transform: translateX(-50%) translateY(0) scale(1) rotate(-15deg); /* will be applied after animation */
     }
     
